@@ -1,0 +1,80 @@
+<apex:page sidebar="false" showHeader="false" readOnly="true" >
+    <apex:includeScript value="/support/console/22.0/integration.js"/>
+    <style type="text/css">
+        .analyticsCordaChart{
+           pointer-events: none;
+           cursor: default;
+        }
+    </style>
+    <apex:includeScript value="/support/console/22.0/integration.js"/>
+    <script type="text/javascript">
+        function OpenPrimaryTab(reportId, reportName) {
+            //Open a new primary tab with the salesforce.com home page in it
+            sforce.console.openPrimaryTab(null, '/'+reportId, false, reportName, openSuccess, reportName);
+            sforce.console.focusPrimaryTabByName(reportName, focusSuccess);
+        }
+        
+        var openSuccess = function openSuccess(result) {
+            //Report whether opening the new tab was successful
+            if (result.success == true) {
+                //alert('Primary tab successfully opened');
+            } else {
+                //alert('Primary tab cannot be opened');
+            }
+        };
+        var focusSuccess = function focusSuccess(result) {
+            //Report whether going to the primary tab was successful
+            if (result.success == true) {
+            } else {
+            }
+        };
+  </script>
+    <table width="75%" align="center">
+        <tr height="300px">
+            <td width="33%" align="center" style="border: 1px solid indianred;">
+                <table width="100%" border="0">
+                    <tr>
+                        <td>
+                            <analytics:reportChart showRefreshButton="true" developerName="Cases_worked_by_me_Today"  size="small"></analytics:reportChart>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            <A HREF="#" onClick="OpenPrimaryTab('00Oc0000000Q7rS', 'Cases worked by me Today');return false"><font color = "#000080"><b>View Report</b></font></A> 
+                        </td>
+                    </tr>
+                </table>
+                
+            </td>
+            <td width="33%" align="center" style="border: 1px solid indianred;">
+                <table width="100%" border="0">
+                    <tr>
+                        <td>
+                            <analytics:reportChart showRefreshButton="true" developerName="Unassigned_Cases_by_Queue" size="small"></analytics:reportChart>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            <A HREF="#" onClick="OpenPrimaryTab('00OE0000001NWxj', 'CSC_Unassigned Cases by Queue');return false"><font color = "#000080"><b>View Report</b></font></A> 
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td width="33%" align="center" style="border: 1px solid indianred;">
+                <table width="100%" border="0">
+                    <tr>
+                        <td>
+                            <analytics:reportChart showRefreshButton="true" developerName="My_DNR_Cases" size="small"></analytics:reportChart>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            <A HREF="#" onClick="OpenPrimaryTab('00Oc0000000Q88d', 'My DNR Cases');return false">
+                                <font color = "#000080"><b>View Report</b></font></A> 
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</apex:page>

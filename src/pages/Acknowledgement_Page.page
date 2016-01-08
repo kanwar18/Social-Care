@@ -1,0 +1,48 @@
+<apex:page showHeader="false" controller="SocialCareController" action="{!doValidateUrl}">
+  <style type="text/css">
+  .btn.apply{
+      float:Center;
+      margin-left:0px !important;
+  }
+    }
+    .buttons .apply{
+        background: #eee  no-repeat 0 50%;
+        width: 250px;
+        height: 35px;
+        background: #065CD4;
+        font-size: 16px;
+        font-weight: bold;  
+        color:#FFFFFF;
+    } 
+
+    .buttons .apply:hover{
+        background: #0094db;
+    }
+    
+  </style> 
+ <apex:form >
+    <table align="center" width="70%">
+        <tr>
+            <td><apex:image value="{!$Resource.ATTLogo}" alt="AT&T Logo"/></td>
+        </tr>
+        <tr>
+            <td>
+                <apex:pageBlock >
+                        <apex:outputLabel >
+                           Thank you for agreeing to share your opinion with us.
+                            <br/><br/>If you would like to provide feedback on your experience please choose <b>Start Survey</b>.
+                              <br/> <br/>
+                              <div align="center">
+                              <apex:commandButton action="https://survey.foreseeresults.com/survey/display?cid=JxTg9PsUYKor4P5i9ne0Ug==&sid=link&cpp[aid]=01753415&cpp[eid]=3507118&cpp[agnt]=Z3Q5NDhx&cpp[mc]=ICcs4CSUB0000000L&cpp[ts]=1445932681082&cpp[pc]=&cpp[pcsc1]=&cpp[ops]=b3Q3aGRo" value="Start Survey in English" style="background-image:none;background-color:#089ADC;color:white;margin-right: 30px;">
+                              
+                              </apex:commandButton>
+                              <apex:commandButton value="Iniciar encuesta en Español" action="https://survey.foreseeresults.com/survey/display?cid=JxTg9PsUYKor4P5i9ne0Ug==&sid=link-sp&cpp[aid]=01753415&cpp[eid]=3507118&cpp[agnt]=Z3Q5NDhx&cpp[mc]=ICcs4CSUB0000000L&cpp[ts]=1445932681082&cpp[pc]=&cpp[pcsc1]=&cpp[ops]=b3Q3aGRo" style="background-image:none;background-color:#089ADC;color:white"/>
+                              </div>
+                              
+                        </apex:outputLabel>  
+                </apex:pageBlock>    
+            </td>
+        </tr>
+    </table>
+  </apex:form>
+</apex:page>

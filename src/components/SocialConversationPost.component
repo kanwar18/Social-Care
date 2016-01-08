@@ -1,0 +1,19 @@
+<apex:component >
+    <!-- Attribute Definitions -->
+    <apex:attribute name="post" description="This is the value for the component." type="SocialPost" required="true"/>  
+    <!-- Component Definition -->
+    <li class="postWrapper postWrapper_{!post.MessageType}_{!post.Provider}">
+        <apex:outputPanel rendered="{!post.isOutbound}">
+            <img src="{!post.OutboundSocialAccount.ExternalPictureURL}" onError="this.src = '{!URLFOR($Resource.SideBarPostList, 'imgs/MissingAvatar.png')}'" />
+        </apex:outputPanel>      
+        <apex:outputPanel rendered="{!!post.isOutbound}">
+            <img src="{!post.Persona.ExternalPictureURL}" onError="this.src = '{!URLFOR($Resource.SideBarPostList, 'imgs/MissingAvatar.png')}'" />
+        </apex:outputPanel>    
+        <div class="postContent">
+            <p class="post">{!post.Content}</p>
+            <div class="postInfo">
+                <apex:image url="{!URLFOR($Resource.SideBarPostList, 'imgs/facebook-icon.png')}" alt="facebook" styleClass="iconMargin" rendered="{!post.Provider='Facebook'}" /><apex:image url="{!URLFOR($Resource.SideBarPostList, 'imgs/twitter-icon.png')}" alt="twitter" styleClass="iconMargin" rendered="{!post.Provider='Twitter'}" /> {!post.MessageType} <span class="bullet">&bull;</span> <apex:outputField value="{!post.posted}"/> <apex:outputPanel rendered="{!(post.ParentId!=null)}" ><span class="bullet">&bull;</span> <span class="caseInfo"><apex:image url="{!URLFOR($Resource.SideBarPostList, 'imgs/case-icon.png')}" alt="case" styleClass="iconMargin" />&nbsp;<apex:outputField styleClass="parentId" value="{!post.ParentId}"/> </span></apex:outputPanel>
+            </div>
+        </div>
+    </li>
+</apex:component>

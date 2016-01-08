@@ -1,0 +1,5 @@
+<apex:page standardController="Defect_Logs__c" extensions="Social_CreateDefect" action="{!CreateITSupTicket}">
+<apex:form >
+<apex:inputHidden value="{!Defect_Logs__c.IT_Support_Ticket__c}"/>
+</apex:form>
+</apex:page>

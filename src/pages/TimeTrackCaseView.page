@@ -1,0 +1,3 @@
+<apex:page standardController="Case" extensions="TimeTrackController" action="{!doCaseOpenTime}">
+    
+</apex:page>

@@ -1,0 +1,70 @@
+<apex:page controller="EmailToCaseExtn" action="{!doAction}" showHeader="true" sidebar="false">
+<!-- controller="EmailToCaseExtn" action="{!doAction}" showHeader="true" sidebar="false"> -->
+
+  <apex:form > 
+    <apex:pageBlock title="Email To Case Automation" id="emails">  
+
+  <!--  <apex:pageBlockTable value="{!lemsg}" var="a">
+            <apex:column value="{!a.Parent.CaseNumber}"/>
+            <apex:column value="{!a.Subject}"/>
+            <apex:column value="{!a.Parent.Contact.Name}"/>
+            <apex:column value="{!a.Parent.Owner.Name}"/>
+           </apex:pageBlockTable>
+           <br/>  
+          
+    <apex:outputPanel style="text-align:center;horizontal-align:center;">
+        <apex:commandLink rendered="{!NOT(pageNumber == 0)}" action="{!previous}" rerender="emails">Prev | </apex:commandLink><apex:commandLink rendered="{!NOT(pageNumber == noOfPages -1)}" action="{!next}" rerender="emails"> Next</apex:commandLink>               
+     </apex:outputPanel>  -->
+ 
+   
+     <apex:pageBlockButtons >
+        <apex:commandButton action="{!save}" id="editButton" value="Export to Excel"/>
+    </apex:pageBlockButtons>
+        
+         <table bgcolor="#E6E6FA" width="100%" border="1">
+             <tr>
+            <br>
+            <center><h1> Email To Case Automation Report </h1></center>
+           </br>
+             </tr>
+                <tr>
+               <td width="10%">   <h6>Case Number</h6> </td>
+                <td  width="80%"> <center><h6>Case Details</h6></center></td>       
+               </tr>
+               
+            <apex:repeat value="{!emailMessageMap}" var="key" >       
+               <tr>
+                    <td><apex:outputText value="{!key}"/></td>
+                    <td>
+             <table width="100%"> 
+                             
+                <tr>
+               <td  width="50%">   <h6>Subject</h6> </td>
+                <td  width="33%">   <h6>Contact</h6> </td>     
+                 <td  width="33%">   <h6>Case Owner</h6> </td>    
+               </tr>
+                            <apex:repeat value="{!emailMessageMap[key]}" var="keyvalue">
+                                <tr>
+                                    <td width="35%">
+                                    <a href="/apex/Social_EmailmessageDetailPage?id={!keyvalue.id}">    
+                                     <apex:outputText value="{!keyvalue.Subject}"/>       
+                                     </a>                       
+                                    </td>                                    
+                                    <td width="33%">
+                                        <apex:outputText value="{!keyvalue.Parent.Contact.Name}"/>                               
+                                    </td>
+                                    <td width="33%">
+                                        <apex:outputText value="{!keyvalue.Parent.Owner.Name}"/>                               
+                                    </td>
+                                </tr>    
+                           </apex:repeat>
+                         </table>
+                     </td>
+                </tr>                   
+            </apex:repeat>                     
+        </table>       
+        
+   
+         </apex:pageBlock>    
+       </apex:form>  
+        </apex:page>

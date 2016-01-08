@@ -1,0 +1,230 @@
+<apex:page id="myPageRight" standardController="Case"  extensions="Social_RightInteractionController" >
+    <html>
+        <style>
+                body.sfdcBody {
+                    margin-top: -8px;
+                    margin-left:0px;
+                    margin-right:0px;
+                }
+                body .bPageBlock .pbBody .pbSubheader {
+                    border-color: #006699;
+                    border-width: 3px 0px 0px;
+                }
+                .bPageBlock .labelCol, body .print .topics-label {
+                    padding: 0px 0px 0px 0px;
+                }
+                .bPageBlock .dataCol {
+                    padding: 0px 0px 0px 0px;
+                }
+                .bPageBlock .detailList .data2Col {
+                    padding: 0px 0px 0px 0px;
+                }
+        </style>
+        <apex:includeScript value="/support/console/26.0/integration.js"/>
+        <script type="text/Javascript">
+            window.onload = collapsePageSections;
+            
+            function collapsePageSections() {
+                twistSection(document.getElementById('myPageRight:myPageBlock:myQuickLinkTab').childNodes[0].childNodes[0]);
+                twistSection(document.getElementById('myPageRight:myPageBlock:myATTDealTab').childNodes[0].childNodes[0]);
+            }
+            
+            function dosearchQuickLink() {
+                document.getElementById('myPageRight:myPageBlock:myQuickLinkTab:quickLinkform:tosearch').disabled = true;
+                searchname();
+            }
+                        
+            function openLink(link) {
+                var hyperTextString = 'http';
+                var linkText =  link.substring(0, 4);
+                if (linkText != hyperTextString) {
+                    link = 'https://' + link;
+                }
+                window.open(link);
+            }
+            
+            function setFocusQuickLink() {
+                document.getElementById('myPageRight:myPageBlock:myQuickLinkTab:quickLinkform:tosearch').focus();
+                var elem = document.getElementById('myPageRight:myPageBlock:myQuickLinkTab:quickLinkform:tosearch');
+                var caretPos = elem.value.length;
+                //Shifts focus to last char in textbox for IE
+                if(elem.createTextRange) {
+                    var range = elem.createTextRange();
+                    range.move('character', caretPos);
+                    range.select();
+                } else if(elem.selectionStart || elem.selectionStart == '0') {
+                     //Shifts focus to last char in textbox for Mozilla and Chrome
+                    elem.setSelectionRange(caretPos, caretPos);
+                }
+            }
+            
+            function newQuickLinkPage() {
+                if ('{!errMsg}' == '') {
+                    if(sforce.console.isInConsole()) {
+                        var tabName = 'myQuickLinkTab';
+                        sforce.console.focusPrimaryTabByName(tabName, focusSuccessQuickLink)          
+                    }
+                }
+            }
+            
+            var focusSuccessQuickLink = function focusSuccessQuickLink(result) {
+                if (result.success == true) {
+                } else {
+                    sforce.console.openPrimaryTab(null,'{!$Label.NewQuickLinkPage}',true,'New Quick Link',openSuccessQuickLink,'myQuickLinkTab');
+                }
+            };
+            
+            var openSuccessQuickLink = function openSuccessQuickLink(result) {}
+            
+            //Logic For AttDeals
+            
+            function doSearchAttDeal(){
+                document.getElementById('myPageRight:myPageBlock:myATTDealTab:attform:tosearchAttDeal').disabled = true;
+                searchnameAttDeal();
+            }
+            
+            function setFocusAttDeals() {
+                document.getElementById('myPageRight:myPageBlock:myATTDealTab:attform:tosearchAttDeal').focus();
+                var elem = document.getElementById('myPageRight:myPageBlock:myATTDealTab:attform:tosearchAttDeal');
+                var caretPos = elem.value.length;
+                //Shifts focus to last char in textbox for IE
+                if(elem.createTextRange) {
+                    var range = elem.createTextRange();
+                    range.move('character', caretPos);
+                    range.select();
+                } else if(elem.selectionStart || elem.selectionStart == '0') {
+                     //Shifts focus to last char in textbox for Mozilla and Chrome
+                    elem.setSelectionRange(caretPos, caretPos);
+                }
+            }
+            
+            function newDealPage() {
+                if ('{!errMsg}' == '') {
+                    if(sforce.console.isInConsole()) {
+                        var tabName = 'myAttDealTab';
+                        sforce.console.focusPrimaryTabByName(tabName, focusSuccessAttDeal)          
+                    }
+                }
+            }
+            
+            function clickToCopy(copiedText) {
+                var holdtxt = document.getElementById(copiedText).innerHTML;
+                if(navigator.userAgent.indexOf("Chrome") != -1 ) {
+                } else if(navigator.userAgent.indexOf("Firefox") != -1 ) {
+                    window.prompt("Copy to clipboard: Ctrl+C, Enter", holdtxt );
+                } else if((navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true )) {
+                    window.clipboardData.setData("Text",holdtxt);
+                }  
+            }
+            
+            var focusSuccessAttDeal = function focusSuccessAttDeal(result) {
+                if (result.success == true) {
+                } else {
+                    sforce.console.openPrimaryTab(null,'{!$Label.ATTDealPage}',true,'New ATT Deal',openSuccessAttDeal,'myAttDealTab');
+                }
+            };
+            
+            var openSuccessAttDeal = function openSuccessAttDeal(result) {}
+        </script>
+        <apex:pageBlock id="myPageBlock" mode="maindetail">
+            <apex:pageBlockSection title="Quick Links" id="myQuickLinkTab" showHeader="true" columns="2">
+                <apex:facet name="header">
+                   <span >
+                       <font size="2px" face="Arial" color="#006699">Quick Links</font>
+                   </span>
+                </apex:facet>     
+                <apex:form id="quickLinkform">
+                    <apex:variable var="caseCount" value="{!1}"/>
+                    <apex:actionFunction name="searchname" action="{!refreshLinkList}" reRender="quickLinkform,pageInfoMsg,myrepeat" oncomplete="setFocusQuickLink();"/>
+                    <div>
+                        <div style="float:left;width: 210px;">
+                            <apex:commandLink title="Show All" value="{!showHideAll}" style="font-family:arial; font-weight:bolder; color:#006699;font-size:10px" reRender="quickLinkform,pageInfoMsg,myrepeat" action="{!showAllRecords}"/>&nbsp;
+                            <apex:commandLink title="Create New" value="Create New" style="font-family:arial; font-weight:bolder; color:#006699;font-size:10px" oncomplete="newQuickLinkPage();return false;" action="{!addNewLinks}" reRender="quickLinkform,pageInfoMsg,myrepeat"/>&nbsp;    
+                            <apex:commandLink title="My Links" value="{!showHideMyLinks}" style="font-family:arial; font-weight:bolder; color:#006699;font-size:10px" reRender="quickLinkform,pageInfoMsg,myrepeat" action="{!MyRecordsQuickLinks}"/>
+                        </div>
+                        <br></br>
+                        <div style="float:justify">
+                                      
+                            <apex:inputText title="Search Quick Links" onkeyup="timerLinksVar = setTimeout(function () {dosearchQuickLink()},1000);" onkeydown="clearTimeout(timerLinksVar)" value="{!tosearch}" id="tosearch" label="Search KeyWord" style="border: 1px solid #848484; -webkit-border-radius: 30px;-moz-border-radius: 30px; border-radius: 30px; outline:0; height:22px; width: 100px; padding-left:10px; padding-right:10px;" onfocus="this.value = this.value;" maxlength="10"/>
+                        </div>
+                        <br></br>
+                        <div>
+                            <apex:pageMessage severity="warning" detail="{!errMsg}" rendered="{!displayWarningMsg}" id="pageInfoMsg" strength="3"/>
+                            <apex:outputPanel id="myOutputPanel" rendered="{!displayOutputPanel}">
+                                <table border="0" cellpadding="5" cellspacing="1" width="100%" align="left">
+                                     <apex:repeat value="{!quickLinksList}" var="quickLinkRep" id="myrepeat">
+                                     <apex:variable var="caseCount" value="{!caseCount + 1}"/>
+                                      <tr bgcolor="{!IF((MOD(caseCount, 2) = 0),'#E0F5FF','#FFFFFF')}"> 
+                                         <td width="50%">
+                                             <div style="float:left;width:70%;" title="Quick Link Name">
+                                                 <b><font size="1px" face="Arial" color="{!IF(($User.Id == quickLinkRep.ownerId),'#FA8072','#006699')}">{!quickLinkRep.name}</font></b><br/>
+                                             </div>
+                                             <div style="float:left;width:100%;" title="Quick Link">
+                                                 <div style="float:left;width:4%;">
+                                                     <apex:image url="{!$Resource.ClickToCopyIcon}" id="clickToCopyImageLinks" height="12px" width="10px" title="Click to Copy Link" onclick="clickToCopy('{!$Component.quickLink}')"/>
+                                                 </div>
+                                                 <div style="float:left;width:70%;">
+                                                     <apex:outputLink id="quickLink" style="font-family:arial;font-size:10px;color:{!IF(($User.Id == quickLinkRep.ownerId),'#FA8072','#006699')}" onclick="openLink('{!quickLinkRep.Quick_Link__c}'); return false;">{!quickLinkRep.Quick_Link__c}</apex:outputLink>
+                                                 </div>
+                                             </div>
+                                         </td>
+                                      </tr>
+                                     </apex:repeat>
+                                </table>
+                            </apex:outputPanel>
+                        </div>
+                    </div>
+                </apex:form>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="ATT Deals" id="myATTDealTab" showHeader="true" rendered="{!IsVisible}" columns="1">
+                <apex:facet name="header">
+                   <span >
+                       <font size="2px" face="Arial" color="#006699">ATT Deals</font>
+                   </span>
+                </apex:facet>   
+                <apex:form id="attform">
+                    <apex:variable var="caseCount" value="{!1}"/>
+                    <apex:actionFunction name="searchnameAttDeal" action="{!refreshListAttDeal}" reRender="attform,pageInfoMsg,myrepeat" oncomplete="setFocusAttDeals();"/> 
+                    <div>
+                        <div style="float:left;width: 210px;">
+                            <apex:commandLink title="Show All" value="{!showHideAllDeals}" style="font-family:arial; font-weight:bolder; color:#006699;font-size:10px" reRender="attform,pageInfoMsg,myrepeat" action="{!showAllRecordsAttDeal}"/>&nbsp;    
+                            <apex:commandLink title="Create New" value="Create New" style="font-family:arial; font-weight:bolder; color:#006699;font-size:10px" oncomplete="newDealPage();return false;" action="{!addNewDeals}" reRender="attform,pageInfoMsg,myrepeat"/>&nbsp;    
+                            <apex:commandLink title="My Deals" value="{!showHideMyDeals}" style="font-family:arial; font-weight:bolder; color:#006699;font-size:10px" reRender="attform,pageInfoMsg,myrepeat" action="{!MyRecordsAttDeal}"/>
+                        </div>
+                    <br></br>
+                    <div style="float:justify;">
+                                  
+                        <apex:inputText title="Search Deals" onkeyup="timerDealVar = setTimeout(function () {doSearchAttDeal()},1000);" onkeydown="clearTimeout(timerDealVar)" value="{!tosearchAttDeal}" id="tosearchAttDeal" label="Search KeyWord" style="border: 1px solid #848484; -webkit-border-radius: 30px;-moz-border-radius: 30px; border-radius: 30px; outline:0; height:22px; width: 110px; padding-left:10px; padding-right:10px;" onfocus="this.value = this.value;" maxlength="10"/><br/><br/>
+                    </div>
+                    <br></br>
+                    <div>
+                        <apex:pageMessage severity="warning" detail="{!errMsg}" rendered="{!displayWarningMsg}" id="pageInfoMsg" strength="3"/>
+                        <apex:outputPanel id="myOutputPanel" rendered="{!displayOutputPanel}">
+                            <table border="0" cellpadding="5" cellspacing="1" width="100%" align="left">
+                                 <apex:repeat value="{!attdealsList}" var="attDealRep" id="myrepeat">
+                                 <apex:variable var="caseCount" value="{!caseCount + 1}"/>
+                                  <tr bgcolor="{!IF((MOD(caseCount, 2) = 0),'#E0F5FF','#FFFFFF')}" id="myDealTable"> 
+                                     <td width="100%" id="myDealTD">
+                                         <div style="float:left;width:70%;" title="AT&T Deal Name" id="DealName">
+                                             <b><font size="1px" face="Arial" color="{!IF(($User.Id == attDealRep.ownerId),'#FA8072','#006699')}">{!attDealRep.name}</font></b>  <br/>
+                                         </div>
+                                         <div style="float:left;width:100%;" title="AT&T Deal Link" id="dealLink">
+                                             <div style="float:left;width:4%;">
+                                                 <apex:image url="{!$Resource.ClickToCopyIcon}" id="clickToCopyImage" height="12px" width="10px" title="Click to Copy Link" onclick="clickToCopy('{!$Component.attDealLink}')"/>
+                                             </div>
+                                             <div style="float:left;width:70%;">
+                                                 <apex:outputLink style="font-family:arial;color:{!IF(($User.Id == attDealRep.ownerId),'#FA8072','#006699')};font-size:10px" onclick="openLink('{!attDealRep.Link__c}'); return false;" id="attDealLink">{!attDealRep.Link__c}</apex:outputLink>
+                                             </div>
+                                         </div>
+                                     </td>
+                                  </tr>
+                                 </apex:repeat>
+                            </table>
+                        </apex:outputPanel>
+                    </div>
+                    </div>
+                </apex:form>  
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </html>
+</apex:page>

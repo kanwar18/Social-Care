@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexComponent xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>32.0</apiVersion>
+    <description>Component will be used for getting data from report.</description>
+    <label>Social_AHTReportComponent</label>
+</ApexComponent>

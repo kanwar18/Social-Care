@@ -1,0 +1,19 @@
+<apex:page controller="AverageResponseTimePerMonthController" sidebar="true" showHeader="true" readonly="true" action="{!retrieveData}">
+<apex:pageBlock title="Average Response Time per Month">
+<apex:pageBlockTable value="{!mrtList}" var="mrt">
+<apex:column value="{!mrt.sMonth}" headervalue="Month"></apex:column>
+<apex:column >
+<apex:pageBlockTable value="{!mrt.prtList}" var="prt">
+<apex:column value="{!prt.sProduct}" headervalue="Product"></apex:column>
+<apex:column value="{!prt.averageTime}" headervalue="Average Time"></apex:column>
+<apex:column >
+<apex:pageBlockTable value="{!prt.crtList}" var="crt">
+<apex:column value="{!crt.sCase.CaseNumber}" headervalue="Case Number"></apex:column>
+<apex:column value="{!crt.respTime}" headervalue="Response Time"></apex:column>
+</apex:pageBlockTable>
+</apex:column>
+</apex:pageBlockTable>
+</apex:column>
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:page>

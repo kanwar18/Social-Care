@@ -1,0 +1,46 @@
+<apex:page controller="SocialAvailabilityController" showHeader="false" standardStylesheets="true" tabStyle="Account" cache="false">
+<style>
+body {
+    background-color : #FFFFFF
+}
+</style>
+<script>
+function enableStatus() {
+    var divVis = document.getElementById("statusDiv").style.visibility;
+    if(divVis == 'visible') {
+      document.getElementById("statusDiv").style.visibility = 'hidden';  
+    } else {
+        document.getElementById("statusDiv").style.visibility = 'visible';
+    }
+}
+</script>
+<apex:panelGrid columns="3" id="theGrid" >
+    <apex:image url="{!URLFOR($Resource.User_Status, currentUserStatusIcon)}"/>
+     <apex:image url="/img/arrowDown.gif" onclick="enableStatus()"/> 
+    <apex:outputLabel >{!loggedInUser.Availability__c}</apex:outputLabel>
+    <!--<font size="2" color="Black"><b> {!$User.FirstName} {!$User.LastName}</b></font> -->
+</apex:panelGrid>
+
+<div id="statusDiv" style="visibility:hidden">
+<table>
+<tr>
+    <td>
+        <apex:form >
+            <apex:pageBlock tabStyle="Account">
+                    <apex:pageBlockTable value="{!socialUserStatusMap}" var="userSta">
+                        <apex:column >
+                            <apex:image url="{!URLFOR($Resource.User_Status, socialUserStatusMap[userSta])}"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:commandLink action="{!updateSocialUserStatus}" value="{!userSta}">
+                                <apex:param id="selVal" name="selVal" assignTo="{!currentUserStatus}" value="{!userSta}"/>
+                            </apex:commandLink>    
+                        </apex:column>
+                    </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:form>
+    </td>
+</tr>
+</table>
+</div>
+</apex:page>

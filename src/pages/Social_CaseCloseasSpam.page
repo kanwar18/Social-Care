@@ -1,0 +1,6 @@
+<apex:page standardcontroller="Case" extensions="Social_CaseCloseasSpam" action="{!Closeasspam}">
+<apex:form >
+<apex:inputHidden value="{!Case.Current_SLA_Phase__c}" id="theHiddenInput"/>
+<apex:inputHidden value="{!Case.id}" id="caseid"/>
+</apex:form>
+</apex:page>

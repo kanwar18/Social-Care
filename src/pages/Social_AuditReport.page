@@ -1,0 +1,268 @@
+<apex:page controller="Social_AuditReportController" sidebar="false" tabStyle="Custom_Audit_Report__tab" readOnly="true">
+    <apex:sectionHeader title="QA Report" rendered="{!(IF(isSystemAdmin,false,true))}">
+        <apex:form >
+            <apex:pageBlock title="All Under QA Cases" id="pageBlock"> 
+                <apex:pageBlockTable value="{!Cases}" var="a" rendered="{!NOT(ISNULL(Cases))}">
+                    <apex:column value="{!a.ClosedDate}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!ViewData}" value="Closed Date{!IF(sortExpression=='ClosedDate',IF(sortDirection='ASC','▼','▲'),'')}">
+                                <apex:param value="ClosedDate" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                    
+                    <apex:column value="{!a.Owner.name}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!ViewData}" value="Owner Name{!IF(sortExpression=='Owner.Name',IF(sortDirection='ASC','▼','▲'),'')}">
+                                <apex:param value="Owner.Name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                    
+                    <apex:column >
+                        <apex:facet name="header">   
+                            <apex:commandLink action="{!ViewData}" value="Case Number{!IF(sortExpression=='CaseNumber',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort">
+                                <apex:param value="CaseNumber" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputLink value="/{!a.Id}" target="_blank">{!a.caseNumber}</apex:outputLink>
+                    </apex:column>
+                    <!--<apex:column headerValue="Case Status" value="{!a.Status}"/>-->
+                    <apex:column headerValue="QA Status" value="{!a.Audit_Status__c}"/>
+                    <apex:column headerValue="Assigned Operation Manager" value="{!a.Assigned_Operation_Manager__c}"/>
+                    <apex:column headerValue="Closed Operation Manager" value="{!a.Closed_Operation_Manager__c}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+    
+            <!--- All Completed QA Case    -->
+            <apex:pageBlock title="All Completed QA Cases">
+                <apex:pageBlockTable value="{!allAuditedCases}" var="a" rendered="{!NOT(ISNULL(allAuditedCases))}">
+                    <apex:column value="{!a.ClosedDate}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!allCompletedAuditCases}" value="Closed Date{!IF(sortExpression=='ClosedDate',IF(sortDirection='ASC','▼','▲'),'')}">
+                                <apex:param value="ClosedDate" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                     <apex:column value="{!a.Owner.name}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!allCompletedAuditCases}" value="Owner Name{!IF(sortExpression=='Owner.name',IF(sortDirection='ASC','▼','▲'),'')}">
+                                <apex:param value="Owner.name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">   
+                            <apex:commandLink action="{!allCompletedAuditCases}" value="Case Number{!IF(sortExpression=='CaseNumber',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort">
+                                <apex:param value="CaseNumber" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputLink value="/{!a.Id}" target="_blank">{!a.caseNumber}</apex:outputLink>
+                    </apex:column>
+                    <apex:column headerValue="QA Status" value="{!a.Audit_Status__c}"/>
+                    <apex:column headerValue="Assigned Operation Manager" value="{!a.Assigned_Operation_Manager__c}"/>
+                    <apex:column headerValue="Closed Operation Manager" value="{!a.Closed_Operation_Manager__c}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+         </apex:form>
+    </apex:sectionHeader>
+            <!---   all closed cases of CM -->
+    <apex:sectionHeader title="Case QA Report of Care Manager" rendered="{!(IF(isCareManager,false,true))}">
+        <apex:form >
+            <apex:pageBlock title="Completed QA Cases">
+                <apex:pageBlockTable value="{!AllClosedCases_CM}" var="a" rendered="{!NOT(ISNULL(AllClosedCases_CM))}">
+                    <apex:column value="{!a.ClosedDate}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!AllClosedCases_CM}" value="Closed Date{!IF(sortExpression=='ClosedDate',IF(sortDirection='ASC','▼','▲'),'')}">
+                                <apex:param value="ClosedDate" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                     <apex:column value="{!a.Owner.name}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!AllClosedCases_CM}" value="Owner Name{!IF(sortExpression=='Owner.name',IF(sortDirection='ASC','▼','▲'),'')}">
+                                <apex:param value="Owner.name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">   
+                            <apex:commandLink action="{!AllClosedCases_CM}" value="Case Number{!IF(sortExpression=='CaseNumber',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort">
+                                <apex:param value="CaseNumber" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputLink value="/{!a.Id}" target="_blank">{!a.caseNumber}</apex:outputLink>
+                    </apex:column>
+                    <apex:column headerValue="QA Status" value="{!a.Audit_Status__c}"/>
+                    <apex:column headerValue="Assigned Operation Manager" value="{!a.Assigned_Operation_Manager__c}"/>
+                    <apex:column headerValue="Closed Operation Manager" value="{!a.Closed_Operation_Manager__c}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+         </apex:form>
+    </apex:sectionHeader>
+            <!---   all Pending cases of OP -->
+    <apex:sectionHeader title="Case QA Report of Operations Manager" rendered="{!(IF(isOperationalManager,false,true))}">
+        <apex:form >  
+            <apex:pageBlock title="Pending QA Cases">
+                <apex:pageBlockTable value="{!allAuditCases_OP}" var="a" rendered="{!NOT(ISNULL(allAuditCases_OP))}">
+                    <apex:column value="{!a.ClosedDate}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!allAuditCases_OP}" value="Closed Date{!IF(sortExpression=='ClosedDate',IF(sortDirection='ASC','▼','▲'),'')}">
+                                <apex:param value="ClosedDate" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                     <apex:column value="{!a.Owner.name}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!allAuditCases_OP}" value="Owner Name{!IF(sortExpression=='Owner.name',IF(sortDirection='ASC','▼','▲'),'')}">
+                                <apex:param value="Owner.name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">   
+                            <apex:commandLink action="{!allAuditCases_OP}" value="Case Number{!IF(sortExpression=='CaseNumber',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort">
+                                <apex:param value="CaseNumber" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputLink value="/{!a.Id}" target="_blank">{!a.caseNumber}</apex:outputLink>
+                    </apex:column>
+                    <apex:column headerValue="QA Status" value="{!a.Audit_Status__c}"/>
+                    <apex:column headerValue="Assigned Operation Manager" value="{!a.Assigned_Operation_Manager__c}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+            
+            <!---   all Pending cases of OP -->
+            <apex:pageBlock title="Completed QA Cases">
+                <apex:pageBlockTable value="{!allCompletedAuditCases_OP}" var="a" rendered="{!NOT(ISNULL(allCompletedAuditCases_OP))}">
+                    <apex:column value="{!a.ClosedDate}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!allCompletedAuditCases_OP}" value="Closed Date{!IF(sortExpression=='ClosedDate',IF(sortDirection='ASC','▼','▲'),'')}">
+                                <apex:param value="ClosedDate" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                     <apex:column value="{!a.Owner.name}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!allCompletedAuditCases_OP}" value="Owner Name{!IF(sortExpression=='Owner.name',IF(sortDirection='ASC','▼','▲'),'')}">
+                                <apex:param value="Owner.name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">   
+                            <apex:commandLink action="{!allCompletedAuditCases_OP}" value="Case Number{!IF(sortExpression=='CaseNumber',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort">
+                                <apex:param value="CaseNumber" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputLink value="/{!a.Id}" target="_blank">{!a.caseNumber}</apex:outputLink>
+                    </apex:column>
+                    
+                    <apex:column headerValue="QA Status" value="{!a.Audit_Status__c}"/>
+                    <apex:column headerValue="Assigned Operation Manager" value="{!a.Assigned_Operation_Manager__c}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:form>
+    </apex:sectionHeader>
+    
+     <!---   Businees Care Manager -->
+     <apex:sectionHeader title="Case QA Report of Care Manager " rendered="{!(IF(isCareManagerBusiness,false,true))}">
+        <apex:form >
+            <apex:pageBlock title="Completed QA Cases">
+                <apex:pageBlockTable value="{!AllClosedCases_CM}" var="a" rendered="{!NOT(ISNULL(AllClosedCases_CM))}">
+                    <apex:column value="{!a.ClosedDate}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!AllClosedCases_CM}" value="Closed Date{!IF(sortExpression=='ClosedDate',IF(sortDirection='ASC','▼','▲'),'')}">
+                                <apex:param value="ClosedDate" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                     <apex:column value="{!a.Owner.name}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!AllClosedCases_CM}" value="Owner Name{!IF(sortExpression=='Owner.name',IF(sortDirection='ASC','▼','▲'),'')}">
+                                <apex:param value="Owner.name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">   
+                            <apex:commandLink action="{!AllClosedCases_CM}" value="Case Number{!IF(sortExpression=='CaseNumber',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort">
+                                <apex:param value="CaseNumber" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputLink value="/{!a.Id}" target="_blank">{!a.caseNumber}</apex:outputLink>
+                    </apex:column>
+                    <apex:column headerValue="QA Status" value="{!a.Audit_Status__c}"/>
+                    <apex:column headerValue="Assigned Operation Manager" value="{!a.Assigned_Operation_Manager__c}"/>
+                    <apex:column headerValue="Closed Operation Manager" value="{!a.Closed_Operation_Manager__c}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+         </apex:form>
+    </apex:sectionHeader>
+    
+    <!---   Business Senior Operation Manager -->
+    
+    <apex:sectionHeader title="Case QA Report of Senior  Operations Manager " rendered="{!(IF(isSeniorOperationalManagerBus,false,true))}">
+        <apex:form >  
+            <apex:pageBlock title="Pending QA Cases">
+                <apex:pageBlockTable value="{!allAuditCases_OP}" var="a" rendered="{!NOT(ISNULL(allAuditCases_OP))}">
+                    <apex:column value="{!a.ClosedDate}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!allAuditCases_OP}" value="Closed Date{!IF(sortExpression=='ClosedDate',IF(sortDirection='ASC','▼','▲'),'')}">
+                                <apex:param value="ClosedDate" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                     <apex:column value="{!a.Owner.name}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!allAuditCases_OP}" value="Owner Name{!IF(sortExpression=='Owner.name',IF(sortDirection='ASC','▼','▲'),'')}">
+                                <apex:param value="Owner.name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">   
+                            <apex:commandLink action="{!allAuditCases_OP}" value="Case Number{!IF(sortExpression=='CaseNumber',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort">
+                                <apex:param value="CaseNumber" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputLink value="/{!a.Id}" target="_blank">{!a.caseNumber}</apex:outputLink>
+                    </apex:column>
+                    <apex:column headerValue="QA Status" value="{!a.Audit_Status__c}"/>
+                    <apex:column headerValue="Assigned Operation Manager" value="{!a.Assigned_Operation_Manager__c}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+            
+            <!---   all Pending cases of OP -->
+            <apex:pageBlock title="Completed QA Cases">
+                <apex:pageBlockTable value="{!allCompletedAuditCases_OP}" var="a" rendered="{!NOT(ISNULL(allCompletedAuditCases_OP))}">
+                    <apex:column value="{!a.ClosedDate}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!allCompletedAuditCases_OP}" value="Closed Date{!IF(sortExpression=='ClosedDate',IF(sortDirection='ASC','▼','▲'),'')}">
+                                <apex:param value="ClosedDate" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                     <apex:column value="{!a.Owner.name}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!allCompletedAuditCases_OP}" value="Owner Name{!IF(sortExpression=='Owner.name',IF(sortDirection='ASC','▼','▲'),'')}">
+                                <apex:param value="Owner.name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">   
+                            <apex:commandLink action="{!allCompletedAuditCases_OP}" value="Case Number{!IF(sortExpression=='CaseNumber',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort">
+                                <apex:param value="CaseNumber" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputLink value="/{!a.Id}" target="_blank">{!a.caseNumber}</apex:outputLink>
+                    </apex:column>
+                    
+                    <apex:column headerValue="QA Status" value="{!a.Audit_Status__c}"/>
+                    <apex:column headerValue="Assigned Operation Manager" value="{!a.Assigned_Operation_Manager__c}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:form>
+    </apex:sectionHeader>
+</apex:page>

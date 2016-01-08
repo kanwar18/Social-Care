@@ -1,0 +1,31 @@
+<apex:page showHeader="false" controller="SocialCareABSController" action="{!doValidateUrl}">
+    <table align="center" width="70%">
+        <tr>
+            <td><apex:image value="{!$Resource.ABSlogo}" alt="AT&T Logo"/></td>
+        </tr>
+        <tr>
+            <td>
+                <apex:pageBlock >
+                    <apex:pageBlockSection title="Customer Satisfaction Survey" columns="1">
+                        <apex:outputLabel >
+                            <font color="blue"><b>Thank you for working with AT&amp;T social media customer service. 
+                            You have been chosen to take part in a brief survey to give us feedback 
+                            <br/><br/>on your recent interaction with the social media representative.</b></font>
+                        </apex:outputLabel>
+                        <apex:outputLabel >
+                            <font color="red"><br/><b><apex:pageMessages /></b></font>
+                        </apex:outputLabel>    
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection title="Survey Details" columns="1" rendered="{!surveyDetailsFlag}">
+                        <apex:pageBlockTable value="{!surveyDet}" var="surveyDet">
+                            <apex:column value="{!surveyDet.todaysDate}" headerValue="Today's Date"/> 
+                            <apex:column value="{!surveyDet.urlCreatedDate}" headerValue="URL Created Date"/>
+                            <apex:column value="{!surveyDet.urlSentDate}" headerValue="URL Sent Date"/>
+                            <apex:column value="{!surveyDet.surveyGivenStr}" headerValue="Survey Taken ?"/>                            
+                        </apex:pageBlockTable>
+                    </apex:pageBlockSection>
+                </apex:pageBlock>    
+            </td>
+        </tr>
+    </table>
+</apex:page>

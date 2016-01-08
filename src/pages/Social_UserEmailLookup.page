@@ -1,0 +1,38 @@
+<apex:page controller="Social_CareManagerResponseEmail" sidebar="false" showHeader="false" id="page">
+<head>
+    <title>Additional Contact Emails</title>
+    </head>
+   <script type='text/javascript' id="script">  
+   function closeWindow(){
+   var mesg = window.document.getElementById("page:form:msg").value;
+    
+    var existaddto = window.opener.document.getElementById("myPage:myForm:pageBlock:addto").value;
+    if(existaddto!=null && existaddto !='' && existaddto !=' ') {
+        window.opener.document.getElementById("myPage:myForm:pageBlock:addto").value= existaddto+';'+mesg ;
+    } else {
+        window.opener.document.getElementById("myPage:myForm:pageBlock:addto").value = mesg; 
+    }
+    
+    var existHidden = window.opener.document.getElementById("myPage:myForm:pageBlock:myHiddenField").value;
+    if(existHidden!=null && existHidden !='' && existHidden !=' ') {
+        window.opener.document.getElementById("myPage:myForm:pageBlock:myHiddenField").value= existaddto+';'+mesg ;
+    } else {
+        window.opener.document.getElementById("myPage:myForm:pageBlock:myHiddenField").value = mesg; 
+    }
+        window.close();
+   }
+   </script>
+    <apex:form id="form">
+    <apex:pageMessages id="errmsg"/>
+   <apex:inputhidden id="msg" value="{!message}"/>
+        <apex:pageBlock title="All Contact Emails">
+            <c:Social_UserEmailGenPage leftLabel="Available Contact Emails" leftOptions1="{!allContacts}" rightLabel="Selected Contacts" rightOptions1="{!selectedContacts}" size="20" width="375px"/>
+            <apex:pageBlockButtons >
+            <apex:actionFunction action="{!ok}" name="callUpdateA" rerender="msg" oncomplete="closeWindow();return false;"/>
+                <apex:commandButton value="Ok"  onclick="callUpdateA();return false;"/>
+                <apex:commandButton value="Cancel" onclick="closeWindow();"/>
+            </apex:pageBlockButtons>
+             
+        </apex:pageBlock>
+    </apex:form>
+    </apex:page>

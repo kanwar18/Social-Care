@@ -1,0 +1,335 @@
+<apex:page standardController="Custom_Post__c" extensions="Social_CareManagerResponse" sidebar="false" tabStyle="Custom_Post__c" id="pageId">
+<apex:includeScript value="/support/console/29.0/integration.js"/>
+    <style>
+        .bPageBlock .detailList TD{
+            vertical-align:middle;
+        }
+        .UserNameFont{
+           font-size: 91%;
+           font-weight: bold;
+           text-align: right;
+           color: #4A4A56;
+           padding-left: 50%;       
+        }
+        .usernameformat{
+            padding-left: 20px;
+        }
+        
+        .statusModalBackground
+        {
+            position:absolute;
+            width:100%;
+            height:100%;
+            opacity:0.5;
+            background-color:black;
+            z-index:1000;
+            display:none;
+        }
+        
+        .statusModal
+        {
+            background-color:white;
+            position:fixed;
+            top:40%;
+            left:40%;
+            width:450px;
+            padding:15px;
+            border-radius:5px;
+            z-index:1001;
+            display:none;
+        }
+        
+        .modalSpinner
+        {
+            float:left;
+            margin-top:40px;
+        }
+    
+        .modalTitle
+        {
+            display:block;
+            font-size:14pt;
+        }
+        
+        .modalDetails
+        {
+            font-size:11pt;
+        }
+        
+        .modalTitle, .modalDetails
+        {
+            margin-left:45px;
+        }
+        
+        input.modalButton
+        {
+            display:block;
+            margin-left:auto;
+            margin-right:auto;
+            font-size:10pt;
+        }
+        .messageEntryFormSendaTweetLbl {
+            font-size: 24px;
+            padding-left: 35px;
+            padding-left-value: 35px;
+            padding-left-ltr-source: physical;
+            padding-left-rtl-source: physical;
+            font-weight: bold;
+            }
+        .messageDetails {
+            padding: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            }
+        .divClass{
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .divClassRed{
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .labelCol {
+            font-weight: bold;
+            color: rgb(51, 51, 51);
+        }
+    </style>
+    <script type="text/javascript"> 
+        var extra = 0;
+        var maxlength = 140; 
+        var customPostIdJS;  
+        
+        window.onload = function() {
+            var initiallength = '';
+            var length = document.getElementById('pageId:twitterform:TwitterformPB:TwitterformPBS:TwitterformMessage').value.length;
+            initiallength = maxlength-length + ' Characters Remaining';
+            document.getElementById('display').innerHTML = initiallength;
+        }
+      
+        function textCounter(textArea){
+            var strTemp = '';
+            document.getElementById('extraText').style.display = 'none';
+            document.getElementById('display').innerHTML = strTemp ;
+            var length = textArea.value.length;
+            if(length <= 140){ 
+                extra = 0;
+                document.getElementById('mainText').style.display = 'block';
+                strTemp = maxlength - length;
+                document.getElementById('display').innerHTML = strTemp + ' Characters Remaining';
+                return true; 
+            } else if(length > 140){ 
+                extra = extra+1;
+                document.getElementById('mainText').style.display = 'none';
+                document.getElementById('extraText').style.display = 'block';
+                strTemp = '';
+                strTemp = 'Message size limit exceeded by '+extra;
+                document.getElementById('display1').innerHTML = strTemp +' characters';
+                return true;
+            }
+        }
+           
+        var extraFB = 0;
+        var maxlengthFB = 420;                
+       
+        function textCounterFB(textArea){
+            var strTempFB = '';
+            document.getElementById('extraText1').style.display = 'none';
+            document.getElementById('display2').innerHTML = strTempFB;
+            var lengthFB = textArea.value.length;
+            if(lengthFB <= 420){ 
+                extraFB = 0;
+                document.getElementById('mainText1').style.display = 'block';
+                strTempFB = maxlengthFB - lengthFB;
+                document.getElementById('display2').innerHTML = strTempFB + ' Characters Remaining';
+                return true; 
+            } else if(lengthFB > 420){ 
+                extraFB = extraFB+1;
+                document.getElementById('mainText1').style.display = 'none';
+                document.getElementById('extraText1').style.display = 'block';
+                strTempFB = '';
+                strTempFB = 'Message size limit exceeded by '+extraFB;
+                document.getElementById('display3').innerHTML = strTempFB +' characters';
+                return true;
+            }
+        }
+        
+        function messageType(){
+            if(document.getElementById('pageId:twitterform:TwitterformPB:TwitterformPBS:messageType').value == '@Reply'){
+                document.getElementById('pageId:twitterform:TwitterformPB:TwitterformPBS:TwitterformMessage').value = document.getElementById('pageId:twitterform:TwitterformPB:TwitterformPBS:hiddenValue').value;
+                var initiallength = '';
+                var length = document.getElementById('pageId:twitterform:TwitterformPB:TwitterformPBS:TwitterformMessage').value.length;
+                initiallength = maxlength-length + ' Characters Remaining';
+                document.getElementById('display').innerHTML = initiallength;
+            } else {
+                document.getElementById('pageId:twitterform:TwitterformPB:TwitterformPBS:TwitterformMessage').value = ''; 
+                var initiallength = '';
+                initiallength = maxlength+ ' Characters Remaining';
+                document.getElementById('display').innerHTML = initiallength;                               
+            }
+        }
+        
+        function cancel(){
+            var url="/{!$CurrentPage.parameters.caseid}";
+            if (sforce.console.isInConsole()) {
+                sforce.console.getFocusedSubtabId(subTabClose);
+            } else {
+                parent.location.href=url;
+            }
+        }
+        var subTabClose = function subTabClose(result) {
+            sforce.console.closeTab(result.id);
+        };
+        
+        function refreshTab(customPostId ){
+            customPostIdJS = customPostId;
+            var url="/{!customPostId}";
+            if(sforce.console.isInConsole()){
+                cancel();
+                sforce.console.getFocusedPrimaryTabId(showTabId);
+            } else {
+                parent.location.href=url;
+            }
+        }
+        var showTabId = function showTabId(result) {
+            sforce.console.refreshPrimaryTabById(result.id, true);
+            sforce.console.openSubtab(result.id,'/'+customPostIdJS, true,'Custom Post', null, null, 'salesforceSubtab'); 
+        };
+        
+    </script>
+    <apex:form rendered="{!twitterBlock}" id="twitterform">
+    <apex:pageMessages ></apex:pageMessages>
+        <div id="outerWrapSection" class="outerWrapSectionCls" > 
+            <table width="100%">
+              <tr>
+                  <td align="right" width="80px">
+                      <apex:image value="{!$Resource.Twitter_Logo}" height="75" width="75" alt="Twitter Logo"/>   
+                  </td>
+                  <td>
+                       <p class="messageEntryFormSendaTweetLbl" >Send a Tweet</p> 
+                  </td>
+                  <td align="right">
+                  </td>
+              </tr>
+            </table>  
+        </div>
+        <apex:pageBlock title="Message Details" id="TwitterformPB">
+            <apex:pageBlockSection title="Message Details" columns="1">
+                <apex:outputField value="{!CustomPost.Case__c}"></apex:outputField>
+                <table width="40%" border="0" cellspacing ="2">
+                    <tr>
+                        <td width="35%" align="right">
+                            <font color = "#515151" size="2px"><b>Replying To:</b></font>
+                        </td>
+                        <td width="50%">
+                            <table width = "100%">
+                                <tr>
+                                    <td style="padding-left: 14px">
+                                        <img src="{!persona.R6Service__AvatarIconResource__c}" />
+                                    </td>
+                                    <td>
+                                        <a href="/{!persona.id}">{!persona.Name}</a><br></br>{!CustomPost.Social_Post_Content__c}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Comment Detail" columns="1" id="TwitterformPBS">
+                <apex:selectList size="1" value="{!CustomPost.Send_As__c}" title="Send As">
+                    <apex:selectOptions value="{!sendAs}"/>
+                </apex:selectList>
+                <apex:inputField id="messageType" onchange="messageType();" value="{!CustomPost.Message_Type__c}" required="true"/>
+                <table width="100%" border="0">
+                    <tr>
+                        <td>
+                            <apex:inputTextarea required="true" value="{!CustomPost.Message__c}" cols="75" rows="4" id="TwitterformMessage" onKeyDown="textCounter(this);" onKeyUp="textCounter(this);" onchange="textCounter(this);"/>
+                            <apex:inputHidden id="hiddenValue" value="{!strMessage }"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdClass">
+                            <div style="display: block" id="mainText" align="right">
+                                <div id="display" class="divClass" align="right"></div> 
+                            </div>
+                            <div style="display: none" id="extraText">
+                                <div id="display1" class="divClassRed"/> 
+                            </div>
+                        </td>
+                    </tr>
+                 </table>     
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons location="bottom">
+                <apex:actionStatus id="submitstatus1" >
+                     <apex:facet name="stop">
+                    <apex:commandButton value="Submit" action="{!save}"  reRender="twitterform" oncomplete="refreshTab('{!customPostId}');return false;" status="submitstatus1"/>
+                     </apex:facet>
+                     <apex:facet name="start">
+                        <apex:commandButton value="Processing..." disabled="true" />
+                    </apex:facet> 
+                </apex:actionStatus>
+                    <apex:commandButton value="Cancel" onclick="cancel();return false;"/> 
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+    <apex:form rendered="{!facebookBlock}" id="facebookform">
+        <apex:pageMessages ></apex:pageMessages>
+        <div id="outerWrapSection" class="outerWrapSectionCls" > 
+            <table width="100%">
+              <tr>
+                  <td align="right" width="80px">
+                      <apex:image value="{!$Resource.facebookLogo}" height="75" width="75" alt="Twitter Logo"/>   
+                  </td>
+                  <td>
+                       <p class="messageEntryFormSendaTweetLbl" >Send a Message</p> 
+                  </td>
+                  <td align="right">
+                  </td>
+              </tr>
+            </table>  
+        </div>
+        <apex:pageBlock title="Message Details" id="facebookformPB">
+            <apex:pageBlockSection title="Message Details" columns="1" id="facebookformPBS">
+                <apex:outputField value="{!CustomPost.Case__c}"></apex:outputField>
+                <apex:outputField value="{!CustomPost.Social_Persona__c}"></apex:outputField>
+                <apex:outputField label="Social Post Message:" value="{!CustomPost.Social_Post_Content__c}"></apex:outputField>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Comment Detail" columns="1">
+                <apex:selectList size="1" value="{!CustomPost.Send_As__c}" title="Send As">
+                    <apex:selectOptions value="{!sendAs}"/>
+                </apex:selectList>
+                <!-- apex:inputField value="{!CustomPost.Message_Type__c}"/ -->
+                
+                <table width="100%" border="0">
+                    <tr>
+                        <td>
+                            <apex:inputTextarea required="true" value="{!CustomPost.Message__c}" cols="75" rows="4" id="FacebookformMessage" onKeyDown="textCounterFB(this);" onKeyUp="textCounterFB(this);" onchange="textCounterFB(this);"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdClass">
+                            <div style="display: block" id="mainText1">
+                                <div id="display2" class="divClass">420 Characters Remaining</div> 
+                            </div>
+                            <div style="display: none" id="extraText1">
+                                <div id="display3" class="divClassRed"/> 
+                            </div>
+                        </td>
+                    </tr>
+                 </table>     
+                
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons location="bottom">
+                <apex:actionStatus id="submitstatus" >
+                     <apex:facet name="stop">
+                    <apex:commandButton value="Submit" action="{!save}"  reRender="twitterform" oncomplete="refreshTab('{!customPostId}');return false;" status="submitstatus"/>
+                     </apex:facet>
+                     <apex:facet name="start">
+                        <apex:commandButton value="Processing..." disabled="true" />
+                    </apex:facet> 
+                </apex:actionStatus>
+                    <apex:commandButton value="Cancel" onclick="cancel();return false;"/> 
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

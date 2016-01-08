@@ -1,0 +1,50 @@
+<apex:page id="userPage" controller="Social_Activate_User" showHeader="False" sidebar="false">
+<apex:includeScript value="{!$Resource.jQuery}" />
+<script>
+var js = jQuery.noConflict();
+
+// Disable Radio Button
+function componentEnable()
+{
+  js('input[id*="userRadio"]').attr('disabled', false);
+  return true;
+}
+
+// Enable Radio Button
+function componentDisable()
+{
+  js('input[id*="userRadio"]').attr('disabled', true);
+  return true;
+}
+</script>
+
+ <center><h1>Activation Of User</h1></center>
+  <apex:form id="userForm" >
+      <apex:pageMessages />
+      
+      <apex:pageBlock >
+          <center><apex:commandButton value="Save" action="{!availableMe}"/></center>
+          <center><p> Hi {!$User.FirstName}</p></center>
+          <center><apex:outputText /> Your User Availability is: <b>{!loggedInUser.Availability__c}</b></center> 
+          <apex:pageBlockSection title="Status of User" >
+           <apex:outputtext value="Please click on the Appropriate button to set your status in the Application" /> 
+            <p>
+             <apex:selectRadio id="userRadio" value="{!user}" >
+                <apex:actionSupport event="onclick" onsubmit="componentDisable();" oncomplete="componentEnable();" reRender="statusId" status="waitStatus" />      
+                   <apex:selectOptions value="{!Availability}" />
+             </apex:selectRadio>
+            </p>
+          </apex:pageBlockSection>
+           <apex:actionStatus id="waitStatus"  startText="Wait Processing..." />
+          <p>
+          <apex:outputPanel layout="block" id="statusId" >
+              <apex:pageBlockSection title="Reason of Unavailability" rendered="{!IF(user=='Unavailable', true, false)}" >
+                   <apex:selectRadio value="{!Status}" >      
+                          <center><apex:selectOptions value="{!Unavailability}" /></center>
+                   </apex:selectRadio>
+              </apex:pageBlockSection>
+          </apex:outputPanel>
+          </p>     
+      </apex:pageBlock>
+  </apex:form>
+  </apex:page>

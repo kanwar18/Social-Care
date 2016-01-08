@@ -1,0 +1,221 @@
+<apex:page showheader="false" sidebar="false" id="myPage" standardController="Case" extensions="Social_CaseUpdateInteractionLog" readOnly="true">
+    <html>
+    <style>
+       form {
+           margin-top: -2px;
+       }
+    </style>
+    <apex:form id="myForm">
+        <apex:includeScript value="/support/console/26.0/integration.js"/>
+        <script type="text/javascript">
+            window.onload=function(){        
+                document.getElementById('myPage:myForm').oncontextmenu = function(){
+                        alert('Right click disabled');
+                        return false; 
+                }
+            }
+            var scrollTop=0;
+            var scrollLeft=0;
+            var casesExpandedList = [];
+            function switchMenu(obj,obj1,obj2,caseNumber) {
+                var el = document.getElementById(obj);                                       
+                if ( el.style.display != 'none' ) {
+                    el.style.display = 'none';
+                    for (removeFromListInt = 0; removeFromListInt < casesExpandedList.length; removeFromListInt++) {
+                        if( casesExpandedList[removeFromListInt] == caseNumber) {
+                            casesExpandedList.splice(removeFromListInt, 1);
+                        }
+                    }
+                } else {
+                    el.style.display = '';
+                    casesExpandedList.push(caseNumber);
+                }
+                var e2 = document.getElementById(obj1);                                       
+                if ( e2.style.display != 'none' ) {
+                    e2.style.display = 'none';
+                } else {
+                    e2.style.display = '';
+                }
+                var e3 = document.getElementById(obj2);                                       
+                if ( e2.style.display != 'none' ) {
+                    e3.style.display = 'none';
+                } else {
+                    e3.style.display = '';
+                }
+            }
+            
+            function expandAll() {
+                casesExpandedList = [];
+                for(var expandTableInt = 0; expandTableInt < '{!limitOfCases}'; expandTableInt++) {
+                    document.getElementById('myPage:myForm:myPageBlockTable:' + expandTableInt + ':inlinetablesec').style.display = 'block';
+                    document.getElementById('myPage:myForm:myPageBlockTable:' + expandTableInt + ':plusimage').style.display = 'none';
+                    document.getElementById('myPage:myForm:myPageBlockTable:' + expandTableInt + ':minusimage').style.display = 'block';
+                    casesExpandedList.push(document.getElementById('myPage:myForm:myPageBlockTable:' + expandTableInt + ':caseNumberMinus').innerHTML);
+                }
+            }
+            
+            function collapseAll() {
+                casesExpandedList = [];
+                for(var collapseTableInt = 0 ; collapseTableInt < '{!limitOfCases}'; collapseTableInt++) {
+                    document.getElementById('myPage:myForm:myPageBlockTable:' + collapseTableInt + ':inlinetablesec').style.display = 'none';
+                    document.getElementById('myPage:myForm:myPageBlockTable:' + collapseTableInt + ':plusimage').style.display = 'block';
+                    document.getElementById('myPage:myForm:myPageBlockTable:' + collapseTableInt + ':minusimage').style.display = 'none';
+                }
+            }
+            
+            function OpenNewCaseTab(recordId,caseNumber) {
+                if(sforce.console.isInConsole()) { 
+                    sforce.console.openPrimaryTab(null,'/'+recordId,true,'',openSuccess,caseNumber);
+                }
+            }
+            
+            var openSuccess = function openSuccess(result) {};
+            var contactId;
+            var contactNameJS;
+            function OpenNewContactTab(recordId,contactName,caseNum) {
+                contactId = recordId;
+                contactNameJS = contactName;
+                if(sforce.console.isInConsole()) {  
+                    sforce.console.openSubtabByPrimaryTabName(caseNum,recordId, true, contactName, null, contactSubTabOpenResult, contactName);
+                }
+                   
+            }
+            var contactSubTabOpenResult = function contactSubTabOpenResult(result) {
+                if (result.success != true) {
+                    sforce.console.openPrimaryTab(null,'/'+contactId,true,contactNameJS,null,contactNameJS);
+                }
+            };
+            
+            function retainScrollLocation(){
+                scrollTop=document.documentElement.scrollTop;
+                scrollLeft=document.documentElement.scrollLeft;
+            }
+            
+            function expandCasesPostRefresh() {
+                if (casesExpandedList != '') {
+                    for (expandCasesInt = 0; expandCasesInt < '{!limitOfCases}'; expandCasesInt++ ) {
+                        if (casesExpandedList.indexOf(document.getElementById('myPage:myForm:myPageBlockTable:' + expandCasesInt + ':caseNumberMinus').innerHTML) > -1) {
+                            document.getElementById('myPage:myForm:myPageBlockTable:' + expandCasesInt + ':inlinetablesec').style.display = 'block';
+                            document.getElementById('myPage:myForm:myPageBlockTable:' + expandCasesInt + ':plusimage').style.display = 'none';
+                            document.getElementById('myPage:myForm:myPageBlockTable:' + expandCasesInt + ':minusimage').style.display = 'block';
+                            window.scroll(scrollLeft,scrollTop);     
+                        }
+                    }                  
+                } 
+            }
+        </script>
+        <apex:commandLink value="Expand All"  onclick="expandAll();return false;" style="color:#006699" title="Click to Expand All"/> &nbsp;|&nbsp;
+        <apex:commandLink value="Collapse All" onclick="collapseAll();return false;" style="color:#006699" title="Click to Collapse All"/> &nbsp;|&nbsp;
+        <apex:commandLink value="Refresh" reRender="mainOutputPanel,myPageBlockTable,pageVariable,innerCaseSection,inlinetablesec" style="color:#006699" title="Click to Refresh" oncomplete="expandCasesPostRefresh();" action="{!queryCases}" />
+        <apex:actionPoller action="{!queryCases}" reRender="mainOutputPanel,myPageBlockTable,pageVariable,innerCaseSection,inlinetablesec" interval="25" oncomplete="expandCasesPostRefresh();" onsubmit="retainScrollLocation();" />    
+         
+            <br/>
+            <apex:outputPanel id="mainOutputPanel">
+            <apex:variable var="caseCount" value="{!0}"/>
+            <table border="0" cellpadding="6" cellspacing="2" style="width:100%;">
+                <apex:repeat value="{!casesToDisplay}"  var="caseInst" id="myPageBlockTable">
+                    <tr bgcolor="{!IF((MOD(caseCount, 2) = 0),'#E0F5FF','#FFFFFF')}">
+                    <td>
+                        <apex:variable var="caseCount" value="{!caseCount + 1}" id="pageVariable"/>
+                        <apex:outputpanel id="plusimage">
+                            <apex:image url="{!$Resource.Plus_Image}" onclick="switchMenu('{!$Component.inlinetablesec}','{!$Component.minusimage}','{!$Component.plusimage}','{!caseInst.CaseNumber}')" title="Expand Section :{!caseInst.CaseNumber}" id="plusImageTag"/> 
+                            <b><apex:commandLink onclick="OpenNewCaseTab('{!caseInst.Id}','{!caseInst.CaseNumber}');return false;" style="color:#006699;" title="{!caseInst.CaseNumber}" id="caseNumberLinkClosed">{!caseInst.CaseNumber}</apex:commandLink></b>
+                            <apex:outputText value="{!caseInst.CaseNumber}" id="caseNumberPlus" style="display:none;"/> 
+                            <apex:outputText rendered="{!IF(ISNULL(caseInst.Update_Reason__c),false,true)}">
+                                &nbsp;|&nbsp;<b><font size="2px" face="Arial" color="#006699">{!caseInst.Update_Reason__c}</font></b>
+                            </apex:outputText>
+                            <apex:image url="{!$Resource.Bulb_Red}" width="14" height="14" title="DNR Time Expires {!caseInst.Timer_Expires_AT__c}" rendered="{!caseInst.DNR_End_Time__c!=null && caseInst.DNR_End_Time__c-now()<DNRTimeExp && caseInst.DNR_End_Time__c-now()>0}"/>
+                            <div style = "float:right;">
+                                <apex:outputText escape="false" value="{!caseInst.ReadUnreadFormula__c}" style="width: 20px; height: 20px"  title="Case Read ?" rendered="{!caseInst.readunreadcheck__c}"/>                                                                             
+                            </div>
+                            <br></br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <b><font size="1px" face="Arial" color="#006699"><apex:outputField value="{!caseInst.NonCaseOwner_LastModifiedDate__c}"/></font></b>
+                        </apex:outputpanel>
+                        <apex:outputpanel id="minusimage" style="display:none;">
+                            <apex:image url="{!$Resource.Minus_image}" onclick="switchMenu('{!$Component.inlinetablesec}','{!$Component.plusimage}','{!$Component.minusimage}','{!caseInst.CaseNumber}')" title="Collapse Section :{!caseInst.CaseNumber}" id="minusImageTag"/>
+                            <b><apex:commandLink onclick="OpenNewCaseTab('{!caseInst.Id}','{!caseInst.CaseNumber}');return false;" style="color:#006699" title="{!caseInst.CaseNumber}" id="caseNumberLinkOpen">{!caseInst.CaseNumber}</apex:commandLink></b>
+                            <apex:outputText value="{!caseInst.CaseNumber}" id="caseNumberMinus" style="display:none;"/>&nbsp;
+                            <apex:image url="/img/samples/light_green.gif" height="12" width="40" title="Priority:{!caseInst.Priority}" rendered="{!(caseInst.Priority=='Low')}"/>
+                            <apex:image url="/img/samples/light_red.gif" height="12" width="40" title="Priority:{!caseInst.Priority}" rendered="{!(caseInst.Priority=='High')}"/>
+                            <apex:image url="/img/samples/light_yellow.gif" height="12" width="40" title="Priority:{!caseInst.Priority}" rendered="{!(caseInst.Priority=='Medium') }"/>
+                            <apex:image url="{!$Resource.Bulb_Red}" width="14" height="14" title="DNR Time Expires {!caseInst.Timer_Expires_AT__c}" rendered="{!caseInst.DNR_End_Time__c!=null && caseInst.DNR_End_Time__c-now()<DNRTimeExp && caseInst.DNR_End_Time__c-now()>0}"/>                                          
+                            <div style = "float:right;">
+                                <apex:outputText escape="false" value="{!caseInst.ReadUnreadFormula__c}" style="width: 20px; height: 20px"  title="Case Read ?" rendered="{!caseInst.readunreadcheck__c}"/>                                                                             
+                            </div>
+                        </apex:outputpanel>
+                        <apex:outputpanel id="inlinetablesec" style="display:none;">
+                            <div style = "height:2px;"></div>
+                            <table border="0" cellpadding="0" cellspacing="0" style="width:270px;">
+                                <apex:repeat value="{!caseInst}" var="caseInnerInst" id="innerCaseSection">
+                                <div  id="contentinfo" style="float:none; width:100%;"> 
+                                    <div style="float:left;">
+                                        <div style="float:left;">
+                                            <apex:image url="{!caseInst.SocialPersonImage__c}" rendered="{!IF(ISNULL(caseInst.SocialPersonImage__c),false,true)}" title="Contact Image"/>&nbsp;
+                                        </div>
+                                        <div style="float:right;">
+                                           <apex:outputText escape="false" value="{!caseInnerInst.R6MediaIcon__c}" style="width: 300px; height: 300px" title="Media Icon" rendered="{!(caseInnerInst.R6Service__MediaProvider__c == 'Facebook') || (caseInnerInst.R6Service__MediaProvider__c == 'Twitter')}"/> 
+                                             <apex:outputPanel rendered="{!(caseInnerInst.R6Service__MediaProvider__c == 'Facebook') || (caseInnerInst.R6Service__MediaProvider__c == 'Twitter')}">
+                                               <br/>
+                                            </apex:outputPanel>
+                                            <apex:image url="{!$Resource.EmailIcon}" width="18" height="18" rendered="{!(caseInnerInst.Origin == 'Email')}" title="Email2Case"/>
+                                            <apex:outputPanel rendered="{!(caseInnerInst.Origin == 'Email')}">
+                                                <br/>
+                                            </apex:outputPanel>
+                                            <apex:outputText escape="false" value="{!caseInnerInst.DNE_Listed_Flag__c}" style="width: 20px; height: 20px" title="DNE Listed"/>
+                                        </div>
+                                    </div>
+                                    <apex:outputText rendered="{!IF(ISNULL(caseInnerInst.Contact.Name),false,true)}"  id="contactLink">
+                                        <div style="float:left;" title="Contact Name">
+                                            <apex:outputPanel rendered="{!(caseInnerInst.R6Service__MediaProvider__c <> 'Facebook') || (caseInnerInst.R6Service__MediaProvider__c <>'Twitter')}" ><b><font size="2px">&nbsp;|&nbsp;</font></b></apex:outputPanel>
+                                            <b><apex:commandLink value="{!caseInnerInst.Contact.Name}" onclick="OpenNewContactTab('{!caseInnerInst.ContactId}','{!caseInnerInst.Contact.Name}','{!caseInnerInst.CaseNumber}');return false;" style="size:1px;face:Arial;color:#006699;text-decoration: none" title="Contact Name"/></b>
+                                            <b><font size="2px">&nbsp;|</font></b>
+                                        </div>
+                                    </apex:outputText> 
+                                    <apex:outputText rendered="{!IF(ISNULL(caseInnerInst.Status),false,true)}">
+                                        <div style="float:left;" title = "Status">
+                                            <b><font size="2px">&nbsp;</font></b>
+                                            <b><font size="1px" face="Arial" color="#006699">{!caseInnerInst.Status}</font></b>
+                                        </div>
+                                    </apex:outputText>
+                                    <apex:outputText rendered="{!IF((caseInnerInst.Current_SLA_Phase__c == 'SLA1 - Initiated'),true,false)}">
+                                        <div style="float:left;" title = "SLA Phase & End Time">
+                                            <b><font size="2px">&nbsp;|&nbsp;</font></b>
+                                            <b><font size="1px" face="Arial" color="#006699">{!caseInnerInst.SLA_Details__c} - <c:Social_DateTimeFormatComponent dateTime_Value="{!caseInnerInst.First_SLA_Scheduled_Time__c}"/></font></b>
+                                        </div>
+                                    </apex:outputText>
+                                    <apex:outputText rendered="{!IF((caseInnerInst.Current_SLA_Phase__c == 'SLA2 - Initiated'),true,false)}">
+                                        <div style="float:left;" title = "SLA Phase & End Time">
+                                            <b><font size="2px">&nbsp;|&nbsp;</font></b>
+                                            <b><font size="1px" face="Arial" color="#006699">{!caseInnerInst.SLA_Details__c} - <c:Social_DateTimeFormatComponent dateTime_Value="{!caseInnerInst.Second_SLA_Scheduled_Time__c}"/></font></b>
+                                        </div>
+                                    </apex:outputText>
+                                    <apex:outputText rendered="{!IF(ISNULL(caseInnerInst.Billing_Account__c),false,true)}">
+                                        <div style="float:left;" title = "BAN/Wireless CTN">
+                                            <b><font size="2px">&nbsp;|&nbsp;</font></b>
+                                            <b><font size="1px" face="Arial" color="#006699">BAN: {!caseInnerInst.Billing_Account__c} / WCTN: {!caseInnerInst.Wireless_CTN__c}</font></b>
+                                        </div>
+                                    </apex:outputText>
+                                    <apex:outputText rendered="{!IF(ISNULL(caseInnerInst.NonCaseOwner_LastModifiedDate__c),false,true)}">
+                                        <div style="float:left;" title = "Last Modified Date and Time">
+                                            <b><font size="2px">&nbsp;|&nbsp;</font></b>
+                                            <b><font size="1px" face="Arial" color="#006699">Modified:<apex:outputField value="{!caseInnerInst.NonCaseOwner_LastModifiedDate__c}"/></font></b>
+                                        </div>
+                                    </apex:outputText>
+                                    <apex:outputText rendered="{!IF(ISNULL(caseInnerInst.Social_Care_Handle_Name__c),false,true)}" >
+                                        <div style="float:left;width:100%;letter-spacing: 1px;word-spacing:2px;" title="Initial Post Comments">
+                                            <p align="justify">
+                                                <b><font size="1px" face="Arial" color="#FF4500">{!caseInnerInst.Social_Care_Handle_Name__c}</font></b><br/>
+                                            </p>  
+                                        </div>
+                                    </apex:outputText>
+                                    </div>
+                                </apex:repeat>
+                            </table>
+                        </apex:outputpanel>
+                    </td></tr>  
+                </apex:repeat>
+            </table>
+        </apex:outputPanel>
+    </apex:form>
+    </html>
+</apex:page>

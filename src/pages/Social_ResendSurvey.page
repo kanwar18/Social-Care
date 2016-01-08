@@ -1,0 +1,40 @@
+<apex:page standardController="Forsee_Survey__c" extensions="Social_ResendSurveyCtrl" id="Resendpage" sidebar="false" showHeader="false">
+    <script src="/soap/ajax/9.0/connection.js" type="text/javascript"></script>
+    <apex:includeScript value="/support/console/29.0/integration.js"/>
+    <script type = "text/javascript">
+        var forseeRecordId;
+        var foreseeRecordName;
+        function nextforsee() {
+            var Casenumber = '{!mforseesur.Case_Number__c}';
+            var qr = sforce.connection.query("SELECT id,name FROM Forsee_Survey__c where case_number__c='"+ Casenumber +"' and Resent_Survey__c=true order by createddate desc limit 1");
+            var records = qr.getArray("records")[0];
+            forseeRecordId = records.get("Id");
+            foreseeRecordName = records.get("Name");
+            if(sforce.console.isInConsole()) {
+                sforce.console.getFocusedPrimaryTabId(primaryTabId);
+            } else {
+                window.top.location='/'+records.get("Id");
+            }
+        }
+        var primaryTabId = function primaryTabId(result) {
+            sforce.console.openSubtab(result.id, '/' + forseeRecordId, true,foreseeRecordName, null, null,foreseeRecordName);
+        };
+    </script>
+    <apex:form style="text-align:center" id="Theform">
+        <apex:pageMessages id="errorMessage" ></apex:pageMessages>
+        <apex:outputPanel >
+            <apex:actionStatus id="mySaveStatus1">
+                <apex:facet name="stop">
+                <apex:commandButton id="resendsurvey" rendered="{!enablebutton}" action="{!GenerateForseeURl}"  onComplete="nextforsee();" value="Resend Survey"  title="Resend Survey" status="mySaveStatus1" />
+                </apex:facet>
+                <apex:facet name="start">
+                <apex:commandButton value="Processing..." status="mySaveStatus1" disabled="true"/>
+                </apex:facet>
+            </apex:actionStatus>
+        </apex:outputPanel>
+        <apex:inputHidden value="{!Forsee_Survey__c.Case_Number__c}"/>
+        <apex:inputHidden value="{!Forsee_Survey__c.Name}"/>
+        <apex:inputHidden value="{!Forsee_Survey__c.Resent_Survey__c}"/>
+        <apex:inputHidden value="{!Forsee_Survey__c.Number_of_Surveys_Resent__c}"/>
+    </apex:form>
+</apex:page>

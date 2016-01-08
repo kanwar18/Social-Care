@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexComponent xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>33.0</apiVersion>
+    <description>Component to get time in minutes and hours in user time zone</description>
+    <label>Social_DateTimeFormatComponent</label>
+</ApexComponent>

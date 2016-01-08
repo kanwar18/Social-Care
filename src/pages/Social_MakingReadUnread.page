@@ -1,0 +1,2 @@
+<apex:page standardController="Case" extensions="CaseUpdate" action="{!CaseVisibility}" showHeader="false" sidebar="false">
+</apex:page>

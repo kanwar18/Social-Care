@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>28.0</apiVersion>
+    <availableInTouch>false</availableInTouch>
+    <confirmationTokenRequired>false</confirmationTokenRequired>
+    <description>/* Version History
+Aug 20th 2013:ITS-000121
+-- This VF page is used for the Resend Survey URL functionality.
+ Deployment Date: 28th August 2013
+*/</description>
+    <label>Social_ResendSurvey</label>
+</ApexPage>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>29.0</apiVersion>
+    <availableInTouch>false</availableInTouch>
+    <confirmationTokenRequired>false</confirmationTokenRequired>
+    <description>/** this VF page is invoked from the custom button close case as spam to update SLA and close case. **/</description>
+    <label>Social_CaseCloseasSpam</label>
+</ApexPage>

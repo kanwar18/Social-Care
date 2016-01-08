@@ -1,0 +1,63 @@
+<apex:page standardController="case" extensions="Social_AuditResponsesController" tabStyle="Case" sidebar="false">
+   <apex:includeScript value="/support/console/29.0/integration.js"/>
+    <script type='text/javascript'>
+    var qaResponseRecordId;
+    var qaResponseName;
+    var qaViewType
+    function openEditWindow(AuditId,auditName,viewType) {
+        qaResponseRecordId = AuditId;
+        qaResponseName = auditName;
+        qaViewType = viewType;
+        if (sforce.console.isInConsole()) {
+            primayTabId();
+        } else {
+            if (qaViewType == 'Edit') {
+                window.open('/apex/Social_AuditEditPage?id='+ AuditId,'_parent');
+            } else {
+                window.open('/'+ AuditId,'_parent');
+            }
+        }
+    }
+        
+    function primayTabId() {
+        sforce.console.getFocusedPrimaryTabId(primaryTabId);
+    }
+    var primaryTabId = function primaryTabId(result) {
+        if (qaViewType == 'Edit') {
+            sforce.console.openSubtab(result.id,'/apex/Social_AuditEditPage?id=' + qaResponseRecordId +'&isdtp=vw', true,qaResponseName, null, null,qaResponseName);
+        } else {
+            sforce.console.openSubtab(result.id, '/' + qaResponseRecordId, true,qaResponseName, null, null,qaResponseName);
+        }
+    };
+    </script>
+    <apex:form rendered="{!(case.No_Of_Audit_Responses__c) ==0}">
+        <apex:outputLabel >
+            <font size="4" color="black"><p>No QA Responses Available.</p></font>
+        </apex:outputLabel>
+    </apex:form>   
+    <apex:form rendered="{!(case.No_Of_Audit_Responses__c) !=0}">
+           <apex:pageBlock >
+           <apex:pageblocktable value="{!AuditResponses}" var="auditRep" id="qaResponseTable">
+                 <apex:column rendered="{!IF(userName ==cManager,true,false) || ($Profile.Name =='System Administrator')}">
+                     <apex:facet name="header">Action</apex:facet>
+                     <a href="#" onClick="openEditWindow('{!auditRep.Id}','{!auditRep.name}','Edit')">Edit</a>                         
+                 </apex:column>                   
+                 <apex:column >
+                     <apex:facet name="header">QA Responses</apex:facet>
+                     <a href="#" onClick="openEditWindow('{!auditRep.Id}','{!auditRep.name}','View')">{!auditRep.name}</a>
+                 </apex:column>
+                 <apex:column headerValue="Component" value="{!auditRep.Audit_Component__c}"/>
+                 <apex:column headerValue="QA Questions" value="{!auditRep.Audit_Question__c}"/>
+                 <apex:column headerValue="QA Answers" value="{!auditRep.Audit_Answer__c}"/>
+                 <apex:column headerValue="Score" value="{!auditRep.Audit_Score__c}"/>
+                 <apex:column headerValue="QA Coaching" value="{!auditRep.Audit_Coaching__c}"/>
+             </apex:pageblocktable> 
+             <apex:panelGrid columns="4">
+                <apex:commandLink action="{!first}" reRender="qaResponseTable">First</apex:commandlink>
+                <apex:commandLink action="{!previous}" rendered="{!hasPrevious}" reRender="qaResponseTable">Previous</apex:commandlink>
+                <apex:commandLink action="{!next}" rendered="{!hasNext}" reRender="qaResponseTable">Next</apex:commandlink>
+                <apex:commandLink action="{!last}" reRender="qaResponseTable">Last</apex:commandlink>
+             </apex:panelGrid>        
+          </apex:pageBlock> 
+       </apex:form> 
+</apex:page>

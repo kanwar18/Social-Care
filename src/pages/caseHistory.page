@@ -1,0 +1,187 @@
+<apex:page standardController="Case" extensions="CSC_CaseHistoryExtension" tabStyle="Case" sidebar="false" cache="true" >
+    <apex:includeScript value="/support/console/29.0/integration.js"/>
+    <Script type="text/Javascript">
+        var emailIdJS;
+        var sopoidJS;
+        var providerJS;
+        function escalateViaEmail(emailId) {
+            emailIdJS = emailId;
+            if(sforce.console.isInConsole()){
+                sforce.console.getFocusedPrimaryTabId(openNewSubTab);
+            } else {
+                if ('{!mCase.Origin}' == 'Email' && '{!mCase.Origin}' != '') {
+                    window.open('/apex/Social_CustomEmailCase?eid='+emailIdJS+'&caseid='+'{!mCase.Id}'+'&flag=TRUE&eflag=FALSE&exmail=TRUE&returl='+'{!mCase.Id}', "_parent");
+                } else {
+                    window.open('/apex/Social_CustomEmailCase?caseid='+'{!mCase.Id}'+'&flag=TRUE&eflag=FALSE&exmail=TRUE&postId='+emailIdJS+'&returl='+'{!mCase.Id}', "_parent");
+                }
+            }
+        }
+        
+        var openNewSubTab = function openNewSubTab(result) {
+            if ('{!mCase.Origin}' == 'Email' && '{!mCase.Origin}' != '') {
+                sforce.console.openSubtab(result.id,'/apex/Social_CustomEmailCase?eid='+emailIdJS+'&caseid='+'{!mCase.Id}'+'&flag=TRUE&eflag=FALSE&exmail=TRUE', true,'Escalate Via Email', null, null, 'salesforceSubtab');
+            } else {
+                sforce.console.openSubtab(result.id,'/apex/Social_CustomEmailCase?caseid='+'{!mCase.Id}'+'&flag=TRUE&eflag=FALSE&exmail=TRUE&postId='+emailIdJS, true,'Escalate Via Email', null, null, 'salesforceSubtab');
+            }
+        };
+        
+        function Reply(emailId,linkValue) {
+            emailIdJS = emailId;
+            if(sforce.console.isInConsole()){
+                if (linkValue != 'Submit Email for Approval') {
+                    sforce.console.getFocusedPrimaryTabId(openNewReplySubTab);
+                } else {
+                    sforce.console.getFocusedPrimaryTabId(openNewReplySubTabForNesting);
+                }
+            } else {
+                window.open('/apex/Social_CustomEmailCase?eid='+emailIdJS+'&caseid='+'{!mCase.Id}'+'&flag=TRUE&eflag=FALSE&exmail=TRUE', "_parent");
+            }
+        }
+        
+        var openNewReplySubTab = function openNewReplySubTab(result) {
+            sforce.console.openSubtab(result.id,'/apex/Social_CustomEmailCase?eid='+emailIdJS+'&caseid='+'{!mCase.Id}'+'&flag=TRUE&eflag=FALSE&exmail=FALSE', true,'Reply to Last Email', null, null, 'salesforceSubtab');
+        };
+        
+        var openNewReplySubTabForNesting = function openNewReplySubTabForNesting(result) {
+            sforce.console.openSubtab(result.id,'/apex/customEmail?caseid='+'{!mCase.Id}', true,'Submit Email for Approval', null, null, 'salesforceSubtab');
+        };
+        
+        function ApprovalPost(sopoId, provider){
+            sopoIdJS = sopoId;
+            providerJS = provider;
+            if(sforce.console.isInConsole()){
+                if(providerJS == 'Twitter' || providerJS == 'TWITTER' || providerJS == 'twitter'){
+                    sforce.console.getFocusedPrimaryTabId(openNewPostPage);
+                } else if(providerJS == 'Facebook' || providerJS == 'FACEBOOK' || providerJS == 'facebook'){
+                    sforce.console.getFocusedPrimaryTabId(openNewFbPostPage);
+                }
+            } else if(providerJS == 'Twitter' || 'TWITTER' || 'twitter'){
+                window.open('/apex/customPost?postId=' + sopoIdJS + '&category=twitter', "_parent");
+            } else if(providerJS == 'Facebook' || 'FACEBOOK' || 'facebook'){
+                window.open('/apex/customPost?postId=' + sopoIdJS + '&category=facebook', "_parent");
+            }
+        }
+        var openNewPostPage = function openNewPostPage(result) {
+            sforce.console.openSubtab(result.id,'/apex/customPost?postId=' + sopoIdJS + '&category=twitter', true,'Submit a Post for Approval', null, null, 'salesforceSubtab');
+        };
+        
+        var openNewFbPostPage = function openNewFbPostPage(result) {
+            sforce.console.openSubtab(result.id,'/apex/customPost?postId=' + sopoIdJS + '&category=facebook', true,'Submit a Post for Approval', null, null, 'salesforceSubtab');
+        };
+        
+        function openPostAndPersona(postId) {
+            sopoidJS = postId;
+            if(sforce.console.isInConsole()){
+                sforce.console.getFocusedPrimaryTabId(openSocialPostAndPersona);
+            } else {
+                window.open('/' + sopoidJS, "_parent");
+            }
+        }
+        var openSocialPostAndPersona = function openSocialPostAndPersona(result) {
+            sforce.console.openSubtab(result.id,'/'+sopoidJS, true,'', null, null, '');
+        };
+        
+        function openPostDetail (postURL) {
+            if (postURL != '') {
+                window.open(postURL, "_target");
+            }
+        }
+    </Script>
+    <apex:form >
+    <apex:pageBlock id="thePageBlock" mode="mainDetail">
+        <apex:pageBlockButtons location="both">
+            <apex:commandButton value="Update" action="{!updateActivity}"/>
+                <apex:outputLabel value="Attachments" for="attachbox"/>
+                <apex:inputCheckbox value="{!CheckBoxAttachments}" id="attachbox"/> &nbsp;
+                <apex:inputhidden value="{!Case.Status}" />
+                <apex:inputhidden value="{!Case.OwnerId}" />
+                <apex:inputhidden value="{!Case.Contact.Email}" />
+                <apex:inputhidden value="{!Case.ContactId}" />
+                <apex:inputHidden value="{!Case.Origin}"/>
+                <apex:outputLabel value="Comments" for="commentbox"/>
+                <apex:inputCheckbox value="{!CheckBoxComments}" id="commentbox"/> &nbsp; 
+                <apex:outputLabel value="Email" for="email"/>
+                <apex:inputCheckbox value="{!CheckBoxEmail}" id="emailbox"/>  &nbsp; 
+                <apex:outputLabel value="History" for="histbox"/>                    
+                <apex:inputCheckbox value="{!CheckBoxHistory}" id="histbox"/> &nbsp; 
+                <apex:outputLabel value="Social" for="socialbox"/>    
+                <apex:inputCheckbox value="{!CheckBoxSocial}" id="socialbox"/> &nbsp; 
+                <apex:outputLabel value="Surveys" for="surveybox"/>    
+                <apex:inputCheckbox value="{!CheckBoxSurveys}" id="surveybox"/> &nbsp; 
+                <apex:commandButton value="{!IF(fullComments, 'Shorten ', 'Full ')}Comments/Email" action="{!toggleComments}" rerender="thePageBlock" status="status"/>
+                <apex:actionStatus id="status" startText="requesting..."/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable id="ct" value="{!histories}" var="h">        
+                <apex:column style="vertical-align:top;" headerValue="Date/Time" value="{!h.purtyDateTime}" width="70"/>
+                <apex:column style="vertical-align:top" headerValue="Modified/Made By" width="100">
+                    <apex:outputText value="{!h.actorname}" escape="false" />
+                </apex:column>
+                <apex:column headerValue="Activity" rendered="{!h.isSocialPost}">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tr>
+                            <td style="vertical-align:top;width:48px;border: 0px;">
+                                <apex:outputText rendered="{!h.socPost.formattedAvatar!=''}" value="{!h.socPost.formattedAvatar}" escape="false"/>
+                                <apex:image rendered="{!h.socPost.formattedAvatar==''}" url="{!$Resource.R6Service__MissingAvatar}" height="48" width="48" />
+                            </td>
+                            <td style="text-align:left;vertical-align:top;border: 0px;">
+                                <apex:outputText style="font-weight:bold;font-size:120%" value="{!h.socPost.headln}" escape="false"/>
+                                <br />
+                                <apex:outputText value="{!h.socPost.cont}" escape="false"/>
+                                <br />
+                                <apex:image rendered="{!(h.socPost.mediaProvider == 'Twitter')}" url="{!$Resource.TwitterLogo}" width="16" height="16" style="float:left;padding-right:2mm;vertical-align:text-top" />
+                                <apex:image rendered="{!h.socPost.mediaProvider=='Facebook'}" url="{!$Resource.facebookLogo}" width="16" height="16" style="float:left;padding-right:2mm;vertical-align:text-top" />
+                                <apex:commandLink value="{!h.socPost.dateTimeSocialURL}" onclick="openPostDetail('{!h.socPost.postURL}'); return false;"/><br/>
+                                <apex:outputText rendered="{!h.socPost.postPriority!=''}" style="font-weight:normal;font-size:x-small" value="{!h.socPost.postPriority} Priority, " escape="false"/> 
+                                <apex:outputText rendered="{!h.socPost.pstTags!=''}" style="font-weight:normal;font-size:x-small" value="{!h.socPost.pstTags} " escape="false"/>  
+                                <apex:outputText rendered="{!h.socPost.srcTags !=''}" style="font-weight:normal;font-size:x-small" value="{!h.socPost.srcTags} " escape="false"/> 
+                                <apex:commandLink value="Social Post" style="font-weight:bold;font-size:80%;color:blue;" onclick="openPostAndPersona('{!h.i_d}'); return false;"/>&nbsp;&nbsp;
+                                <apex:commandLink value="Social Persona" style="font-weight:bold;font-size:80%;color:blue;" onclick="openPostAndPersona('{!h.socPost.sopeepLink}'); return false;" rendered="{!IF(ISNULL(h.socPost.sopeepLink),false,true)}"/><br></br>
+                                <apex:commandLink value="{!h.replyLink}" rendered="{!enablePostLinkCaseTimeLine}" style="font-weight:bold;font-size:100%;color:blue;" onclick="ApprovalPost('{!h.socPost.i_d}','{!h.socPost.mediaProvider}');return false;"/> &nbsp;&nbsp;
+                                <apex:commandLink value="{!h.escalateLink}" rendered="{!enablePostLinkCaseTimeLine}" style="font-weight:bold;font-size:100%;color:blue;" onclick="escalateViaEmail('{!h.socPost.i_d}');return false;"/>
+                            </td>
+                            <td style="text-align:right;vertical-align:top;border: 0px;">
+                                <apex:outputText rendered="{!h.customTxt=='ShowSuccess'}" style="font-weight:bold;font-size:120%;color:green" value="{!h.sendSuccess}" escape="false"/><br></br>
+                                <apex:commandLink rendered="{!enablePostLinkCaseTimeLine}" value="{!h.replyLink}" style="font-weight:bold;font-size:120%;color:blue" onclick="ApprovalPost('{!h.i_d}','{!h.socPost.mediaProvider}');return false;" /><br></br>
+                                <apex:outputText rendered="{!h.customTxt=='ShowError'}" style="font-weight:bold;font-size:120%;color:rgb(255,114,0)" value="Error" escape="false"/><br/><br></br>
+                                <apex:outputText rendered="{!h.customTxt=='ShowError'}" style="font-weight:normal;font-size:x-small" value="{!h.sendErr}" escape="false"/>
+                            </td>
+                        </tr>
+                    </table>
+                </apex:column>
+                <apex:column headerValue="Activity" rendered="{!(h.isSocialPost==false)}" >
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tr>
+                            <td style="vertical-align:top;width:87%;border: 0px;background-color: {!bgColor}">
+                                <apex:outputText value="{!h.customTxt}" escape="false"/>
+                            </td>
+                            <td height="100%" style="border: 0px;">
+                                <table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0">
+                                    <tr>
+                                        <td style="vertical-align:top;border: 0px;">
+                                            <apex:commandLink value="{!h.replyLink}" rendered="{!enableEmailLinkCaseTimeLine}" style="font-weight:bold;font-size:100%;color:blue" onclick="Reply('{!h.i_d}','{!h.replyLink}');return false;"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="vertical-align:top;border: 0px;">
+                                            <apex:outputText rendered="true" style="font-weight:bold;font-size:100%;color:green" value="{!h.sendErr}" escape="false"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="vertical-align:top;border: 0px;">
+                                            <apex:outputText rendered="true" style="font-weight:bold;font-size:100%;color:red" value="{!h.sendSuccess}" escape="false"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="vertical-align:bottom;border: 0px;">
+                                            <apex:commandLink value="{!h.escalateLink}" rendered="{!enableEmailLinkCaseTimeLine}" style="font-weight:bold;font-size:100%;color:blue" onclick="escalateViaEmail('{!h.i_d}');return false;"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

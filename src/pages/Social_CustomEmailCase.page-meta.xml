@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>29.0</apiVersion>
+    <availableInTouch>false</availableInTouch>
+    <confirmationTokenRequired>false</confirmationTokenRequired>
+    <description>/** This is the custom VF page used to send emails from salesforce to consumers.
+This will be visible on the page layouts.**/</description>
+    <label>Social_CustomEmailCase</label>
+</ApexPage>

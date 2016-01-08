@@ -1,0 +1,30 @@
+<apex:page StandardController="Custom_Post__c" extensions="Social_ReplyToPostController">
+    <script src="/soap/ajax/9.0/connection.js" type="text/javascript"></script>
+    <apex:includeScript value="/support/console/29.0/integration.js"/>
+    <script>
+        function refreshTab(caseId){
+            if(sforce.console.isInConsole()){
+                sforce.console.getFocusedPrimaryTabId(showTabId);
+            } else {
+                window.open('/'+ caseid, "_blank");
+            }
+        }     
+        var showTabId = function showTabId(result) {
+            sforce.console.refreshPrimaryTabById(result.id, true);
+            getSubTabId(result.id);          
+        };
+        
+        function getSubTabId(pTabId) {
+            sforce.console.getSubtabIds(pTabId, focusSubTab);
+        }
+        var focusSubTab = function focusSubTab(result) {
+            sforce.console.focusSubtabById(result.ids[0]);
+        };
+        
+        
+    </script>
+    <apex:form style="text-align:right" id="ResendCtrlform">
+        <apex:commandbutton id="ReplyToPost" value="Reply to post" action="{!replyToPost}" oncomplete="refreshTab('{!Custom_Post__c.Case__c}');return false;" rendered="{!IF((Custom_Post__c.Category__c != 'Email'),true,false)}"/>
+        <apex:inputHidden value="{!Custom_Post__c.Case__c}" />
+    </apex:form>
+</apex:page>

@@ -1,0 +1,3 @@
+<apex:page controller="Social_UserDeactivateController" action="{!makeUserInactive}" showHeader="false" sidebar="false">
+  
+</apex:page>

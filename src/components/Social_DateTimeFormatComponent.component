@@ -1,0 +1,4 @@
+<apex:component access="Global" controller="Social_DateTimeFormatCtrl">
+    <apex:attribute assignTo="{!dateTimeValue}" name="dateTime_Value" type="DateTime" description="Date time"/>
+    {!TimeZoneValue}
+</apex:component>

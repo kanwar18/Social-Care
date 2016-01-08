@@ -1,0 +1,52 @@
+<apex:page sidebar="false" showHeader="false" controller="caseAssignController">
+    
+    
+    <apex:form >  
+    
+    <style>
+        .statusStyle {
+            background:url(/img/loading.gif) no-repeat 0 0; 
+            padding-left:20px; 
+            margin-left:10px; 
+            padding-bottom:5px; 
+        }
+    </style>
+     
+    <table width="15%" border ="0" cellpadding = "5">
+        <tr>
+            <td>FIFO</td>
+            <td>
+            <apex:inputCheckbox value="{!FIFO}" id="fifo"  >
+                <apex:actionSupport status="myStatus" event="onchange" rerender="ajaxRefreshPanel" action="{!toggleFifo}" immediate="true" />
+            </apex:inputCheckbox>
+            </td> 
+        </tr>
+        <tr>
+            <td>Group Name</td>
+            <td>
+                <apex:outputPanel id="ajaxRefreshPanel">
+                    <apex:selectList value="{!groupName}" size="1"  id="groupname" disabled="{!FIFO}">
+                        <apex:selectOptions value="{!AssociatedGroupNames}" />
+                    </apex:selectList>
+                </apex:outputPanel>
+            </td>
+        </tr>
+        <apex:actionStatus id="myStatus" startText="Processing..." 
+                           stopText=""   startStyleClass="statusStyle"/>
+        <tr>
+            <td># of Cases</td>
+            <td>
+                <apex:selectList value="{!numberOfCasesToBeAssigned}" size="1">
+                    <apex:selectOptions value="{!NumberOfCases}"/>
+                </apex:selectList>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center"><apex:commandButton action="{!assignCase}" value="Submit"/> </td>
+        </tr>
+        <tr>
+            <td colspan="2"><b><font color='red'><apex:outputText escape="false" value="{!strMessage}"></apex:outputText></font></b></td>
+        </tr>
+    </table>
+    </apex:form>
+</apex:page>

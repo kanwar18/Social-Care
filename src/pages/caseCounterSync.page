@@ -1,0 +1,24 @@
+<apex:page controller="Social_CaseAssignmentSync" sidebar="false">
+    <apex:pageblock title="Case Counters">
+        <apex:pageBlockTable value="{!caseCountUserObjMap}" var="d">
+            <apex:column headerValue="User Id">
+                <apex:repeat value="{!caseCountUserObjMap[d]}" var="User">
+                    <apex:outputLink value="/{!User.id}?noredirect=1" target="_new">{!User.name}</apex:outputLink>
+                </apex:repeat>
+            </apex:column>
+            <apex:column headerValue="Case count">
+                {!caseCountCaseObjMap[d]}
+            </apex:column>
+            <apex:column headerValue="Counter Value(User Object)">
+                <apex:repeat value="{!caseCountUserObjMap[d]}" var="User">
+                    <apex:outputText value="{!User.case_counter__c}" /> 
+                </apex:repeat>
+            </apex:column>
+        </apex:pageBlockTable>
+        
+    </apex:pageblock>
+    <apex:form >
+        <apex:commandButton action="{!resetCounters}" value="Sync Counters"/>
+        <apex:outputText >Note: Please refresh the page once you click on "Sync Counters" button</apex:outputText>        
+    </apex:form>
+</apex:page>

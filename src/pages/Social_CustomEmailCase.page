@@ -1,0 +1,358 @@
+<apex:page standardController="Case" extensions="Social_CareManagerResponseEmail" sidebar="true" id="myPage" showHeader="true">
+    <head>
+    <title>Send Email</title>
+    </head>
+    <apex:includeScript value="/support/console/29.0/integration.js"/>
+    <script type='text/javascript'>
+        window.onload = function() {
+            if (sforce.console.isInConsole()){
+                if ('{!excchkbox}' == 'false') {
+                   sforce.console.setTabTitle('Reply To Last Email');
+                } 
+            }        
+        } 
+           
+        function hideValue(){
+                document.getElementById('emailMessage').style.display = 'none';
+        }
+        
+        function openCaseWindow(caseId) {
+            if (sforce.console.isInConsole()) {
+                getprimayTabId();
+            } else {
+                window.open('/'+ caseId, "_blank");
+            }
+        }
+        
+        function getprimayTabId() {
+            sforce.console.getFocusedPrimaryTabId(pTabId);
+        }
+        
+        var pTabId = function pTabId(result) {
+            sforce.console.getSubtabIds(result.id, focusSubTab);
+        };
+        
+        var focusSubTab = function focusSubTab(result) {
+            sforce.console.focusSubtabById(result.ids[0]);
+        };
+    </script>
+    <style>
+    .bPageBlock .detailList TD{
+        vertical-align:middle;
+    }
+    .UserNameFont{
+       font-size: 91%;
+       font-weight: bold;
+       text-align: right;f
+       color: #4A4A56;
+       padding-left: 50%;       
+    }
+    .usernameformat{
+        padding-left: 20px;
+    }
+    
+    .statusModalBackground
+    {
+        position:absolute;
+        width:100%;
+        height:100%;
+        opacity:0.5;
+        background-color:black;
+        z-index:1000;
+        display:none;
+    }
+    
+    .statusModal
+    {
+        background-color:white;
+        position:fixed;
+        top:40%;
+        left:40%;
+        width:450px;
+        padding:15px;
+        border-radius:5px;
+        z-index:1001;
+        display:none;
+    }
+    
+    .modalSpinner
+    {
+        float:left;
+        margin-top:40px;
+    }
+
+    .modalTitle
+    {
+        display:block;
+        font-size:14pt;
+    }
+    
+    .modalDetails
+    {
+        font-size:11pt;
+    }
+    
+    .modalTitle, .modalDetails
+    {
+        margin-left:45px;
+    }
+    
+    input.modalButton
+    {
+        display:block;
+        margin-left:auto;
+        margin-right:auto;
+        font-size:10pt;
+    }
+    .messageEntryFormSendaTweetLbl {
+        font-size: 24px;
+        padding-left: 35px;
+        padding-left-value: 35px;
+        padding-left-ltr-source: physical;
+        padding-left-rtl-source: physical;
+        font-weight: bold;
+        }
+    .messageDetails {
+        padding: 5px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .labelCol{
+        padding: 2px 10px 2px 2px;
+        text-align: right;
+        font-size: 91%;
+        font-weight: bold;
+        color: rgb(51, 51, 51);
+    }
+     .tdData{
+        padding: 4px 10px 4px 4px;
+        font-size: 100%;
+        font-weight: normal;
+        color: rgb(51, 51, 51);
+    }
+</style>
+
+    <div id="outerWrapSection" class="outerWrapSectionCls" > 
+        <table width="100%">
+          <tr>
+              <td>
+                <div class="bPageTitle">
+                    <div class="ptBody">
+                        <div class="content">
+                            <img class="pageTitleIcon" title="Home" alt="Home" src="/s.gif"></img>
+                            <h1 class="pageType"></h1>
+                            <h2 class="pageDescription">
+                               <apex:outputText rendered="{!renderReply}">Reply to Email</apex:outputText>
+                               <apex:outputText rendered="{!renderEscalation}">Escalate Email</apex:outputText>
+                            </h2>
+                            <div class="blank"></div>
+                        </div>
+                        <div class="links"></div>
+                    </div>
+                    <div class="ptBreadcrumb"></div>
+                </div>
+                              
+                  
+              </td>
+              <td align="right">
+              </td>
+          </tr>
+        </table>  
+    </div>  
+  
+   <apex:form id="myForm">
+   <apex:outputpanel id="oppanel">
+   <script type='text/javascript'>
+   <apex:includeScript value="/support/console/29.0/integration.js"/>     
+    function windowclosure() {
+        var url="/{!$CurrentPage.parameters.caseid}";
+        var errorflag='{!errorflag}';
+        var eid="{!$CurrentPage.parameters.eid}";
+        if(errorflag!="true") {
+            if (sforce.console.isInConsole()) {
+               refreshPrimaryTab();
+            } else {
+                if(eid==null ||eid==''){
+                    window.opener.location.href=url;
+                    window.top.close();
+                } else {
+                    window.location.href=url;
+                }
+            }
+        }
+    }
+    
+    function refreshPrimaryTab() {
+        sforce.console.getFocusedPrimaryTabId(showTabId);
+    }
+    
+    var showTabId = function showTabId(result) {
+        sforce.console.refreshPrimaryTabById(result.id, true, refreshSuccess);
+    };
+    
+    var refreshSuccess = function refreshSuccess(result) {
+        sforce.console.getFocusedSubtabId(subTabIdSubmit);      
+    };
+    
+    var subTabIdSubmit = function subTabIdSubmit(result) {
+        sforce.console.closeTab(result.id);
+    };
+    
+    function cancel() {
+        var url="/{!$CurrentPage.parameters.caseid}";
+        var eid="{!$CurrentPage.parameters.eid}";
+        var eflag="{!$CurrentPage.parameters.eflag}";
+        if (sforce.console.isInConsole()) {
+            getFocusedSubTabId();
+        } else {
+            if(eid==null ||eid==''){
+                parent.location.href=url;
+            } else {
+                if(eflag!='TRUE') {
+                    parent.location.href=url;
+                } else {
+                    var url_emsg="/apex/Social_EmailmessageDetailPage?id={!$CurrentPage.parameters.eid}";
+                    parent.location.href=url_emsg;
+                }
+            }
+        }
+    }
+    
+    function getFocusedSubTabId() {
+        sforce.console.getFocusedSubtabId(subTabClose);
+    }
+    
+    var subTabClose = function subTabClose(result) {
+        sforce.console.closeTab(result.id);
+    };    
+    
+    function openemailadd(){
+       var conid='{!newcase.Contactid}';
+       var exemail='{!excchkbox}';
+       var caseid='{!$CurrentPage.parameters.caseid}';
+       if(exemail!='true'){
+       var url="/apex/Social_UserEmailLookup?conid="+conid+"&caseid="+caseid;
+       }
+       else
+       {
+       var url="/apex/Social_UserEmailLookup?conid="+conid+"&caseid="+caseid+"&exmail="+exemail;
+       }
+       var newwin;
+           newwin=window.open(url,"_blank",'toolbar=0,scroll bars=1,location=0,statusbar=0,menubar=0,resizable= 0,width=800,height=500,left = 100,top = 100');
+   }
+    </script> 
+   </apex:outputpanel>
+   
+        <apex:pageBlock title="Email Details" id="pageBlock">
+        <apex:pageMessages id="errmsg"/>
+        
+                <table width="95%"  border = "0">
+
+                    <tr>
+                        <td width="20%" align="right" class="labelCol" >From: </td>
+                        <td class="tdData">
+                            <apex:outputtext value="{!$Label.From_Name} ({!$Label.From_Email_Address})"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labelCol">
+                            <apex:outputLabel rendered="{!renderReply}">  To: </apex:outputLabel> 
+                        </td>
+                        <td class="tdData">
+                            <apex:outputField value="{!newcase.Contact.name}"  rendered="{!renderReply}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labelCol">Related To:</td>
+                        <td class="tdData">
+                            <apex:outputLink >
+                                <a href="#" onClick="openCaseWindow('{!newcase.Id}')"> {!caseNoContactName} </a>
+                            </apex:outputLink>
+                        </td>
+                    </tr>
+                     <!-- tr>
+                        <td class="labelCol">Reference Number :</td>
+                        <td class="tdData">
+                            <apex:outputText value="{!newcase.Social_CaseThreadID__c}" >
+                              </apex:outputText>
+                        </td>
+                    </tr -->
+                    <tr>
+                        <td class="labelCol">Last Email Address Used :</td>
+                        <td class="tdData">
+                            <apex:outputText value="{!newcase.contact.Last_Email_Used__c}" >
+                              </apex:outputText>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="labelCol">
+                            <apex:outputLabel > To Email Address: </apex:outputLabel>
+                        </td>
+                        <td class="tdData">
+                            <apex:outputPanel id="tooppanel" styleClass="requiredInput" layout="block">
+                            <apex:outputPanel styleClass="requiredBlock" layout="block" /> 
+                            <apex:selectList id="accts" value="{!toemail}" size="1" title="To Email Address" disabled="{!excchkbox}"> 
+                            <apex:selectOptions value="{!emails}"></apex:selectOptions>
+                            </apex:selectList>
+                        &nbsp;&nbsp;&nbsp;<!-- B><apex:outputLabel value="Escalation Email" for="theCheckbox"/></B>
+                            <apex:inputCheckbox label="Escalation Email" value="{!excchkbox}" id="theCheckbox">
+                                <apex:actionSupport event="onchange" reRender="accts,oppanel" id="Us"/>
+                            </apex:inputCheckbox --> 
+                        </apex:outputPanel> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labelCol">
+                            <apex:outputText rendered="{!renderReply}">Additional To :</apex:outputText>
+                            <apex:outputText rendered="{!renderEscalation}">Escalation Contact, To:</apex:outputText>    
+                        </td>
+                        <td class="tdData">
+                            <apex:inputTextarea id="addto" value="{!addto}" COLS="50" rows="2" readonly="true"/>&nbsp;&nbsp;<apex:image url="/s.gif" alt="Lookup (New Window)" styleClass="lookupIcon" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onclick="openemailadd();" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Lookup (New Window)"/>
+                            <apex:inputHidden value="{!addto}" id="myHiddenField"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labelCol">CC:</td>
+                        <td class="tdData">
+                        <apex:inputTextarea id="CC" value="{!CC}" COLS="50" rows="2" readonly="{!renderEscalation}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labelCol">BCC:</td>
+                        <td class="tdData">
+                        <apex:inputTextarea id="BCC" value="{!BCC}" COLS="50" rows="2" readonly="{!renderEscalation}"/>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="labelCol">Subject:</td>
+                        <td class="tdData">
+                            <apex:outputPanel styleClass="requiredInput" layout="block">
+                            <apex:outputPanel styleClass="requiredBlock" layout="block"/> 
+                            <apex:inputText id="subj" value="{!subj}" size="75"/>
+                            </apex:outputPanel>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="labelCol">Body</td>
+                        <td class="tdData">
+                            <apex:inputTextarea id="Body" value="{!body}" cols="150" rows="20" richText="{!richtext}" />
+                        </td>
+                    </tr>
+                </table>
+                <apex:pageBlockButtons location="bottom">
+                <apex:actionStatus id="submitstatus">
+                 <apex:facet name="stop">
+                <apex:commandButton value="Submit" action="{!save}" oncomplete="windowclosure();" reRender="errmsg,oppanel" status="submitstatus"/>
+                 </apex:facet>
+                 <apex:facet name="start">
+                    <apex:commandButton value="Processing..." disabled="true" />
+                </apex:facet> 
+            </apex:actionStatus>
+                <apex:commandButton value="Cancel" onclick="cancel();return false;"/>
+                </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

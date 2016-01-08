@@ -1,0 +1,168 @@
+<apex:page standardController="Case" extensions="Social_CaseAudit" id="pageId">
+    <apex:includeScript value="{!$Resource.jQuery}"/>
+     <apex:includeScript value="/support/console/29.0/integration.js"/>
+    <script type="text/javascript">
+        window.onload = function() {
+            if (sforce.console.isInConsole()){   
+                sforce.console.setTabTitle('QA');
+            }        
+        } 
+        var j$ = jQuery.noConflict();
+        j$(document).ready(function(){
+           j$('#caseDetail :input').hide();
+        });
+        
+        var auditCaseId;
+        var errorcheck;
+        function checkAnswer(caseid,errorcheck){
+            auditCaseId=caseid;
+            errorcheck=errorcheck;
+            if(errorcheck=='true'){          
+                var mesg = document.getElementById('pageId:formId:pblockId:error').value;
+                alert(mesg);
+            }else{
+                if (sforce.console.isInConsole()) {
+                    getprimayTabId();
+                } else {
+                    window.open('/'+ auditCaseId,'_self');
+                }
+            }
+        }
+        function getprimayTabId() {
+            sforce.console.getEnclosingPrimaryTabId(pTabId);
+        }
+         var pTabId = function pTabId(result) {
+            sforce.console.refreshPrimaryTabById(result.id, true);
+            testCloseTab();
+        };
+        
+        function testCloseTab() {
+            sforce.console.getEnclosingTabId(closeSubtab);
+        }
+        var closeSubtab = function closeSubtab(result) {
+            var tabId = result.id;
+            sforce.console.closeTab(tabId);    
+        };
+        
+         function closeWindow(caseid){
+             if (sforce.console.isInConsole()) {
+                    testCloseTab();
+                } else {
+                    window.open('/'+ caseid,'_self');
+                }    
+         }
+         function checkAnswerBus(caseid,errorcheck){ 
+             auditCaseId=caseid;
+             errorcheck=errorcheck;
+             if(errorcheck=='true'){     
+                 var mesg = document.getElementById('pageId:formIdBusiness:pblockIdBus:errorBusiness').value;         
+                 alert(mesg);
+             }else{
+                    if (sforce.console.isInConsole()) {
+                        getprimayTabId();
+                    } else {
+                        window.open('/'+ auditCaseId,'_self');
+                    }
+            }
+         }
+    </script>
+    <div id="caseDetail"><apex:detail relatedList="false"/></div>
+    
+     <!-- --------------displaying social post list ---------------------- -->      
+           <apex:pageblock title="Social Posts">
+                <apex:pageBlockTable value="{!SocialPostList}" var="SocialPost">
+                    <apex:column headerValue="Name">
+                        <a href="#" onClick="window.open('/apex/Social_SocialPostDetail?id={!SocialPost.Id}','mywindow')">
+                            {!SocialPost.name}
+                        </a>    
+                    </apex:column>
+                                       
+                    <apex:column headerValue="Content">
+                        {!SocialPost.Content}
+                    </apex:column>
+                    <apex:column headerValue="Headline">
+                        {!SocialPost.Headline}
+                    </apex:column>
+                  
+                    <apex:column headerValue="Created Date">
+                        {!SocialPost.CreatedDate}
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageblock>      
+    <!-------------------------------End Social Post List------------------------- -->
+
+    <!-- apex:form id="formId" rendered="{!IF((isAuditComplete==true),false,true)}" -->
+    <apex:form id="formId" rendered="{!(IF(isBusinessCare,false,true))}">
+        <apex:pageBlock title="Case QA Reponse" id="pblockId">
+            <apex:inputHidden value="{!error}" id="error" />
+                <apex:pagemessages />
+
+           <apex:pageBlockTable value="{!AuditQuestions}" var="q">
+               <apex:column >
+                    <apex:facet name="header">Component</apex:facet>
+                        {!q.Component__c}
+               </apex:column>
+               <apex:column >
+                   <apex:facet name="header">QA Questions</apex:facet>
+                        {!q.Question__c}
+               </apex:column>
+               <apex:column headerValue="Select Answer" >
+                   <apex:outputPanel styleClass="requiredInput" layout="block">
+                   <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+                       <apex:selectRadio value="{!q.Answer__c}">
+                           <apex:selectOptions value="{!items}" />
+                       </apex:selectRadio>
+                   </apex:outputPanel>
+               </apex:column>  
+                <apex:column >
+                    <apex:facet name="header">Coaching / Comments</apex:facet>
+                        <apex:inputField value="{!q.Coaching__c}"/> 
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Possible Points</apex:facet>
+                        {!q.Score__c}
+                </apex:column>
+           </apex:pageBlockTable>     
+        </apex:pageBlock>
+       <apex:commandButton value="Submit" action="{!saveAudit}" reRender="error" onComplete="checkAnswer('{!caseId}','{!isErrorcheck}');" />
+       <apex:commandButton value="Cancel" action="{!cancel}" oncomplete="closeWindow('{!caseId}')"/>   
+    </apex:form>
+    
+    <apex:form id="formIdBusiness" rendered="{!(IF(isBusinessCare,true,false))}">
+        <!--<apex:form id="formIdBusiness"  rendered="{!case.RecordTypeId ==$Label.Business_Case_Audit_Record_Type_ID}">-->
+        <apex:pageBlock title="Case QA Reponse" id="pblockIdBus">
+            <apex:inputHidden value="{!error}" id="errorBusiness" />
+                <apex:pagemessages />
+
+           <apex:pageBlockTable value="{!BusAuditQuestions}" var="q">
+               <apex:column >
+                    <apex:facet name="header">Component</apex:facet>
+                        {!q.Component__c}
+               </apex:column>
+               <apex:column >
+                   <apex:facet name="header">QA Questions</apex:facet>
+                        {!q.Question__c}
+               </apex:column>
+               <apex:column headerValue="Select Answer" >
+                   <apex:outputPanel styleClass="requiredInput" layout="block">
+                   <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+                       <apex:selectRadio value="{!q.Answer__c}">
+                           <apex:selectOptions value="{!items}" />
+                       </apex:selectRadio>
+                   </apex:outputPanel>
+               </apex:column>  
+                <apex:column >
+                    <apex:facet name="header">Coaching / Comments</apex:facet>
+                        <apex:inputField value="{!q.Coaching__c}"/> 
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Possible Points</apex:facet>
+                        {!q.Score__c}
+                </apex:column>
+           </apex:pageBlockTable>     
+        </apex:pageBlock>
+       <apex:commandButton value="Submit" action="{!saveAudit}" reRender="errorBusiness" onComplete="checkAnswerBus('{!caseId}','{!isErrorcheck}')" />
+       <apex:commandButton value="Cancel" action="{!cancel}" oncomplete="closeWindow('{!caseId}')"/>   
+    </apex:form>
+    
+</apex:page>

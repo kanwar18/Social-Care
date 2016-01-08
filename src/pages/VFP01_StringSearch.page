@@ -1,0 +1,256 @@
+<!-- 
+/********************************************************************************************************************************************************************
+* Page Name            : VFP01_StringSearch
+* Author               : Accenture
+* Date                 : 30-October-2013 
+* Asset                : Search a String.
+* Description          : This page holding the basic GUI functionality for the user.
+*********************************************************************************************************************************************************************/
+-->
+<apex:page controller="VFC01_StringSearch" sidebar="true" id="page">
+ <script type="text/javascript">
+        <!-- Javascript function to select all checkboxes -->            
+        function selectAll(){
+            var searchAll = document.getElementById("page:form:pgBlock:searchAll").checked;
+            document.getElementById("page:form:pgBlock:apexClass").checked = searchAll;
+            document.getElementById("page:form:pgBlock:apexPage").checked = searchAll;
+            document.getElementById("page:form:pgBlock:ApexTrigger").checked = searchAll;
+            document.getElementById("page:form:pgBlock:apexcomponent").checked = searchAll;
+            document.getElementById("page:form:pgBlock:EmailTemplate").checked = searchAll;
+            document.getElementById("page:form:pgBlock:validationRule").checked = searchAll;
+            document.getElementById("page:form:pgBlock:workflowRule").checked = searchAll;
+            document.getElementById("page:form:pgBlock:workflowFieldUpdate").checked = searchAll;
+            document.getElementById("page:form:pgBlock:Report").checked = searchAll;
+            document.getElementById("page:form:pgBlock:Dashboard").checked = searchAll;
+            document.getElementById("page:form:pgBlock:Profile").checked = searchAll;
+            document.getElementById("page:form:pgBlock:Role").checked = searchAll;
+            document.getElementById("page:form:pgBlock:Group").checked = searchAll;
+            document.getElementById("page:form:pgBlock:Staticresource").checked = searchAll;
+            document.getElementById("page:form:pgBlock:Sites").checked = searchAll;
+            document.getElementById("page:form:pgBlock:RecordType").checked = searchAll;
+            document.getElementById("page:form:pgBlock:Document").checked = searchAll;
+            document.getElementById("page:form:pgBlock:Attachment").checked = searchAll;
+            document.getElementById("page:form:pgBlock:Objects").checked = searchAll;
+            document.getElementById("page:form:pgBlock:Fields").checked = searchAll;
+            document.getElementById("page:form:pgBlock:PermissionSets").checked = searchAll;
+            document.getElementById("page:form:pgBlock:CustomSettings").checked = searchAll;
+            }
+        <!-- Javascript function to uncheck all checkboxes -->     
+        function unCheckAll(){
+            document.getElementById("page:form:pgBlock:searchAll").checked = false;
+        }
+        <!-- Javascript function to validate user input --> 
+        function validateForm(){
+            if (document.getElementById('page:form:pgBlock:userInput').value.trim().length < 1){
+                alert('Please enter some search String ');
+                return false;
+            }
+          return true;  
+        }
+ </script>
+
+   <apex:form id="form">
+   <apex:pageMessages /> 
+   
+        <apex:pageBlock title="Search" id="pgBlock">
+        <table width="90%">
+               <tr>
+                <th>Search a String </th>
+                <td colspan = "10">
+                     <apex:inputText value="{!yourString}" size="40" id="userInput" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan = "12">
+                    <apex:selectRadio value="{!searchRadioButton}" id="FirstRadio">
+                        <apex:selectOptions value="{!items}"/>
+                        <apex:actionsupport event="onclick" rerender="out2,out4,out6" action="{!onclickaction}"  status="counterStatus"/>
+                    </apex:selectRadio>
+                </td>                 
+           </tr>
+           <tr>
+               <td colspan = "12">
+                   &nbsp;
+               </td>
+           </tr>
+           <tr>
+               <th>Components to Search your string in:</th>
+               <td colspan="10">                                         
+                 &nbsp;&nbsp;<apex:inputCheckbox value="{!isSearchAll}"
+                                       id="searchAll"
+                                       onclick="selectAll()"/>ALL 
+           </td>
+           </tr>
+           <tr>
+           <td>&nbsp;
+           </td>
+           <td colspan="10">
+             <table width="100%">
+             <tr>
+               <td width="1px"> <apex:inputCheckbox value="{!isApexClass}" id="apexClass" onclick="unCheckAll()" selected="True"/></td>
+               <td width="15%">Apex Classes</td>
+               <td align="right"> <apex:inputCheckbox value="{!isApexPage}" id="apexPage" onclick="unCheckAll()" /></td> 
+               <td width="15%">Visualforce Pages</td>
+               <td align="right"> <apex:inputCheckbox value="{!isApexTrigger}" id="ApexTrigger" onclick="unCheckAll()" /></td>
+               <td width="15%">Apex Triggers</td>
+               <td align="right"> <apex:inputCheckbox value="{!isApexComponent}"  id="apexcomponent" onclick="unCheckAll()" /></td>
+               <td width="15%">Visualforce Components</td>
+               <td align="right"><apex:inputCheckbox value="{!isEmailTemplate}"  id="EmailTemplate" onclick="unCheckAll()" /></td>
+               <td width="15%">Email Templates</td>
+               <td align="right"> <apex:inputCheckbox value="{!isValidationRule}"  id="validationRule" onclick="unCheckAll()" /></td>
+               <td width="15%">Validation Rule</td>
+               <td align="right"> <apex:inputCheckbox value="{!isWorkflowRule}"  id="workflowRule" onclick="unCheckAll()" /></td>
+               <td width="15%">Workflow Rule</td>
+               <td align="right"> <apex:inputCheckbox value="{!isWorkflowFieldUpdate}"  id="workflowFieldUpdate" onclick="unCheckAll()" /></td>
+               <td width="15%">Workflow Field Update</td>      
+              </tr>
+              </table>
+         </td>
+         </tr>
+         <tr>
+            <td colspan = "1">&nbsp;
+            </td>
+            <td colspan="10">
+            <apex:outputpanel id="out2">
+            <apex:outputPanel id="out3" rendered="{!flag}"> 
+             <table width="100%">
+                <tr>
+                  <td width="1px"><apex:inputCheckbox value="{!isReport}" id="Report" onclick="unCheckAll()" /></td>
+                  <td width="15%">Reports</td>
+                  <td align="right"><apex:inputCheckbox value="{!isDashboard}" id="Dashboard" onclick="unCheckAll()" /></td>
+                  <td width="15%">Dashboards</td>   
+                  <td align="right"><apex:inputCheckbox value="{!isProfile}" id="Profile" onclick="unCheckAll()" /></td>
+                  <td width="15%">Profiles</td>
+                  <td align="right"><apex:inputCheckbox value="{!isRole}" id="Role" onclick="unCheckAll()" /></td>
+                  <td width="15%">Roles</td>
+                  <td align="right"><apex:inputCheckbox value="{!isGroup}"  id="Group" onclick="unCheckAll()" /></td>
+                  <td width="15%">Groups</td>
+                </tr>
+           </table>
+           </apex:outputpanel>
+           </apex:outputPanel>
+           </td>
+          </tr>
+          <tr>
+           <td colspan = "1">&nbsp;</td>
+           <td colspan="10">
+           <apex:outputpanel id="out4">
+           <apex:outputPanel id="out5" rendered="{!flag}"> 
+           <table width="100%">
+            <tr>
+              <td width="1px"><apex:inputCheckbox value="{!isStaticResource}" id="Staticresource" onclick="unCheckAll()" /></td>
+              <td width="15%">Static Resources</td>
+              <td align="right"><apex:inputCheckbox value="{!isSites}" id="Sites" onclick="unCheckAll()" /></td>
+              <td width="15%">Sites</td>   
+              <td align="right"><apex:inputCheckbox value="{!isRecordType}" id="RecordType" onclick="unCheckAll()" /></td>
+              <td width="15%">Record Types</td>
+              <td align="right"><apex:inputCheckbox value="{!isDocument}" id="Document" onclick="unCheckAll()" /></td>
+              <td width="15%">Documents</td>
+              <td align="right"><apex:inputCheckbox value="{!isAttachment}" id="Attachment" onclick="unCheckAll()" /></td>
+              <td width="15%">Attachments</td>
+            </tr>
+           </table>
+           </apex:outputpanel>
+           </apex:outputPanel>
+           </td>
+          </tr>
+          
+           <tr>
+           <td colspan = "1">&nbsp;</td>
+           <td colspan="10">
+           <apex:outputpanel id="out6">
+           <apex:outputPanel id="out7" rendered="{!flag}"> 
+           <table width="80%">
+            <tr>
+              <td width="1px"><apex:inputCheckbox value="{!isObject}" id="Objects" onclick="unCheckAll()" /></td>
+              <td width="22%">Objects</td>
+              <td align="right"><apex:inputCheckbox value="{!isField}" id="Fields" onclick="unCheckAll()" /></td>
+              <td width="21%">Fields</td> 
+              <td align="right"><apex:inputCheckbox value="{!isPermissionSet}" id="PermissionSets" onclick="unCheckAll()" /></td>
+              <td width="22%">Permission Sets</td> 
+              <td align="right"><apex:inputCheckbox value="{!isCustomSetting}" id="CustomSettings" onclick="unCheckAll()" /></td>
+              <td width="19%">Custom Settings</td>        
+            </tr>
+           </table>            
+           </apex:outputpanel>
+           </apex:outputPanel>
+           </td>
+         </tr>
+         
+        </table>
+        
+        <br/>
+       <apex:commandButton value="Search" action="{!search}" onclick="return validateForm();" /><BR/>
+    
+    <font size = "5" color = "red"><BR/>
+    <apex:outputText value="No Records found" rendered="{!noResultsDisplayError}" />
+    </font>  
+    
+    <font size="4" face="verdana" color="red">
+        <B><apex:actionStatus id="counterStatus" >
+                <apex:facet name="start">
+                    <apex:image url="{!URLFOR($Resource.stringSearch, 'stringSearch/AjaxLoader.gif')}" title="Processing...." width="100" height="100"/>
+                </apex:facet>
+            </apex:actionStatus>    
+        </B>
+    </font>         
+     <apex:outputPanel id="codeList" rendered="{!loadResults}" >
+         <apex:pageBlockTable id="table" value="{!paginatedResults}"  var="clist">
+             <apex:column headerValue="Component Name">
+                 <apex:outputLink value="{!baseURL}/{!clist.codeID}" target="_blank" rendered="{!NOT(ISBLank(clist.codeID))}" >
+                     {!clist.codeName}
+                 </apex:outputLink>
+                 <apex:outputLink value="{!baseURL}/{!clist.prefix}" target="_blank" rendered="{!NOT(ISBLank(clist.prefix))}" >
+                     {!clist.codeName}
+                 </apex:outputLink>
+              </apex:column>
+             
+              <apex:column headerValue="HighLighter Details" rendered="{!searchRadioButton == 'FileData'}">
+                 <apex:outputLink value="/apex/VFP01_GenericHighLighter?componentName={!clist.pseudoColumnName}&componentId={!clist.codeId}&searchValue={!yourString}"
+                       target="_blank">
+                     Click here to see search String
+                 </apex:outputLink>
+             </apex:column>
+             
+             
+             <apex:column headerValue="Component" value="{!clist.componentName}"/>
+             <apex:column headerValue="Line Number" value="{!clist.lineNumber}" rendered="{!searchRadioButton == 'FileData'}"/>
+         </apex:pageBlockTable>
+                
+         <br/> <Br/>
+         
+          <apex:pageBlockTable id="paginationBlock" value="{!paginationBlockList}"  var="c1">
+             <apex:column headerValue="Previous Page"  >
+                <apex:commandLink action="{!previousPage}" rendered="{!previousPageEnabled}" rerender="codeList" status="counterStatus">
+                     Previous Page
+                </apex:commandLink>
+             </apex:column>
+             
+             <apex:column headerValue="Next Page " >
+                  <apex:commandLink action="{!nextPage}" rendered="{!nextPageEnabled}" reRender="codeList" status="counterStatus" >
+                      Next Page
+                  </apex:commandLink> <Br/>
+             </apex:column>     
+                       
+              <apex:column headerValue="Available Pages" >
+                You are seeing &nbsp; <apex:selectList value="{!pageNumber}" size="1" multiselect="false" onchange="this.form.submit();">
+                      <apex:SelectOptions value="{!pageList}"></apex:SelectOptions>
+                  </apex:selectList>   of <B> {!totalPageCount} </B> pages <Br/>
+             </apex:column> 
+             
+               <apex:column headerValue="Record Size" >
+                   Records per Page &nbsp; <apex:selectList value="{!paginationSize}" size="1" multiselect="false" >
+                      <apex:SelectOption itemValue="10" itemLabel="10" />
+                      <apex:SelectOption itemValue="20" itemLabel="20" />
+                      <apex:SelectOption itemValue="50" itemLabel="50" />
+                      <apex:SelectOption itemValue="100" itemLabel="100" />
+                      <apex:actionSupport event="onchange" action="{!changePageSize}" reRender="codeList"  status="counterStatus" />
+                  </apex:selectList>  
+             </apex:column>
+                        
+         </apex:pageBlockTable>
+      </apex:outputPanel>
+  </apex:pageBlock>
+  
+</apex:form>
+</apex:page>

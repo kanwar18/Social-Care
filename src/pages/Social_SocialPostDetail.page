@@ -1,0 +1,47 @@
+<apex:page standardController="SocialPost" tabStyle="SocialPost" sidebar="false" showHeader="false" >
+    <apex:sectionHeader title="Social Post" subtitle="{!SocialPost.Name}" />
+        <apex:form >
+            <apex:pageBlock title="Social Post Detail">
+             <apex:pageBlockButtons >
+                    <apex:commandButton value="Edit" action="{!Edit}"/>         
+                    <apex:commandButton value="Delete" action="{!Delete}"/>                
+                </apex:pageBlockButtons>
+               
+                <apex:pageBlockSection columns="2">
+               
+                    <apex:pageBlockSectionItem >
+                         <apex:outputLabel value="Posted Date" ></apex:outputLabel> 
+                         <apex:outputField value="{!SocialPost.Posted}"/> 
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                         <apex:outputLabel value="Name" ></apex:outputLabel> 
+                            <apex:outputField value="{!SocialPost.Name}"/>
+                    </apex:pageBlockSectionItem>
+                     <apex:pageBlockSectionItem >
+                         <apex:outputLabel value="Headline" ></apex:outputLabel> 
+                         <apex:outputField value="{!SocialPost.Headline}"/> 
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                         <apex:outputLabel value="Parent" ></apex:outputLabel> 
+                         <apex:outputField value="{!SocialPost.ParentId}"/> 
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                         <apex:outputLabel value="Content" ></apex:outputLabel>
+                         <apex:outputField value="{!SocialPost.Content}"/> 
+                    </apex:pageBlockSectionItem>  
+                   
+                    <apex:pageBlockSectionItem >
+                         <apex:outputLabel value="Who" ></apex:outputLabel> 
+                         <apex:outputField value="{!SocialPost.WhoId}"/>
+                    </apex:pageblocksectionitem> 
+
+                    <apex:pageBlockSectionItem >
+                         <apex:outputLabel value="Social Persona" ></apex:outputLabel>
+                         <apex:outputField value="{!SocialPost.PersonaId}"/> 
+                    </apex:pageBlockSectionItem>  
+                </apex:pageblocksection>     
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

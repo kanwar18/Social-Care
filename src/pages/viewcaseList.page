@@ -1,0 +1,90 @@
+<apex:page controller="Social_CaseAssignmentHandler" sidebar="false" tabStyle="Assignment_Groups__c">
+    {!strTemp}
+        <apex:pageBlock >
+            <apex:pageBlockSection columns="4" title="High Influencer List">
+                <apex:repeat value="{!highInfluencerCaseList}" var="case">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText style="label" value="Owner ID:"></apex:outputText>
+                        <apex:outputField value="{!case.OwnerId}" /> 
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText style="label" value="Date:"></apex:outputText>
+                        <apex:outputLabel value="{!case.TempDate__c}" /> 
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText style="label" value="Priority:"></apex:outputText>
+                        <apex:outputLabel value="{!case.priority}" /> 
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText style="label" value="Case ID:"></apex:outputText>
+                        <apex:outputLink value="/{!case.id}" target="_new">{!case.id}</apex:outputLink>
+                    </apex:pageBlockSectionItem> 
+                </apex:repeat>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="4" title="Business Hour List">
+                <apex:repeat value="{!businessHourCaseList}" var="case">
+                                  
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText style="label" value="Owner ID:"></apex:outputText>
+                        <apex:outputField value="{!case.OwnerId}" /> 
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText style="label" value="Date:"></apex:outputText>
+                        <apex:outputLabel value="{!case.TempDate__c}" /> 
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText style="label" value="Priority:"></apex:outputText>
+                        <apex:outputLabel value="{!case.priority}" /> 
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText style="label" value="Case ID:"></apex:outputText>
+                        <apex:outputLink value="/{!case.id}" target="_new">{!case.id}</apex:outputLink>
+                    </apex:pageBlockSectionItem>                      
+                </apex:repeat>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection columns="4" title="Non Business Hour List">
+                <apex:repeat value="{!nonbusinessHourCaseList}" var="case">
+                                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText style="label" value="Owner ID:"></apex:outputText>
+                        <apex:outputField value="{!case.OwnerId}" /> 
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText style="label" value="Date:"></apex:outputText>
+                        <apex:outputLabel value="{!case.TempDate__c}" /> 
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText style="label" value="Priority:"></apex:outputText>
+                        <apex:outputLabel value="{!case.priority}" /> 
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText style="label" value="Case ID:"></apex:outputText>
+                        <apex:outputLink value="/{!case.id}" target="_new">{!case.id}</apex:outputLink>
+                    </apex:pageBlockSectionItem>                    
+                </apex:repeat>
+            </apex:pageBlockSection>
+        </apex:pageBlock>            
+        <apex:pageBlock >            
+            <apex:pageBlockSection columns="4" title="Final List">
+                <apex:repeat value="{!testCaseList}" var="case">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText style="label" value="Owner ID:"></apex:outputText>
+                        <apex:outputField value="{!case.ownerId}" /> 
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText style="label" value="Date:"></apex:outputText>
+                        <apex:outputLabel value="{!case.TempDate__c}" /> 
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText style="label" value="Priority:"></apex:outputText>
+                        <apex:outputLabel value="{!case.priority}" /> 
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText style="label" value="Case ID:"></apex:outputText>
+                        <apex:outputLink value="/{!case.id}" target="_new">{!case.id}</apex:outputLink>
+                    </apex:pageBlockSectionItem>                    
+                </apex:repeat>
+            </apex:pageBlockSection>             
+        </apex:pageBlock>
+</apex:page>

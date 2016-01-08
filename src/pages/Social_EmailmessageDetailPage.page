@@ -1,0 +1,70 @@
+<apex:page standardController="EmailMessage" extensions="Social_EmailmessageDetail">
+    <apex:includeScript value="/support/console/25.0/integration.js"/>
+    <script type='text/javascript'>
+        function Cancel(){
+            if (sforce.console.isInConsole()){
+                getFocusedSubtabId();
+            } else {
+                var url="{!$Label.Salesforce_Site_URL}/{!Emailmessage.parentid}";
+                parent.location.href = url;
+            }            
+        }
+        
+        function getFocusedSubtabId() {
+            sforce.console.getFocusedSubtabId(closeSubTab);
+        }
+        
+        var closeSubTab = function closeSubTab(result) {
+            sforce.console.closeTab(result.id);
+        };
+        var consoleCaseid;
+        var consoleEmailid;
+        function Sendmail() {
+            if (sforce.console.isInConsole()){
+                consoleCaseid = "{!EmailMessage.parentid}";
+                consoleEmailid = "{!Emailmessage.id}";
+                sforce.console.getEnclosingPrimaryTabId(openSubtab);            
+            } else {
+                var caseid = "{!EmailMessage.parentid}";
+                var eid = "{!Emailmessage.id}";
+                var url = "/apex/Social_CustomEmailCase?caseid="+caseid+"&eid="+eid+"&flag=TRUE&eflag=TRUE";
+                window.open(url,"_self");
+            }
+        }
+        
+        var openSubtab = function openSubtab(result) {
+            var primaryTabId = result.id;
+            getFocusedSubtabId();
+            sforce.console.openSubtab(primaryTabId ,'/apex/Social_CustomEmailCase?eid='+consoleEmailid+'&caseid='+consoleCaseid+'&flag=TRUE&eflag=FALSE', true,'Reply To Email', null, null, 'salesforceSubtab');
+        };
+    </script>
+    <apex:form >
+        <apex:sectionHeader title="Email Message"/>
+        <apex:pageBlock title="Email Message Detail" mode="edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton onclick="Sendmail();return false;" value="Reply" rendered="{!disableButtons}"/>
+                <apex:commandButton onclick="Cancel();return false;" value="Cancel"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection columns="2">
+                <apex:outputField value="{!EmailMessage.parentid}"/>
+                <apex:outputField value="{!EmailMessage.status}"/>
+                <apex:outputField value="{!EmailMessage.MessageDate}"/>
+                <br></br>
+                <apex:outputField value="{!EmailMessage.CreatedById}"/>
+                <apex:outputField value="{!EmailMessage.LastModifiedByid}"/>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Address Information" columns="1">
+                <apex:outputField value="{!EmailMessage.FromAddress}"/>
+                <apex:outputField value="{!EmailMessage.FromName}"/>
+                <apex:outputField value="{!EmailMessage.ToAddress}"/>
+                <apex:outputField value="{!EmailMessage.CcAddress}"/>
+                <apex:outputField value="{!EmailMessage.BCcAddress}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Email Information" columns="1">
+                <apex:outputField value="{!EmailMessage.Subject}"/>
+                <apex:outputField value="{!EmailMessage.TextBody}"/>
+                <apex:outputText label="Html Body" value="{!if(EmailMessage.TextBody!=null && EmailMessage.TextBody !='' && EmailMessage.TextBody!=' ','', emailMessage.HtmlBody)}" escape="false" />
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,33 @@
+<apex:page controller="Social_OP_TeamStatus" showHeader="false" standardStylesheets="true" tabStyle="Account">
+<script>
+    //var int=self.setInterval(function(){RefreshPage()},20000);
+    function RefreshPage(){
+        window.location.reload();
+   }
+</script>
+   <table>
+       <tr>
+           <td>
+               <apex:form >
+                   <apex:pageBlock >
+                            <apex:pageBlockTable value="{!results}" var="status" id="theTable">
+                                <apex:column >
+                                   <apex:variable var="imageVar" value="{!status.cellcolor}"/> 
+                                   <apex:image url="{!URLFOR($Resource.User_Status,imageVar)}"/>
+                                </apex:column>         
+                                <apex:column headerValue="User Name">
+                                    {!status.con.Name}
+                                </apex:column>                 
+                                <apex:column headerValue="Availability">
+                                    {!status.con.Availability__c}
+                                </apex:column>
+                            </apex:pageBlockTable>
+                    </apex:pageBlock>
+                    <apex:pageBlock >
+                        <apex:actionPoller reRender="theTable"  interval="30" oncomplete="RefreshPage()"/>
+                    </apex:pageBlock>
+                </apex:form>
+            </td>
+        </tr>
+    </Table>
+</apex:page>

@@ -1,0 +1,51 @@
+<apex:page standardController="Case" extensions="Social_massCaseCloseController" recordSetVar="cases" id="myPage" tabStyle="Case">
+    <apex:form id="myForm">
+        <Script type="text/javascript">
+        <apex:includeScript value="/support/console/22.0/integration.js"/>
+            window.onload = function() {
+                if ('{!errorMessage}' != '') {
+                    alert('Error: ' + '{!errorMessage}');
+                    window.location = '{!returnURL}';
+                }
+            }
+            
+            function goBack() {
+                window.location = '{!returnURL}';
+            }
+            
+            function confirmAlert() {
+                if(confirm('Please Confirm to Mass Close the Remaining Cases')) {
+                    continueMassCaseClose();
+                }
+            }
+        </Script>
+        <apex:pageBlock title="Mass Close Selected Cases" rendered="{!displayCaseDetails}" id="myPageBlockSection">
+            <apex:pageBlockButtons location="both">
+                <apex:commandButton value="Confirm" action="{!massCaseClose}" rendered="{!showConfirmButton}" title="Confirm"/>
+                <apex:actionFunction name="continueMassCaseClose" action="{!continueMassCaseClose}"/>
+                <apex:commandButton value="Mass Close remaining Cases" rendered="{!enableContinueMassClose}" onclick="confirmAlert(); return false;"/>
+                <apex:commandButton value="Back to List View" onclick="goBack(); return false;" title="Back to List View"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection showHeader="true" collapsible="false" title="Case Reason Section for Mass Close (Select One)">
+                <apex:selectList title="Case Reason" size="1" label="Case Reason" required="true"  multiselect="false" value="{!caseReason}" REndered="{!showConfirmButton}">
+                    <apex:selectOptions value="{!caseReasonValue}"/> 
+                </apex:selectList>
+            </apex:pageBlockSection>
+            <apex:pageMessage severity="{!severity}" strength="3" summary="{!confirmationMessage}" escape="false" rendered="{!enableUIError}" id="errorMessgae"/>
+            <apex:pageBlockTable value="{!meetMassCaseCloseList}" var="case" rendered="{!enableDataTableSuccess}">
+                <apex:column value="{!case.Casenumber}"/>
+                <apex:column value="{!case.Status}"/>
+                <apex:column value="{!case.Reason}"/>
+                <apex:column value="{!case.OwnerId}"/>
+            </apex:pageBlockTable>
+            <apex:pageBlockTable value="{!doNotMeetMassCloseCriteriaList}" var="case" rendered="{!enableDataTableFailed}">
+                <apex:column value="{!case.Casenumber}"/>
+                <apex:column value="{!case.Status}"/>
+                <apex:column value="{!case.Reason}"/>
+                <apex:column value="{!case.OwnerId}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        <apex:inputHidden value="{!Case.Status}"/>
+        <apex:inputHidden value="{!Case.Case_Assigned_Time__c}"/>
+    </apex:form>    
+</apex:page>

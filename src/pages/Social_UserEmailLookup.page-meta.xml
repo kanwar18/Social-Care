@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>29.0</apiVersion>
+    <availableInTouch>false</availableInTouch>
+    <confirmationTokenRequired>false</confirmationTokenRequired>
+    <description>/** this Custom VF page is used to display the custom multiselect picklist for the email ids present for the consumer **/</description>
+    <label>Social_UserEmailLookup</label>
+</ApexPage>

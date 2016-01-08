@@ -1,0 +1,56 @@
+<apex:page standardController="Case" extensions="Social_EmailmessageRelatedlistController" action="{!getInitialemailSet}" rendered="{!displayPage}">
+    <apex:includeScript value="/support/console/29.0/integration.js"/>
+    <script type="text/javascript">
+        var emailId;
+        var caseId;
+        function openReplyToEmailPage(eId,cId) {
+            emailId = eId;
+            caseId = cId;
+            if (sforce.console.isInConsole()) {    
+                sforce.console.getFocusedPrimaryTabId(openNewSubTab);
+            } else {
+                window.open('/apex/Social_CustomEmailCase?eid='+emailId+'&caseid='+caseId+'&returl='+caseId+'&flag=TRUE&eflag=FALSE', "_parent");
+            }
+        }
+        
+        var openNewSubTab = function openNewSubTab(result) {
+            sforce.console.openSubtab(result.id,'/apex/Social_CustomEmailCase?eid='+emailId+'&caseid='+caseId+'&flag=TRUE&eflag=FALSE', true,'Reply To Email', null, null, 'salesforceSubtab'); 
+        };
+        
+        function openEmailDetailPage(eId,cId) {
+            emailId = eId;
+            caseId = cId;
+            if (sforce.console.isInConsole()) {    
+                sforce.console.getFocusedPrimaryTabId(openNewEmailSubTab);
+            } else {
+                window.open('/apex/Social_EmailmessageDetailPage?id='+emailId+'&returl='+caseId+'', "_parent");
+            }
+        }
+        
+        var openNewEmailSubTab = function openNewEmailSubTab(result) {
+            sforce.console.openSubtab(result.id,'/apex/Social_EmailmessageDetailPage?id='+emailId+'&returl='+caseId+'', true,'Email Message', null, null, null); 
+        };
+    </script>
+    <apex:form >
+        <apex:pageBlock id="emails">
+            <apex:pageBlockTable value="{!lemsg}" var="a">
+                <apex:column headervalue="Action" title="Action">
+                    <apex:outputLink rendered="{!IF((case.Status='Closed' || case.Status='Auto Closed' || $User.Id != case.ownerId),false,true)}" onclick="openReplyToEmailPage('{!a.id}','{!caseid}'); return false;">Reply</apex:outputLink>
+                </apex:column>
+                <apex:column value="{!a.status}"/> 
+                <apex:column value="{!a.Incoming}" headerValue="Inbound"/> 
+                <apex:column title="Subject" headerValue="Subject">
+                    <apex:outputLink onclick="openEmailDetailPage('{!a.id}','{!caseid}'); return false;">{!a.Subject}</apex:outputLink>
+                </apex:column>
+                <apex:column value="{!a.FromName}"/>
+                <apex:column value="{!a.FromAddress}"/>
+                <apex:column value="{!a.ToAddress}"/>
+                <apex:column value="{!a.MessageDate}"/>
+            </apex:pageBlockTable>
+            <br/>
+            <apex:outputPanel style="text-align:center;horizontal-align:center;">
+                <apex:commandLink rendered="{!NOT(pageNumber == 0)}" action="{!previous}" rerender="emails">Prev | </apex:commandLink><apex:commandLink rendered="{!NOT(pageNumber == noOfPages -1)}" action="{!next}" rerender="emails"> Next</apex:commandLink>               
+            </apex:outputPanel>
+        </apex:pageBlock>
+    </apex:form>    
+</apex:page>

@@ -1,0 +1,10 @@
+<apex:page controller="TimerReportsController" title="Case Timer Reports" showheader="true" readonly="true" sidebar="false">
+    <apex:pageBlock >
+        <apex:pageBlockTable value="{!reportNames}" var="reportObj">
+            <apex:column headerValue="Report #">{!reportObj.reportNumber}</apex:column>
+            <apex:column headerValue="Report Name">
+                <apex:outputLink value="{!reportObj.reportPage}" target="_blank">{!reportObj.reportName}</apex:outputLink>
+            </apex:column>
+        </apex:pageBlockTable>
+   </apex:pageBlock>    
+</apex:page>

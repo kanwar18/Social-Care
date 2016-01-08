@@ -1,0 +1,3 @@
+<apex:page standardController="Case" sidebar="false" extensions="Social_CaseRedirectController" action="{!returnMethod}">
+
+</apex:page>

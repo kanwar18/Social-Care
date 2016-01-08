@@ -1,0 +1,12 @@
+<apex:page standardController="IT_Support_Ticket__c" extensions="ITSupport_MetricsCompute" action="{!doAction}" 
+                                                                showHeader="false" sidebar="false">
+<!-- Begin Default Content REMOVE THIS -->
+
+<apex:form >
+    <apex:pageBlock >
+        <apex:pageBlockSection >
+            <apex:outputText id="progress" label="Total Resolution Time" value="{!totalResTime}"/>
+        </apex:pageBlockSection> 
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

@@ -1,0 +1,24 @@
+<apex:page standardController="Case" id="myPage" extensions="Social_DNRRestPageController" recordSetVar="cases">
+    <apex:form id="myForm">
+        <Script type="text/javascript">
+            window.onload = function() {
+                if ('{!errorMessage}' != ''){
+                    alert('Error: ' + '{!errorMessage}');
+                    window.location = '{!returnURL}';
+                }else{
+                    if(confirm('Please confirm to reset DNR on selected case(s).')){
+                        resetDNR();
+                    }else{
+                        window.location = '{!returnURL}';
+                    }                       
+                }                
+            }
+                         
+            function selectedCasesResetDNR(){
+                alert('DNR has been reset on the selected case(s). Click OK to navigate back to the List View.');
+                window.location = '{!returnURL}';
+            }           
+        </Script>
+        <apex:actionFunction name="resetDNR" Action="{!resetDNROnCase}" oncomplete="selectedCasesResetDNR(); return false;"/>
+    </apex:form>
+</apex:page>

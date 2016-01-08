@@ -1,0 +1,11 @@
+<!-- Component Name:  Social_AHTReportComponent
+     Author: Accenture
+     Requirement/Project Name: Social Care
+     Description: Component will be called from email template "AHT Report Email Tempelate"
+     Version History: Aditya(16/December/2014)
+-->
+
+<apex:component access="global" controller="Social_AHTReportController">
+    <apex:attribute name="salesforceReportId" description="report ID" type="String" assignTo="{!reportId}"/>
+    <apex:outputText value="{!CSVStream}" escape="false"/>
+</apex:component>

@@ -1,0 +1,70 @@
+<apex:page controller="TimerReportsController" title="Case Timer Reports" showheader="false" readonly="true">
+
+<style type="text/css">
+table.gridtable {
+    font-family: Verdana,arial,sans-serif;
+    font-size:12px;
+    color:#333333;
+    border-width: 0px;
+    border-color: #666666;
+    border-collapse: collapse;
+    border-radius: 3px 3px 3px 3px    
+}
+table.gridtable th {
+    border-width: 0px;
+    padding: 4px;
+    border-style: solid;
+    border-color: black;
+    background-color: #F26405;
+    border-radius: 3px 3px 3px 3px
+}
+table.gridtable td {
+    border-width: 0px;
+    padding: 4px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 3px 3px 3px 3px;
+    text-align: left
+}
+#divCss{
+    border: 0px solid gray;
+    padding: 2px;
+    --background: red;
+    overflow-y: auto;
+}
+</style>
+<div align="center"><h1>Average case handle time per team, that is,average handle time of cases handled by the Social Media Operations Manager’s team</h1></div>  
+<div id="divCss">
+    <table class="gridtable" width="50%" align="center" bgcolor="#D6FFFF" border="3">
+        <tr>
+            <th>Operations Manager Name</th>
+            <th>Statistics</th>
+        </tr>
+        
+        <apex:repeat value="{!caseHandlingPerTeam}" var="opsMgr">
+            <tr>
+                <td width="30%" valign="top">
+                    <b>{!opsMgr}</b>
+                </td>
+                <td width="70%">
+                    <table class="gridtable" border="0" width="100%">
+                        <tr bgcolor="#CBD7F7">
+                            <td><b>Care Manager Name</b></td>
+                            <td><b>Duration</b></td>
+                        </tr>
+                        <apex:repeat value="{!caseHandlingPerTeam[opsMgr]}" var="hwObj">
+                            <tr bgcolor="{!IF((MOD(hwObj.objectCounter, 2) = 0),'#F7F4CB','#FAD4BB')}">
+                                <td width="40%">
+                                    {!hwObj.careMgrName}
+                                 </td>
+                                <td width="60%">{!hwObj.averageReadableDate}</td>
+                            </tr>
+                        </apex:repeat>    
+                    </table>
+                </td>                        
+            </tr>   
+        </apex:repeat>        
+    </table>
+</div>            
+
+</apex:page>

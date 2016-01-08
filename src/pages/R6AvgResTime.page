@@ -1,0 +1,65 @@
+<apex:page controller="R6CaseTimerReportController" sidebar="true" readonly="true" showheader="true" action="{!getCaseAvgResCustPer}">
+<style type="text/css">
+table.gridtable {
+    font-family: Verdana,arial,sans-serif;
+    font-size:12px;
+    color:#333333;
+    border-width: 1px;
+    border-color: #666666;
+    border-collapse: collapse;
+    border-radius: 3px 3px 3px 3px    
+}
+table.gridtable th {
+    border-width: 1px;
+    padding: 4px;
+    border-style: solid;
+    border-color: black;
+    background-color: #dedede;
+    border-radius: 3px 3px 3px 3px
+}
+table.gridtable td {
+    border-width: 1px;
+    padding: 4px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 3px 3px 3px 3px;
+    text-align: left
+}
+#divCss{
+    border: 0px solid gray;
+    padding: 2px;
+    --background: red;
+    overflow-y: auto;
+}
+</style>
+    <table class="gridtable" width="50%" align="left">
+            <tr>
+                <th>&nbsp;</th>
+                <apex:repeat value="{!monthList}" var="monthObj">
+                    <th>{!monthObj.monthName}</th>
+                </apex:repeat> 
+                <th>Grand Total</th>
+            </tr>
+            <apex:repeat value="{!avgCustMapGlobal}" var="prod">
+                <tr>
+                    <th>{!prod}</th>
+                    <apex:repeat value="{!avgCustMapGlobal[prod].productMonthList}" var="monthProAvg">
+                         <!-- <td>{!monthProAvg.monthWiseAverage}</td> -->
+                         <td nowrap="nowrap">{!monthProAvg.strMonthWiseAverage} <b># Cases:{!monthProAvg.caseCount}</b></td>  
+                    </apex:repeat>
+                    <!-- <th>{!avgCustMapGlobal[prod].totalProductDuration}</th> -->
+                    <th>{!avgCustMapGlobal[prod].strTotalProductDuration} <b># Cases: {!avgCustMapGlobal[prod].totProductCases}</b></th>
+                </tr>
+            </apex:repeat>
+            <tr>
+                <th>Grand Total</th>
+                <apex:repeat value="{!monthProdList}" var="monthAvg">
+                   <!-- <th>{!monthAvg.monthWiseAverage}</th> -->
+                   <th nowrap="nowrap">{!monthAvg.strMonthWiseAverage} <b># Cases: {!monthAvg.caseCount}</b></th>
+                </apex:repeat>
+                <th>&nbsp;</th>
+               <!--  <td bgcolor="orange"><b>{!grandTotalStr}</b></td> -->
+            </tr>   
+     </table>    
+     
+</apex:page>

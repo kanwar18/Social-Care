@@ -1,0 +1,237 @@
+<apex:page controller="Url_Shortener_Ctr_v2" standardStylesheets="false" showHeader="false">
+    <head>
+        <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+        <style type="text/css">
+
+            .pBody{
+                padding: 2px;
+            }
+
+            .wrapper{
+                padding: 2px;
+            }
+
+            .clearLink{
+                float:right;
+            }
+
+            .errorMsg{
+                list-style:none;
+                padding-left: 0px !important;
+                color: #a94442;
+            }
+        </style>
+    </head>
+    
+    <script type='text/javascript' src='/canvas/sdk/js/publisher.js'/> 
+
+    <div class="pBody">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <apex:outputpanel styleClass="clearLink" rendered="{!NOT(ISBLANK(service))}">
+                <!-- a href="#" onClick="chooseService()" >Choose service</a -->
+                <apex:outputPanel rendered="{!service == 'TinyUrl' || (service == 'Bitly' &&  NOT(ISBLANK(access_token)))}">
+                  <!--   &nbsp;|&nbsp; -->
+                    <a href="#" onClick="clearPage()" >Clear</a>
+                </apex:outputPanel>
+            </apex:outputPanel>
+            <label>Url Shortener</label>
+            <apex:outputPanel rendered="{!service == 'TinyUrl' || (service == 'Bitly' &&  NOT(ISBLANK(access_token)))}">
+                ({!service})
+            </apex:outputPanel>
+        </div>
+        <div class="panel-body">
+
+        <apex:messages styleClass="errorMsg" id="errormsg" />
+
+    <apex:outputPanel layout="block" styleClass="form-group" rendered="{!ISBLANK(service)}">
+
+        <apex:form styleClass="form-horizontal" >
+            <div class="form-group">
+                <label for="inputUsername" class="col-sm-2 control-label">Choose service</label>
+                <div class="col-sm-3">
+                    <apex:selectList id="chooseService" value="{!service}" size="1" styleClass="form-control">
+                        <apex:selectOptions value="{!services}"/>
+                    </apex:selectList>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <apex:commandButton styleClass="btn btn-primary" value="Go" action="{!setService}"  />
+                </div>
+            </div>
+        </apex:form>
+    </apex:outputPanel>
+
+    <apex:outputPanel layout="block" styleClass="form-group" rendered="{!(service == 'Bitly')&&(ISBLANK(access_token))}">
+
+        <apex:form styleClass="form-horizontal" >
+            <apex:actionFunction name="chooseService" action="{!chooseService}" />
+            <div class="form-group">
+                <label for="inputUsername" class="col-sm-2 control-label">Username</label>
+                    <div class="col-sm-3">
+                        <apex:inputText value="{!username}" styleClass="form-control" />
+                    </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword" class="col-sm-2 control-label">Password</label>
+                <div class="col-sm-3">
+                    <apex:inputSecret value="{!password}" styleClass="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <apex:commandButton styleClass="btn btn-primary" value="Sign in" action="{!getLogin}"  />
+                </div>
+            </div>
+        </apex:form>
+
+    </apex:outputPanel>
+
+
+    <apex:outputPanel layout="block" styleClass="form-group" id="resultUrl1" rendered="{!NOT(ISBLANK(access_token))}">
+
+        <apex:form styleClass="form-horizontal" >
+            <apex:actionFunction name="clearPage" action="{!clear}"  status="myStatus"/>
+            <apex:actionFunction name="chooseService" action="{!chooseService}" />
+            <div class="form-group">
+                <label for="inputUrl" class="col-sm-2 control-label">Input url</label>
+                <div class="col-sm-3">
+                    <apex:inputText value="{!inputUrl}" styleClass="form-control" id="inputUrl" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <apex:commandButton styleClass="btn btn-primary btnGetUrl" value="Get Url" action="{!getBitlyShortUrl}"  />
+                </div>
+            </div>
+
+        <apex:outputPanel layout="block" id="resultUrl" >
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Short Url</label>
+                    <div class="col-sm-3">
+                        <apex:outputText value="{!shortUrl}" id="retUrl" styleClass="form-control retUrl"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button id="copy-button" class="btn btn-primary" title="Copy to clipboard" >Copy</button>
+                        <a href="javascript:void(0);" class="btn btn-primary" role="button" onclick="postShortUrl();">Add to Social Publisher</a>
+                   
+                    </div>
+                </div>
+            </div>
+        </apex:outputPanel>
+        
+         <apex:actionFunction action="{!getTinyShortUrl}" name="jsCallShortUrl" oncomplete="postShortUrl()" rerender="thePageBlock">
+              <apex:param name="theUrl" assignTo="{!questionUrl}" value="" />
+         </apex:actionFunction>
+
+        </apex:form>
+
+    </apex:outputPanel>
+
+
+
+    <apex:outputPanel layout="block" styleClass="form-group" id="resultUrl2" rendered="{!service == 'TinyUrl'}">
+
+        <apex:form styleClass="form-horizontal" >
+            <apex:actionFunction name="clearPage" action="{!clear}"  status="myStatus"/>
+            <apex:actionFunction name="chooseService" action="{!chooseService}" />
+            <div class="form-group">
+                <label for="inputUrl" class="col-sm-2 control-label">Input url</label>
+                <div class="col-sm-3">
+                    <apex:inputText value="{!inputUrl}" styleClass="form-control" id="inputUrl" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <apex:commandButton styleClass="btn btn-primary btnGetUrl" value="Get Url" action="{!getTinyShortUrl}"  />
+                </div>
+            </div>
+
+        <apex:outputPanel layout="block" id="resultUrl" >
+
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Short Url</label>
+                    <div class="col-sm-3">
+                        <apex:outputText value="{!shortUrl}" id="retUrl" styleClass="form-control retUrl"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button id="copy-button" class="btn btn-primary" title="Copy to clipboard" >Copy</button>
+                        
+                        <a href="javascript:void(0);" class="btn btn-primary" role="button" onclick="postShortUrl();">Add to Social Publisher</a>
+                    </div>
+                </div>
+            </div>
+
+        </apex:outputPanel>
+
+        </apex:form>
+
+
+    </apex:outputPanel>
+
+
+</div>
+</div>
+</div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/1.3.5/ZeroClipboard.min.js"></script>
+
+  
+
+        <script type="text/javascript">
+                j$ = jQuery.noConflict();
+
+                ZeroClipboard.config( { moviePath: "https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/1.3.5/ZeroClipboard.swf" } );
+
+                var client = new ZeroClipboard( j$("#copy-button") );
+
+                client.on( 'load', function(client) {
+
+                    console.log('movie ok');
+
+                    client.on( 'datarequested', function(client) {
+                        var text = j$('.retUrl').text();
+                        console.log(text);
+                        client.setText(text);
+                    });
+
+                    // callback triggered on successful copying
+                    client.on( 'complete', function(client, args) {
+                        console.log("Text copied to clipboard: \n" + args.text );
+                    });
+                });
+
+                // In case of error - such as Flash not being available
+                client.on( 'wrongflash noflash', function() {
+                    ZeroClipboard.destroy();
+                } );
+                
+                
+                
+                function postShortUrl() {  
+
+
+                   if('{!shortUrl}' == ''){
+                       alert( 'This service is not working, please try again later');
+                   }
+                   else{
+                       Sfdc.canvas.publisher.publish({name:"publisher.setActionInputValues",payload:{actionName:"Case.Social",targetFields:{content:{value:" {!shortUrl}", insertType:"end"}}}});
+                   }
+                   Sfdc.canvas.publisher.publish({name:"publisher.selectAction",payload:{actionName:"Case.Social"}});
+
+               }
+
+        </script>
+
+</apex:page>

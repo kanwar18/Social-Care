@@ -1,0 +1,102 @@
+<apex:page controller="TimerReportsController" title="Case Timer Reports" showheader="false" readonly="true">
+
+<style type="text/css">
+table.gridtable {
+    font-family: Verdana,arial,sans-serif;
+    font-size:12px;
+    color:#333333;
+    border-width: 0px;
+    border-color: #666666;
+    border-collapse: collapse;
+    border-radius: 3px 3px 3px 3px    
+}
+table.gridtable th {
+    border-width: 0px;
+    padding: 4px;
+    border-style: solid;
+    border-color: black;
+    background-color: #F26405;
+    border-radius: 3px 3px 3px 3px
+}
+table.gridtable td {
+    border-width: 0px;
+    padding: 4px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 3px 3px 3px 3px;
+    text-align: left
+}
+#divCss{
+    border: 0px solid gray;
+    padding: 2px;
+    --background: red;
+    overflow-y: auto;
+}
+</style>
+<div align="center"><h1>Average Case handling time per time period (Last 90 Days)</h1></div>
+<div id="divCss">
+    <table class="gridtable" width="70%" align="center" bgcolor="#D6FFFF">
+        <tr>
+            <th>Time Period</th>
+            <th>Care Manager Name</th>
+        </tr>
+        <apex:repeat value="{!caseHandlingByTimePeriod}" var="timePeriod">
+            <tr>
+                <td valign="top"><b>{!timePeriod}</b></td>
+                <td>
+                    <table width="100%" border="3">
+                        <apex:repeat value="{!caseHandlingByTimePeriod[timePeriod]}" var="cmVar">
+                           <tr>
+                                <td nowrap="nowrap" valign="top"><b>{!cmVar}</b></td>
+                                 <td>
+                                    <table width="100%" border="2">
+                                        <tr>
+                                            <td nowrap="nowrap" colspan="2" bgcolor="#CBD7F7">
+                                                <b>
+                                                    # of Cases Handled:{!cmMapCtrl[cmVar].noOfCases}<br/>
+                                                 </b>
+                                            </td>
+                                        </tr>
+                                        <apex:repeat value="{!caseHandlingByTimePeriod[timePeriod][cmVar]}" var="caseObjId">
+                                            <tr>
+                                                <td valign="top">
+                                                    <a href="/{!caseMap[caseObjId].Id}">
+                                                       <b> {!caseMap[caseObjId].caseNumber} </b>
+                                                    </a>    
+                                                </td>
+                                                <td>
+                                                    <table width="100%">
+                                                        <apex:repeat value="{!caseHandlingByTimePeriod[timePeriod][cmVar][caseObjId].wrapperObjList}" var="wrapObj">
+                                                            <tr bgcolor="{!IF((MOD(wrapObj.objectCounter, 2) = 0),'#F7F4CB','#FAD4BB')}">
+                                                                <td nowrap="nowrap">{!wrapObj.transactionType}</td>
+                                                                <td nowrap="nowrap">{!wrapObj.readableDate}</td>
+                                                            </tr>
+                                                        </apex:repeat>
+                                                        <tr>
+                                                            <td colspan="2" bgcolor="sky blue">
+                                                                <b>Total Time:{!caseHandlingByTimePeriod[timePeriod][cmVar][caseObjId].averageReadableDate}</b>
+                                                            </td>
+                                                        </tr>                                                                
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </apex:repeat>
+                                        <tr>
+                                            <td nowrap="nowrap" colspan="2" bgcolor="orange">
+                                                <b>
+                                                    Average time per case :{!cmMapCtrl[cmVar].averageReadableDate}
+                                                </b>
+                                            </td>
+                                        </tr>
+                                    </table>      
+                                  </td>
+                            </tr>
+                         </apex:repeat>
+                    </table>
+                </td>
+             </tr>
+        </apex:repeat>
+     </table>
+</div>            
+
+</apex:page>

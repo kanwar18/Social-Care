@@ -1,0 +1,32 @@
+<apex:page controller="URL_Shortener_SetupCtr" sidebar="false" showHeader="false" action="{!checkCustomSetting}">
+  <!-- Begin Default Content REMOVE THIS -->  
+  <apex:form >
+        <apex:pageBlock mode="edit">
+            <apex:pageBlockButtons location="bottom" >
+                <apex:commandButton action="{!save}" value="Save"/>
+            </apex:pageBlockButtons>
+
+            <apex:pageBlockSection title=" Bitly configuration" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Username" for="username__c"/>
+                    <apex:inputText value="{!setupObj.username__c}" id="username__c"/> 
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Active" for="active__c"/>
+                    <apex:inputField value="{!setupObj.active__c}" id="active__c"/> 
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Password " for="password__c"/>
+                    <apex:inputText value="{!setupObj.password__c}" id="password__c"/> 
+                </apex:pageBlockSectionItem>
+
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+  
+  
+  
+  
+</apex:page>

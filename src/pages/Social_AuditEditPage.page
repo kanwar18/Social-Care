@@ -1,0 +1,68 @@
+<apex:page standardController="Audit_Responses__c" extensions="Social_AuditEditController" tabStyle="Audit_Responses__c" sidebar="false">
+    <apex:includeScript value="/support/console/29.0/integration.js"/>
+    <script type="text/javascript">
+        var qaResponseSalesforceId;
+        var qaResponseName;
+        function getFocusedSubtabId() {
+            if (sforce.console.isInConsole()) {
+                sforce.console.getFocusedSubtabId(showTabId);
+            }
+        }
+        var showTabId = function showTabId(result) {
+            sforce.console.closeTab(result.id);
+        };
+        
+        function refreshSubTab(qaResponseId,qaName) {
+            qaResponseSalesforceId = qaResponseId;
+            qaResponseName = qaName;
+            if (sforce.console.isInConsole()) {
+                sforce.console.getFocusedPrimaryTabId(primaryTabId);
+            } else {
+                window.open('/'+ '{!CaseId}','_parent');
+            }
+        }
+        var primaryTabId = function primaryTabId(result) {
+            sforce.console.openSubtab(result.id, '/' + qaResponseSalesforceId, true,qaResponseName, null, null,qaResponseName);
+        };
+       
+    </script>
+    <apex:sectionHeader title="QA Response Edit"/>
+        <apex:form >
+             <apex:pageBlock title="Audit Responses Edit">
+            <apex:pageBlockButtons location="top">
+                   <apex:commandButton value="Save" action="{!save}" oncomplete="refreshSubTab('{!Audit_Responses__c.Id}','{!Audit_Responses__c.Name}');"/>
+                   <apex:commandButton value="Cancel" onclick="getFocusedSubtabId();" action="{!Cancel}"/>
+            </apex:pageBlockButtons>  
+                <apex:pageBlockSection columns="2">
+                    <apex:pageBlockSectionItem >
+                       <apex:outputLabel value="QA Responses Detail" ></apex:outputLabel> 
+                            <apex:outputField value="{!Audit_Responses__c.Name}"/>
+                    </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                     <apex:outputLabel value="QA Question" ></apex:outputLabel>
+                     <apex:outputField value="{!Audit_Responses__c.Audit_Question__c}"/>
+                </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem > 
+                    <apex:outputLabel value="QA Answer"></apex:outputLabel>  
+                <apex:inputField value="{!auditObj.Audit_Answer__c}" required="True"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Score" ></apex:outputLabel> 
+                    <apex:outputField value="{!Audit_Responses__c.Audit_Score__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                     <apex:outputLabel value="Case" ></apex:outputLabel> 
+                    <apex:outputField value="{!Audit_Responses__c.Case__r.CaseNumber}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                     <apex:outputLabel value="QA Coaching" ></apex:outputLabel> 
+                    <apex:inputField value="{!auditObj.Audit_Coaching__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                     <apex:outputLabel value="QA Component" ></apex:outputLabel> 
+                    <apex:outputField value="{!Audit_Responses__c.Audit_Component__c}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,59 @@
+<apex:page standardStylesheets="true" sidebar="false" showHeader="false" standardController="case" extensions="Social_CaseUpdateStreamCtrl" id="mypage">
+    <script type="text/javascript">
+        window.onload=function(){
+        document.getElementById('mypage:myform').oncontextmenu = function(){
+                alert('Right click disabled');
+                return false; 
+            }
+        }
+    </script>
+
+    <style type="text/css">
+        body{
+            background-color: transparent;
+            background-image: url("/img/alohaSkin/sidebar_sprite.png");
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            background-position: -15px top;
+            background-clip: border-box;
+
+            background-size: auto auto;
+            font-size : 12px;
+        }
+        .sidebarModuleBody{
+        }
+    </style>
+    <apex:form id="myform">
+        <div style="overflow:auto; height:130px;">
+        <apex:dataTable value="{!caseList}" var="Case" cellspacing="3" cellpadding="1" id="counter" rows="{!intRows}" rendered="{!not(renderValue)}" >
+            <apex:column width="5%">
+                <apex:image url="{!$Resource.Bulb_Red}" width="15" height="15" title="DNR Time Expires {!Case.Timer_Expires_AT__c}" rendered="{!Case.DNR_End_Time__c!=null && Case.DNR_End_Time__c-now()<DNRTimeExp && Case.DNR_End_Time__c-now()>0}"/>
+            </apex:column>
+            <apex:column width="35%">
+                    <apex:facet name="header">Case</apex:facet> 
+                    <apex:commandLink id="Title" target="_new" action="{!markCaseRead}"><b>{!Case.casenumber}</b>
+                        <apex:param assignTo="{!itemId}" value="{!Case.id}" name="{!Case.id}"/>
+                    </apex:commandLink>
+             </apex:column>
+            <apex:column width="60%"> 
+                <apex:facet name="header">Update Reason</apex:facet>
+                <apex:outputText value="{!Case.Update_Reason__c}" rendered="{!NOT(Case.DNR_End_Time__c!=null && Case.DNR_End_Time__c-now()<DNRTimeExp && Case.DNR_End_Time__c-now()>0)}"/>
+                 <apex:outputText Title="DNR" value="DNR Time Expires" rendered="{!Case.DNR_End_Time__c!=null && Case.DNR_End_Time__c-now()<DNRTimeExp && Case.DNR_End_Time__c-now()>0 }"/>
+            </apex:column> 
+        </apex:dataTable>
+        </div>
+        <br></br>
+        <apex:actionPoller action="{!runCasesStream}" reRender="counter, counter1, more" interval="30" />
+        <apex:commandLink action="{!getCount}" value="More" id="more" rendered="{!showMore}"/>
+        
+        <br></br>
+        </apex:form>
+    <apex:form >
+    <br></br>
+        
+        <apex:outputText rendered="{!showCaseReference}" >Case Ref: {!strPostId}</apex:outputText>
+        
+    </apex:form>
+    
+
+</apex:page>

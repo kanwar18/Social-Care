@@ -1,0 +1,694 @@
+<apex:page standardStylesheets="false" showHeader="false" controller="SocialPersonaDetailCtr">
+
+ <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color:#494b4e;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        p {
+            font-size:12px;
+        }
+
+        h2 {
+            font-size: 14px;
+            color:#494b4e;
+            margin-left:10px;
+            min-width: 360px;
+        }
+
+        h3 {
+            font-weight: normal;
+        }
+
+
+        ul, li {
+            margin:0;
+            padding:0;
+            list-style: none;
+        }
+
+
+        
+        .sidebar {
+            /*width: 24%; */
+            height:100vh;
+            margin:0;
+            padding:0;
+            background: #fff;
+            float:left;
+        }
+
+
+        .personaHistory {
+            min-width: 360px;
+        }
+
+        .conversations {
+            min-width: 360px;
+        }
+
+        .personaId {
+            background: #f9f9f9;
+            width:94%;
+           /* white-space: nowrap; */
+            white-space: normal;
+            padding:3%;
+        }
+
+
+
+        .avatar {
+            width:60px;
+            height: 60px;
+            position: absolute;
+            display: inline-block;
+        }
+
+        .avatar .socialLabelTwitter {
+            width:18px;
+            height:18px;
+            background: #ffffff url('{!URLFOR($Resource.SideBarPostList, 'imgs/twitter-icon.png')}') no-repeat center center; 
+            border-radius: 50%;
+            position: absolute;
+            bottom:0px;
+            right:0px;
+        }
+        
+        
+        .avatar .socialLabelFacebook {
+            width:18px;
+            height:18px;
+            background: #ffffff url('{!URLFOR($Resource.SideBarPostList, 'imgs/facebook-icon.png')}') no-repeat center center; 
+            border-radius: 50%;
+            position: absolute;
+            bottom:0px;
+            right:0px;
+        }
+
+        .avatar img {
+            border-radius: 50%;
+            height: 62px;
+            width: 62px;
+        }
+        
+        #componentSwitch {
+            padding:5px 0 0px 0;
+            border-bottom: 1px solid #ddd;
+            min-width: 360px;
+        }
+        
+        #componentSwitch ul {
+            height:28px;
+        }
+
+        #componentSwitch li{
+            float:left;
+            font-size: 12px;
+            color:#494b4e;
+            width:50%;
+            padding:2px 0 8px 0;
+            text-align: center;
+
+        }
+
+        #componentSwitch li.active {
+
+            border-bottom: 2px solid #00a8ff;
+        }
+
+        #componentSwitch li.active:hover {
+         border-bottom: 2px solid #00a8ff;
+        }
+
+        #componentSwitch li:hover {
+            border-bottom: 2px solid #cfd0d2;
+            cursor: pointer;
+        }
+
+        ul.personaHistory {
+            border-bottom: 0;
+            padding-top: 2px;
+            margin-top: 10px;
+        }
+
+
+        .personaInfo {
+            display: inline-block;
+            vertical-align: top;
+            margin-left:80px;
+
+        }
+
+        .personaInfo h3 {
+            margin:0;
+        }
+
+        .personaInfo .twitterHandle {
+            color: #015ba7;
+            text-decoration: none;
+            font-size: 12px;
+            vertical-align: top;
+            margin: 0 0 10px 0;
+        }
+
+        .personaInfo ul {
+            margin: 0;
+            width:100%;
+        }
+
+
+        .personaInfo ul li {
+            font-size: 12px;
+            display: inline-block;
+            margin-right:10px;
+        }
+
+        .personaInfo ul li span{
+            font-weight: bold;
+        }
+
+
+        .postWrapper {
+            border-bottom: 1px solid #ededed;
+            padding:0 5% 3% 5%;
+            width:90%;
+        }
+        
+        
+        .postWrapper_Reply_Twitter, .postWrapper_Comment_Facebook{
+            border-bottom: 1px solid #ededed;
+            padding:0 5% 3% 15%;
+            width:80%;
+        }
+        
+        .postWrapper_Reply_Facebook{
+            border-bottom: 1px solid #ededed;
+            padding:0 5% 3% 25%;
+            width:70%;
+        }
+
+        .postWrapper img {
+            position: absolute;
+            width:30px;
+            height:30px;
+            border-radius: 50%;
+        }
+
+        .postContent {
+
+            margin-left:40px;
+        }
+
+        .postContent p {
+            margin-top:5px;
+        }
+
+        .postInfo {
+            font-size: 12px;
+            color:#7d7d84;
+        }
+
+        .postInfo span.bullet {
+            margin:0 5px;
+            color:#ddd;
+        }
+
+        .postInfo span.caseInfo {
+            white-space: nowrap;
+        }
+
+        .postInfo img {
+            width: 10px;
+            height: 10px;
+            position: relative;
+            border-radius: 0;
+        }
+
+        ul.conversations {
+            border-bottom: 0;
+        }
+
+        .iconMargin {
+            margin-top: -3px;
+        }
+
+        ul.conversations .postWrapper {
+          margin-top:17px;
+        }
+
+
+
+        ul.conversations .postContent {
+           /* border-left: 1px dotted #ddd; */
+            margin-left: 15px;
+            padding-left: 24px;
+        }
+
+
+        ul.conversations .nest {
+
+        }
+
+        ul.conversations ul.nest {
+ 
+
+        }
+
+        ul.conversations ul.nest li.postWrapper {
+            padding:5% 0 0 0;
+            border-bottom:0;
+            width:100%;
+            border-top:1px solid #ddd;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .show {
+            display:block;
+        }
+
+        .loadMoreBtn{
+          cursor: pointer;
+          text-align: center;
+          text-transform: lowercase;
+          border-bottom: 1px solid #ededed;
+          padding: 0 5% 3% 5%;
+          width: 90%;
+        }
+
+        .plusIcon{
+          cursor: pointer;
+
+        }
+        </style>
+
+
+ <div class="sidebar">
+        
+
+            <div>
+
+                
+                <div class="personaId">
+          
+                    <apex:outputPanel rendered="{!persona.Provider == 'Twitter'}" styleClass="avatar" layout="block">
+                         
+                           <img src="{!persona.ExternalPictureURL}" onError="this.src = '{!URLFOR($Resource.SideBarPostList, 'imgs/MissingAvatar.png')}'" />
+                         
+                        
+                        <div class="socialLabelTwitter"></div>
+
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!persona.Provider == 'Twitter'}" styleClass="personaInfo" layout="block">
+                    
+                        <h3>{!persona.RealName}</h3>
+                        <a href="{!persona.ProfileUrl}" class="twitterHandle" target="_blank" >@{!persona.Name}</a>
+                        <ul>
+                            <li><apex:outputField value="{!persona.Followers}" rendered="{!$ObjectType.SocialPersona.fields.Followers.Accessible}" /> Followers</li> 
+                            <li><apex:outputField value="{!persona.Following}" rendered="{!$ObjectType.SocialPersona.fields.Following.Accessible}" /> Following</li>
+                            <li><apex:outputField value="{!persona.NumberOfTweets}" rendered="{!$ObjectType.SocialPersona.fields.NumberOfTweets.Accessible}" /> Tweets</li>
+                        </ul>
+                    </apex:outputPanel>
+                    
+                    
+                    <apex:outputPanel rendered="{!persona.Provider == 'Facebook'}" styleClass="avatar" layout="block">
+                        
+                            <img src="{!persona.ExternalPictureURL}" onError="this.src = '{!URLFOR($Resource.SideBarPostList, 'imgs/MissingAvatar.png')}'" />
+                         
+
+                        <div class="socialLabelFacebook"></div>
+
+                    </apex:outputPanel>
+ 
+                    
+                    <apex:outputPanel rendered="{!persona.Provider == 'Facebook'}" styleClass="personaInfo" layout="block">
+                    
+                        <h3>{!persona.RealName}</h3>
+                        <a href="{!persona.ProfileUrl}" class="twitterHandle" target="_blank" >{!persona.RealName} on Facebook</a>
+                        <ul>
+                            <li>
+                                <apex:outputPanel rendered="{!!ISBLANK(persona.NumberOfFriends)}">
+                                    <apex:outputField value="{!persona.NumberOfFriends}" rendered="{!$ObjectType.SocialPersona.fields.NumberOfFriends.Accessible}" /> Friends
+                                </apex:outputPanel>
+                            </li> 
+                            <li> </li>
+                            <li> </li>
+                        
+                        </ul>
+                   
+                    </apex:outputPanel>
+                    
+                    
+                    <apex:outputPanel rendered="{!socialAccount!=Null}" styleClass="avatar" layout="block">
+                         
+                        <img src="{!socialAccount.ExternalPictureURL}" onError="this.src = '{!URLFOR($Resource.SideBarPostList, 'imgs/MissingAvatar.png')}'" />
+                        
+                    </apex:outputPanel>
+                    
+                    
+                    <apex:outputPanel rendered="{!socialAccount!=Null}" styleClass="personaInfo" layout="block" >
+
+                        <h3>{!socialAccount.Username}</h3>
+                        
+                        <span class="twitterHandle"> </span>
+                        
+                        <ul>
+                            <li> </li> 
+                            <li> </li>
+                            <li> </li>
+                        
+                        </ul>
+          
+                        
+                    </apex:outputPanel>
+                    
+
+                </div>
+
+                <nav id="componentSwitch">
+                    <ul>
+                        <li id="personaHistorySwitch" class="active">
+                            Persona History
+                        </li>
+                        <li id="conversationSwitch">
+                            Conversations
+                        </li>
+                        <span></span>
+                    </ul>
+                </nav>
+
+                <ul id="historyList" class="historyControls">
+                    
+                </ul>
+                <div id="morePostBtn" onclick="loadMorePosts(false)" value="More posts"  class="historyControls loadMoreBtn hide">
+                    load more 
+                </div>
+                
+                <ul id="conversationList"  class="conversationControls">
+                    
+                </ul>
+                <div id="moreConversationsBtn" onclick="loadMoreConversationPosts(false)"   class="conversationControls loadMoreBtn hide">
+                    load more 
+                </div>
+                 
+
+
+            </div>
+
+        </div>
+<script id="tplHistory" type="text/x-jsrender">
+
+
+<li class="postWrapper">
+  <span >
+   {{if IsOutbound }}
+    <img src="{{:OutboundSocialAccount.ExternalPictureURL}}" 
+            onError="this.src = '{!URLFOR($Resource.SideBarPostList, 'imgs/MissingAvatar.png')}'" />
+     {{else}}
+     <img src="{{:Persona.ExternalPictureURL}}" 
+            onError="this.src = '{!URLFOR($Resource.SideBarPostList, 'imgs/MissingAvatar.png')}'" />
+     {{/if}}
+  </span>
+  <div class="postContent">
+        <p class="post">{{:Content}}</p>
+        <div class="postInfo"> 
+        {{if Provider == 'Facebook'}}
+            <img src="{!URLFOR($Resource.SideBarPostList, 'imgs/facebook-icon.png')}">
+        {{else}}
+          <img src="{!URLFOR($Resource.SideBarPostList, 'imgs/twitter-icon.png')}">
+        {{/if}}
+            
+            <span>{{:MessageType}}</span>
+            <span class="bullet">•</span>
+            <span >{{:~formatDate(Posted)}}</span>
+            <span class="bullet">•</span>
+            {{if Parent != undefined}}
+                <img src="{!URLFOR($Resource.SideBarPostList, 'imgs/case-icon.png')}" alt="case" styleClass="iconMargin" >
+                 {{:Parent.Name}}
+            {{/if}}
+        </div>
+    </div>
+</li>
+
+
+</script>
+<script id="tplConversation" type="text/x-jsrender">
+{{if Replies != undefined}}
+      <li class="postWrapper postWrapper_{{:MessageType}}_{{:Provider}} thread_{{:Id}}">
+{{else}}
+        <li class="postWrapper postWrapper_{{:MessageType}}_{{:Provider}}">
+{{/if}}
+
+  <span >
+   {{if IsOutbound  }}
+       {{if OutboundSocialAccount != undefined  }}
+            <img src="{{:OutboundSocialAccount.ExternalPictureURL}}" 
+                onError="this.src = '{!URLFOR($Resource.SideBarPostList, 'imgs/MissingAvatar.png')}'" />
+         {{else}}
+            <img src="{!URLFOR($Resource.SideBarPostList, 'imgs/MissingAvatar.png')}" />
+         {{/if}}
+      
+     {{else}}
+       {{if Persona != undefined  }}
+           <img src="{{:Persona.ExternalPictureURL}}" 
+            onError="this.src = '{!URLFOR($Resource.SideBarPostList, 'imgs/MissingAvatar.png')}'" />
+         {{else}}
+            <img src="{!URLFOR($Resource.SideBarPostList, 'imgs/MissingAvatar.png')}" />
+         {{/if}}
+     
+     
+     {{/if}}
+  </span>
+  <div class="postContent">
+        <p class="post">{{:Content}}</p>
+        <div class="postInfo"> 
+        {{if Provider == 'Facebook'}}
+            <img src="{!URLFOR($Resource.SideBarPostList, 'imgs/facebook-icon.png')}">
+        {{else}}
+          <img src="{!URLFOR($Resource.SideBarPostList, 'imgs/twitter-icon.png')}">
+        {{/if}}
+            
+            <span>{{:MessageType}}</span>
+            <span class="bullet">•</span>
+            <span id="date">{{:~formatDate(Posted)}}</span>
+            <span class="bullet">•</span>
+            {{if Parent != undefined}}
+                <img src="{!URLFOR($Resource.SideBarPostList, 'imgs/case-icon.png')}" alt="case" styleClass="iconMargin" >
+                 {{:Parent.Name}}
+            {{/if}}
+             {{if Replies != undefined && (MessageType =='Post' || MessageType =='Tweet')}}
+              <span class="bullet">•</span> 
+              <span id="plus_{{:Id}}" class="plusIcon" onclick="loadThreadsFor('{{:Id}}')">[+]</span> 
+              <span id="less_{{:Id}}"  class="plusIcon hide" onclick="removeThreadsFor('{{:Id}}')">[-]</span> 
+            {{/if}}
+        </div>
+    </div>
+</li>
+
+
+
+</script> 
+
+        <apex:includeScript value="{!URLFOR($Resource.SLookupScripts, 'jquery-1.11.3.min.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SLookupScripts, 'jsrender.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SLookupScripts, 'moment.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SLookupScripts, 'moment-timezone.js')}"/>
+        
+        
+        <script type="text/javascript">
+            var tplHistory = $.templates("#tplHistory");
+            var tplConversation = $.templates("#tplConversation");
+
+            function removeAllThreads(){
+                $("span[id^='plus_']:hidden").show();
+                $("span[id^='less_']:visible").hide();
+                $('li.postThread').remove();
+            }
+
+            function loadMorePosts(isFirstTime){
+                removeAllThreads();
+                $(window.historyPosts.splice(0,10)).each(function (i,e){
+                    var htmlOutput = tplHistory.render(e,{ 
+                            formatDate: function(mili) {
+                                return formatDate(mili);
+                              }
+                          });
+                    $("ul#historyList").append(htmlOutput);
+                });
+                if (window.historyPosts.length == 0 )
+                    $('#morePostBtn').hide();
+                if (!isFirstTime)
+                    $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+            }
+
+            function loadMoreConversationPosts(isFirstTime){
+                removeAllThreads();
+                $(window.conversationPosts.splice(0,10)).each(function (i,e){
+                    var htmlOutput = tplConversation.render(e,{ 
+                            formatDate: function(mili) {
+                                return formatDate(mili);
+                              }
+                          });
+                    $("ul#conversationList").append(htmlOutput);
+                });
+                if (window.conversationPosts.length == 0 )
+                    $('#moreConversationsBtn').hide();
+                if (!isFirstTime)
+                    $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+            }
+
+            function getRemotePosts() {
+                var objId = '{!$CurrentPage.parameters.id}';
+
+                window.historyPosts = [];
+                Visualforce.remoting.Manager.invokeAction(
+                    '{!$RemoteAction.SocialPersonaDetailCtr.getPostHistory}',
+                    objId, 
+                    function(result, event){
+                        if (event.status) {
+                            if (result != null && result.length > 0){
+                                window.historyPosts = result;
+                                loadMorePosts(true);
+                            }
+                        } else if (event.type === 'exception') {
+                            document.getElementById("responseErrors").innerHTML = 
+                                event.message + "<br/>\n<pre>" + event.where + "</pre>";
+                        } else {
+                            document.getElementById("responseErrors").innerHTML = event.message;
+                        }
+                    }, 
+                    {escape: true}
+                );
+            }
+
+            function getRemoteConversationsPosts() {
+                var objId = '{!$CurrentPage.parameters.id}';
+                window.conversationPosts = [];
+
+                Visualforce.remoting.Manager.invokeAction(
+                    '{!$RemoteAction.SocialPersonaDetailCtr.getConversationsPosts}',
+                    objId, 
+                    function(result, event){
+                        if (event.status) {
+                            if (result != null &&  result.length > 0){
+                                window.conversationPosts = result;
+                                loadMoreConversationPosts(true);
+                            }
+
+                        } else if (event.type === 'exception') {
+                            document.getElementById("responseErrors").innerHTML = 
+                                event.message + "<br/>\n<pre>" + event.where + "</pre>";
+                        } else {
+                            document.getElementById("responseErrors").innerHTML = event.message;
+                        }
+                    }, 
+                    {escape: true}
+                );
+            }
+
+            function loadThreadsFor(parentId){
+
+                $("span[id^='plus_']:hidden").show();
+                $("span[id^='less_']:visible").hide();
+                $('span#plus_'+parentId).hide();
+                $('span#less_'+parentId).hide();
+                Visualforce.remoting.Manager.invokeAction(
+                    '{!$RemoteAction.SocialPersonaDetailCtr.getThreadByPostId}',
+                    parentId, 
+                    function(result, event){
+                        if (event.status) {
+                            loadThread(parentId,result);
+
+                        } else if (event.type === 'exception') {
+                            document.getElementById("responseErrors").innerHTML = 
+                                event.message + "<br/>\n<pre>" + event.where + "</pre>";
+                        } else {
+                            document.getElementById("responseErrors").innerHTML = event.message;
+                        }
+                    }, 
+                    {escape: true}
+                );
+            } 
+
+            function removeThreadsFor(parentId){
+                $('span#plus_'+parentId).show();
+                $('span#less_'+parentId).hide();
+                $('li.postThread').remove();
+            }
+
+            function loadThread(parentId, result){
+                $('li.postThread').remove();
+                $('span#less_'+parentId).show();
+                console.log('will load threads for '+parentId + $('.thread_'+parentId+':last') );
+                $(result).each(function (i,e){
+                    var htmlOutput = tplConversation.render(e,{ 
+                            formatDate: function(mili) {
+                                return formatDate(mili);
+                              }
+                          }); 
+                    if (parentId != e.Id)
+                    $( htmlOutput).addClass('postThread').insertAfter( '.thread_'+parentId+':last');
+                });
+
+
+
+            }
+
+            function historyDisplay(isFirstTime){
+                console.log('historyDisplay');
+                getRemotePosts();
+                $(this).addClass("active");
+                $("#conversationSwitch").removeClass("active");
+                $("#personaHistorySwitch").addClass("active");
+                $('.conversationControls').hide();
+                $('ul.conversationControls li').remove();
+                $('.historyControls').show();
+            }
+            function conversationDisplay(){
+                console.log('conversationDisplay');
+                 getRemoteConversationsPosts();
+                $(this).addClass("active");
+                $("#personaHistorySwitch").removeClass("active"); 
+                $("#conversationSwitch").addClass("active");
+                $('.historyControls').hide();
+                $('ul.historyControls li').remove();
+                $('.conversationControls').show();
+            }
+
+
+            function formatDate (mili){
+                                        //6/8/2015 8:22 AM
+                                        //.format('YYYY-MM-DD h:mm A')
+                return moment(mili).utcOffset('{!offset}').format('MM/DD/YYYY h:mm A')
+
+            }
+
+
+        $(document).ready(function() {
+            $("#personaHistorySwitch").click(function() {
+                if (! $(this).hasClass('active'))
+                    historyDisplay();
+            });
+
+            $("#conversationSwitch").click(function() {
+                if (! $(this).hasClass('active'))
+                    conversationDisplay();
+            });
+            $('.caseInfo a').each(function(i,e){
+                $(e).parent().html($(e).text());
+            });
+            
+            historyDisplay(true);
+        });
+
+
+
+        </script>
+
+</apex:page>

@@ -1,0 +1,35 @@
+<!-- 
+/********************************************************************************************************************************************************************
+* Page Name            : VFP01_GenericHighLighter
+* Author               : Accenture
+* Date                 : 30-October-2013 
+* Asset                : Search a String.
+* Description          : This page displays the search string highlighted in the Component.
+*********************************************************************************************************************************************************************/
+-->
+<apex:page id="genericPage" controller="VFC01_GenericHighLighter">
+<!-- Including the CSS and Jquery in the Page -->
+<apex:stylesheet value="{!URLFOR($Resource.stringSearch, 'stringSearch/searchPage_highlight.css')}"/> 
+<apex:stylesheet value="{!URLFOR($Resource.stringSearch, 'stringSearch/searchPage_jquery_highlight.css')}"/>
+<apex:includeScript value="{!URLFOR($Resource.stringSearch, 'stringSearch/jQuery')}"/>
+<apex:includeScript value="{!URLFOR($Resource.stringSearch, 'stringSearch/searchPage_jquery_highlighttextareajs')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.stringSearch, 'stringSearch/searchPage_style.css')}"/>
+
+<!-- Javascript to call the Jquery which highlights the text. -->
+<script type="text/javascript">
+  $(document).ready(function() {
+      var stringPassed = document.getElementById('genericPage:genericForm:genericSearchValue').value;
+      $("#genericPage\\:genericForm\\:genericInputArea").highlightTextarea({
+          words: [stringPassed],
+          color: "#fff34d"
+      });
+  });
+</script>
+  
+  
+    <apex:form id="genericForm">
+        <apex:pageMessage severity="error" summary="Tooling API Failure. Kindly try after sometime." rendered="{!displayErrorMsg}" strength="3"/>
+        <apex:inputTextarea value="{!inputTextAreaBody}" rows="45" cols="190" id="genericInputArea"/>
+        <apex:inputHidden value="{!searchString}" id="genericSearchValue" />
+    </apex:form>
+</apex:page>

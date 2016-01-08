@@ -1,0 +1,69 @@
+<apex:page controller="firstCustResponse" title="First Custpmer Response" showheader="true" readonly="true" sidebar="true">
+    <style type="text/css">
+table.gridtable {
+    font-family: Verdana,arial,sans-serif;
+    font-size:12px;
+    color:#333333;
+    border-width: 1px;
+    border-color: #666666;
+    border-collapse: collapse;
+    border-radius: 3px 3px 3px 3px    
+}
+table.gridtable th {
+    border-width: 1px;
+    padding: 4px;
+    border-style: solid;
+    border-color: black;
+    background-color: #dedede;
+    border-radius: 3px 3px 3px 3px
+}
+table.gridtable td {
+    border-width: 1px;
+    padding: 4px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 3px 3px 3px 3px;
+    text-align: left
+}
+#divCss{
+    border: 0px solid gray;
+    padding: 2px;
+    --background: red;
+    overflow-y: auto;
+}
+</style>
+    <table class="gridtable"  width="50%" align="left">
+            <tr>
+                <th>Case Owner</th>
+                <th>DSL</th>
+                <th>U-verse</th>
+                <th>Yellow Pages</th>
+                <th>Landline</th>
+                <th>Others</th>
+            </tr>
+            
+            <apex:repeat value="{!UserList}" var="V">
+                <tr>
+                    <th>
+                        
+                    {!OwnerNameMap[V.Id]}
+                    </th>
+                    <th>{!firstCustMap[V.Id]['DSL']}</th>
+                    <th>{!firstCustMap[V.Id]['U-verse']}</th>
+                    <th>{!firstCustMap[V.Id]['Yellow Pages']}</th>
+                    <th>{!firstCustMap[V.Id]['Landline']}</th>
+                    <th>{!firstCustMap[V.Id]['Others']}</th>
+                </tr>
+            </apex:repeat>
+            <tr>
+                <th>Average Total</th>
+                <th>{!GradTotalMap['DSL']}</th>
+                <th>{!GradTotalMap['U-verse']}</th>
+                <th>{!GradTotalMap['Yellow Pages']}</th>
+                <th>{!GradTotalMap['Landline']}</th>
+                <th>{!GradTotalMap['Others']}</th>
+            </tr> 
+            
+             
+     </table>      
+</apex:page>

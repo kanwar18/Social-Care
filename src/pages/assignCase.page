@@ -1,0 +1,7 @@
+<apex:page controller="Social_CaseAssignment">
+    Case ID : {!strCaseId}<br></br>
+    Care Manager : {!strCareManager}<br></br><br></br><br></br><br></br>
+    <apex:form >
+        <apex:commandButton action="{!assignCase}" value="Assign Case"/>
+    </apex:form>
+</apex:page>

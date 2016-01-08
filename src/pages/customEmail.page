@@ -1,0 +1,176 @@
+<apex:page standardController="Custom_Post__c" extensions="Social_CareManagerResponseEmail" sidebar="false" id="myPage">
+    <apex:includeScript value="/support/console/29.0/integration.js"/>
+    <style>
+        .bPageBlock .detailList TD{
+            vertical-align:middle;
+        }
+        
+        .UserNameFont{
+           font-size: 91%;
+           font-weight: bold;
+           text-align: right;
+           color: #4A4A56;
+           padding-left: 50%;       
+        }
+        
+        .usernameformat{
+            padding-left: 20px;
+        }
+        
+        .statusModalBackground {
+            position:absolute;
+            width:100%;
+            height:100%;
+            opacity:0.5;
+            background-color:black;
+            z-index:1000;
+            display:none;
+        }
+        
+        .statusModal {
+            background-color:white;
+            position:fixed;
+            top:40%;
+            left:40%;
+            width:450px;
+            padding:15px;
+            border-radius:5px;
+            z-index:1001;
+            display:none;
+        }
+        
+        .modalSpinner {
+            float:left;
+            margin-top:40px;
+        }
+    
+        .modalTitle {
+            display:block;
+            font-size:14pt;
+        }
+        
+        .modalDetails {
+            font-size:11pt;
+        }
+        
+        .modalTitle, .modalDetails {
+            margin-left:45px;
+        }
+        
+        input.modalButton {
+            display:block;
+            margin-left:auto;
+            margin-right:auto;
+            font-size:10pt;
+        }
+        
+        .messageEntryFormSendaTweetLbl {
+            font-size: 24px;
+            padding-left: 35px;
+            padding-left-value: 35px;
+            padding-left-ltr-source: physical;
+            padding-left-rtl-source: physical;
+            font-weight: bold;
+        }
+        
+        .messageDetails {
+            padding: 5px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .labelCol{
+            padding: 2px 10px 2px 2px;
+            text-align: right;
+            font-size: 91%;
+            font-weight: bold;
+            color: rgb(51, 51, 51);
+        }
+    </style>
+    <script type='text/javascript'>
+        function hideValue(){
+            document.getElementById('emailMessage').style.display = 'none';
+        }
+        
+        function refereshPrimaryTab() {
+            if(sforce.console.isInConsole()){
+                sforce.console.getFocusedPrimaryTabId(showTabId);
+            }
+        }
+        var showTabId = function showTabId(result) {
+            sforce.console.refreshPrimaryTabById(result.id, true);
+        };
+    </script>
+    <div id="outerWrapSection" class="outerWrapSectionCls" > 
+        <table width="100%">
+          <tr>
+              <td>
+                   <p class="messageEntryFormSendaTweetLbl" >Send an Email</p>                 
+              </td>
+              <td align="right">
+              </td>
+          </tr>
+        </table>  
+    </div>  
+    <apex:pageMessages ></apex:pageMessages>
+    <apex:outputText rendered="{!noformRenderer}">There is already an email pending for approval.&nbsp;&nbsp;</apex:outputText>
+    <apex:outputLink rendered="{!noformRenderer}" value="/{!customPost.Case__c}">Click here to go Back</apex:outputLink>
+    <apex:form id="myForm" rendered="{!formRenderer}">
+        <apex:pageBlock title="Email Details" id="pageBlock">
+                <table width="60%" cellspacing ="2" cellpadding="2" border = "0">
+                    <tr>
+                        <td width="25%" align="right" class="labelCol" >From: </td>
+                        <td>"ATT Email To Case" (attcustomercare@att.com)</td>
+                    </tr>
+                    <tr>
+                        <td class="labelCol">To</td>
+                        <td>
+                            
+                            <apex:inputField value="{!customPost.Contact__c}" onchange="hideValue();" />
+                            <div id="emailMessage"><font color="red">{!emailMessages}</font></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labelCol">Related To</td>
+                        <td>
+                            <apex:outputField value="{!CustomPost.Case__c}"></apex:outputField>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labelCol">Additional To</td>
+                        <td>
+                            <apex:inputTextarea value="{!customPost.AdditionalTo__c}" cols="50"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labelCol">CC:</td>
+                        <td>
+                            <apex:inputTextarea value="{!customPost.CCAddress__c}" cols="50"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labelCol">BCC:</td>
+                        <td>
+                            <apex:inputTextarea value="{!customPost.BCCAddress__c}" cols="50"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labelCol">Subject</td>
+                        <td>
+                            <apex:inputtext id="subject" value="{!customPost.Subject__c}" required="true" style="width: 75%"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labelCol">Body</td>
+                        <td>
+                            <apex:inputTextarea id="body" value="{!customPost.Body__c}" cols="100" rows="20"/>
+                        </td>
+                    </tr>
+                </table>
+                <apex:pageBlockButtons location="bottom">
+                    <apex:commandButton value="Submit" action="{!save}" onclick="refereshPrimaryTab();"/>
+                    <apex:commandButton value="Cancel" action="{!cancel}"/>
+                </apex:pageBlockButtons>
+            </apex:pageBlock>
+        </apex:form>
+</apex:page>

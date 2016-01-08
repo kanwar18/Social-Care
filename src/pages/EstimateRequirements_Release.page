@@ -1,0 +1,32 @@
+<apex:page extensions="effortdetails" standardController="Release__c">
+
+<table width="100%" height="122" border="0" cellpadding="5" bordercolor="#F3F3EC" bgcolor="#F3F3EC">
+<tr>
+<td width="15%" align="right"><b>Plan</b></td>
+<td width="20%" align="left"><apex:outputText value="{!Requirement_gathering}"></apex:outputText></td>
+<td width="25%" align="right"><b>UAT</b> </td>
+<td width="25%" align="left"><apex:outputText value="{!uat}"></apex:outputText></td>
+</tr>
+<tr>
+<td width="15%" align="right"><b>Design</b></td>
+<td width="20%" align="left"><apex:outputText value="{!design}"></apex:outputText></td>
+<td width="25%" align="right"><b>Deploy</b></td>
+<td width="25%" align="left"><apex:outputText value="{!Traindep}"></apex:outputText></td>
+</tr>
+
+<tr>
+<td width="15%" align="right"><b>Build</b></td>
+<td width="20%" align="left"><apex:outputText value="{!but}"></apex:outputText></td>
+<td width="25%" align="right"><b>Support</b></td>
+<td width="25%" align="left"><apex:outputText value="{!adapt}"></apex:outputText></td>
+</tr>
+<tr>
+<td width="15%" align="right"><b>Test</b></td>
+<td width="20%" align="left"><apex:outputText value="{!sit}"></apex:outputText></td>
+<td width="25%" align="right"><b>Total Estimate</b></td>
+<td width="25%" align="left"><apex:outputText value="{!total}"></apex:outputText></td>
+</tr>
+
+
+</table>
+</apex:page>

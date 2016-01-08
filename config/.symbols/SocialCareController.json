@@ -1,0 +1,447 @@
+{
+    "properties": [
+        {
+            "modifiers": [
+                "public"
+            ], 
+            "name": "forseeSurveyObj", 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 29, 
+                "line": 6
+            }, 
+            "type": "Forsee_Survey__c"
+        }, 
+        {
+            "modifiers": [
+                "public"
+            ], 
+            "name": "responseMessage", 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 19, 
+                "line": 7
+            }, 
+            "type": "String"
+        }, 
+        {
+            "modifiers": [
+                "public"
+            ], 
+            "name": "surveyDet", 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 26, 
+                "line": 8
+            }, 
+            "type": "SurveyDetails"
+        }, 
+        {
+            "modifiers": [
+                "public"
+            ], 
+            "name": "surveyDetailsFlag", 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 20, 
+                "line": 9
+            }, 
+            "type": "Boolean"
+        }, 
+        {
+            "modifiers": [
+                "public"
+            ], 
+            "name": "surveyType", 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 19, 
+                "line": 11
+            }, 
+            "type": "String"
+        }, 
+        {
+            "modifiers": [
+                "private", 
+                "static", 
+                "final"
+            ], 
+            "name": "USER_MODIFIED_URL", 
+            "visibility": "PRIVATE", 
+            "references": [], 
+            "location": {
+                "column": 33, 
+                "line": 2
+            }, 
+            "type": "String"
+        }, 
+        {
+            "modifiers": [
+                "private", 
+                "static", 
+                "final"
+            ], 
+            "name": "LINK_USED", 
+            "visibility": "PRIVATE", 
+            "references": [], 
+            "location": {
+                "column": 33, 
+                "line": 3
+            }, 
+            "type": "String"
+        }, 
+        {
+            "modifiers": [
+                "private", 
+                "static", 
+                "final"
+            ], 
+            "name": "LINK_EXPIRED", 
+            "visibility": "PRIVATE", 
+            "references": [], 
+            "location": {
+                "column": 33, 
+                "line": 4
+            }, 
+            "type": "String"
+        }
+    ], 
+    "externalReferences": [], 
+    "innerClasses": [
+        {
+            "properties": [
+                {
+                    "modifiers": [
+                        "public"
+                    ], 
+                    "name": "todaysDate", 
+                    "visibility": "PUBLIC", 
+                    "references": [], 
+                    "location": {
+                        "column": 25, 
+                        "line": 148
+                    }, 
+                    "type": "Datetime"
+                }, 
+                {
+                    "modifiers": [
+                        "public"
+                    ], 
+                    "name": "urlCreatedDate", 
+                    "visibility": "PUBLIC", 
+                    "references": [], 
+                    "location": {
+                        "column": 25, 
+                        "line": 149
+                    }, 
+                    "type": "Datetime"
+                }, 
+                {
+                    "modifiers": [
+                        "public"
+                    ], 
+                    "name": "urlSentDate", 
+                    "visibility": "PUBLIC", 
+                    "references": [], 
+                    "location": {
+                        "column": 25, 
+                        "line": 150
+                    }, 
+                    "type": "Datetime"
+                }, 
+                {
+                    "modifiers": [
+                        "public"
+                    ], 
+                    "name": "surveyGiven", 
+                    "visibility": "PUBLIC", 
+                    "references": [], 
+                    "location": {
+                        "column": 24, 
+                        "line": 151
+                    }, 
+                    "type": "Boolean"
+                }, 
+                {
+                    "modifiers": [
+                        "public"
+                    ], 
+                    "name": "surveyGivenStr", 
+                    "visibility": "PUBLIC", 
+                    "references": [], 
+                    "location": {
+                        "column": 23, 
+                        "line": 152
+                    }, 
+                    "type": "String"
+                }
+            ], 
+            "externalReferences": [], 
+            "innerClasses": [], 
+            "interfaces": [], 
+            "constructors": [
+                {
+                    "modifiers": [
+                        "public"
+                    ], 
+                    "name": "SurveyDetails", 
+                    "parameters": [], 
+                    "visibility": "PUBLIC", 
+                    "references": [], 
+                    "location": {
+                        "column": 16, 
+                        "line": 153
+                    }, 
+                    "type": null
+                }, 
+                {
+                    "modifiers": [
+                        "public"
+                    ], 
+                    "name": "SurveyDetails", 
+                    "parameters": [
+                        {
+                            "type": "Datetime", 
+                            "name": "todaysDate"
+                        }, 
+                        {
+                            "type": "Datetime", 
+                            "name": "urlCreatedDate"
+                        }, 
+                        {
+                            "type": "Datetime", 
+                            "name": "urlSentDate"
+                        }, 
+                        {
+                            "type": "Boolean", 
+                            "name": "surveyGiven"
+                        }
+                    ], 
+                    "visibility": "PUBLIC", 
+                    "references": [], 
+                    "location": {
+                        "column": 16, 
+                        "line": 155
+                    }, 
+                    "type": null
+                }
+            ], 
+            "namespace": null, 
+            "name": "SurveyDetails", 
+            "tableDeclaration": {
+                "type": "SurveyDetails", 
+                "modifiers": [
+                    "global"
+                ], 
+                "references": [], 
+                "location": {
+                    "column": 18, 
+                    "line": 147
+                }, 
+                "name": "SurveyDetails"
+            }, 
+            "key": null, 
+            "variables": [
+                {
+                    "type": "Datetime", 
+                    "modifiers": [], 
+                    "references": [], 
+                    "location": {
+                        "column": 39, 
+                        "line": 155
+                    }, 
+                    "name": "todaysDate"
+                }, 
+                {
+                    "type": "Datetime", 
+                    "modifiers": [], 
+                    "references": [], 
+                    "location": {
+                        "column": 60, 
+                        "line": 155
+                    }, 
+                    "name": "urlCreatedDate"
+                }, 
+                {
+                    "type": "Datetime", 
+                    "modifiers": [], 
+                    "references": [], 
+                    "location": {
+                        "column": 22, 
+                        "line": 156
+                    }, 
+                    "name": "urlSentDate"
+                }, 
+                {
+                    "type": "Boolean", 
+                    "modifiers": [], 
+                    "references": [], 
+                    "location": {
+                        "column": 42, 
+                        "line": 156
+                    }, 
+                    "name": "surveyGiven"
+                }
+            ], 
+            "id": null, 
+            "methods": []
+        }
+    ], 
+    "interfaces": [], 
+    "constructors": [
+        {
+            "modifiers": [
+                "public"
+            ], 
+            "name": "SocialCareController", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 12, 
+                "line": 22
+            }, 
+            "type": null
+        }
+    ], 
+    "namespace": null, 
+    "name": "SocialCareController", 
+    "tableDeclaration": {
+        "type": "SocialCareController", 
+        "modifiers": [
+            "global"
+        ], 
+        "references": [], 
+        "location": {
+            "column": 14, 
+            "line": 1
+        }, 
+        "name": "SocialCareController"
+    }, 
+    "key": "01pE0000001geaNIAQ", 
+    "variables": [
+        {
+            "type": "PageReference", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 23, 
+                "line": 34
+            }, 
+            "name": "pageRef"
+        }, 
+        {
+            "type": "String", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 16, 
+                "line": 42
+            }, 
+            "name": "foreseeId"
+        }, 
+        {
+            "type": "LIST", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 32, 
+                "line": 43
+            }, 
+            "name": "forseeSurveyList"
+        }, 
+        {
+            "type": "PageReference", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 23, 
+                "line": 44
+            }, 
+            "name": "pageForward"
+        }, 
+        {
+            "type": "String", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 16, 
+                "line": 46
+            }, 
+            "name": "forseeQuery"
+        }, 
+        {
+            "type": "String", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 16, 
+                "line": 47
+            }, 
+            "name": "responseStr"
+        }, 
+        {
+            "type": "String", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 16, 
+                "line": 52
+            }, 
+            "name": "ReturnValue"
+        }
+    ], 
+    "id": "01pE0000001geaNIAQ", 
+    "methods": [
+        {
+            "modifiers": [
+                "public"
+            ], 
+            "name": "updateResult", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 26, 
+                "line": 23
+            }, 
+            "returnType": "PageReference", 
+            "type": null
+        }, 
+        {
+            "modifiers": [
+                "public"
+            ], 
+            "name": "englishSurvey", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 26, 
+                "line": 32
+            }, 
+            "returnType": "PageReference", 
+            "type": null
+        }, 
+        {
+            "modifiers": [
+                "global"
+            ], 
+            "name": "doValidateUrl", 
+            "parameters": [], 
+            "visibility": "GLOBAL", 
+            "references": [], 
+            "location": {
+                "column": 26, 
+                "line": 41
+            }, 
+            "returnType": "PageReference", 
+            "type": null
+        }
+    ]
+}

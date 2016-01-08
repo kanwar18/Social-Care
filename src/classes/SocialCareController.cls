@@ -8,8 +8,35 @@ global class SocialCareController {
     public SurveyDetails surveyDet {get; set;}
     public boolean surveyDetailsFlag {get;set;}
     
+    public String surveyType {
+        get;
+        
+        set {
+            surveyType = value;
+            System.debug(surveyType+'<<value:>> '+value);
+        }
+    }
+
+
+
     public SocialCareController() {}
-    
+    public PageReference updateResult(){
+        system.debug('surveyType>>>'+surveyType);
+        if(surveyType != null && surveyType == 'English'){
+            forseeSurveyObj.Survey_Taken__c = surveyType;
+        }
+        update(forseeSurveyObj);
+        return null;
+    }
+
+    public PageReference englishSurvey(){
+        system.debug('surveyType>>>'+surveyType);
+        PageReference pageRef = new PageReference('https://survey.foreseeresults.com/survey/display?cid=JxTg9PsUYKor4P5i9ne0Ug==&sid=link&cpp[aid]=01753415&cpp[eid]=3507118&cpp[agnt]=Z3Q5NDhx&cpp[mc]=ICcs4CSUB0000000L&cpp[ts]=1445932681082&cpp[pc]=&cpp[pcsc1]=&cpp[ops]=b3Q3aGRo');
+            forseeSurveyObj.Survey_Taken__c = surveyType;
+        
+        update(forseeSurveyObj);
+        return pageRef;
+    }
     //A method to validate the Foresee URL
     global PageReference doValidateUrl() {
         String foreseeId = ApexPages.currentPage().getParameters().get('noc');
@@ -35,7 +62,7 @@ global class SocialCareController {
             if((null != foreseeId) && (foreseeId.length() == 15 || foreseeId.length() == 18)) {
                 forseeQuery = 
                 'Select Id,Forsee_URL__c,Business_Page_Load_Count__c,User_Machine_details__c,Case_Number__c,URL_Active__c,One_Time_Used__c,URL_Sent_Date__c,'+
-                'CreatedDate,Survey_Expired__c,resent_survey__c from Forsee_Survey__c Where Id = \'' + foreseeId + '\' Limit 1';
+                'CreatedDate,Survey_Expired__c,resent_survey__c,Survey_Taken__c from Forsee_Survey__c Where Id = \'' + foreseeId + '\' Limit 1';
                 forseeSurveyList = Database.query(forseeQuery);
                 if((null != forseeSurveyList) && !(forseeSurveyList.isEmpty())) {
                     forseeSurveyObj = forseeSurveyList.get(0);

@@ -7,17 +7,14 @@
         <tr>
             <td>
                 <apex:pageBlock >
-                    <apex:actionFunction id="updtResult" action="{!updateResult}" name="updtResult" />
                         <apex:outputLabel >
                            Thank you for agreeing to share your opinion with us.
                             <br/><br/>If you would like to provide feedback on your experience please choose <b>Start Survey</b>.
                               <br/> <br/>
                               <div align="center">
-                              <apex:commandButton action="{!englishSurvey}" value="Start Survey in English" style="background-image:none;background-color:#089ADC;color:white;margin-right: 30px;" rerender="hiddenBlock" rendered="{!!forseeSurveyObj.One_Time_Used__c}" >
-                              <apex:param name="surveyType" value="English" assignTo="{!surveyType}"/>
+                              <apex:commandButton action="{!EnglishSurvey}" value="Start Survey in English" style="background-image:none;background-color:#089ADC;color:white;margin-right: 30px;" rerender="hiddenBlock" rendered="{!!forseeSurveyObj.One_Time_Used__c}" >
                               </apex:commandButton>
-                              <apex:commandButton value="Iniciar encuesta en Español" action="https://survey.foreseeresults.com/survey/display?cid=JxTg9PsUYKor4P5i9ne0Ug==&sid=link-sp&cpp[aid]=01753415&cpp[eid]=3507118&cpp[agnt]=Z3Q5NDhx&cpp[mc]=ICcs4CSUB0000000L&cpp[ts]=1445932681082&cpp[pc]=&cpp[pcsc1]=&cpp[ops]=b3Q3aGRo" style="background-image:none;background-color:#089ADC;color:white" rerender="hiddenBlock" rendered="{!!forseeSurveyObj.One_Time_Used__c}">
-                                <apex:param name="surveyType" value="Spanish" assignTo="{!surveyType}"/>
+                              <apex:commandButton value="Iniciar encuesta en Español" action="{!SpanishSurvey}" style="background-image:none;background-color:#089ADC;color:white" rerender="hiddenBlock" rendered="{!!forseeSurveyObj.One_Time_Used__c}">
                               </apex:commandButton>
                               </div>
                               

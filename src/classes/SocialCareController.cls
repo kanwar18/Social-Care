@@ -8,35 +8,25 @@ global class SocialCareController {
     public SurveyDetails surveyDet {get; set;}
     public boolean surveyDetailsFlag {get;set;}
     
-    public String surveyType {
-        get;
-        
-        set {
-            surveyType = value;
-            System.debug(surveyType+'<<value:>> '+value);
-        }
-    }
-
-
-
     public SocialCareController() {}
-    public PageReference updateResult(){
-        system.debug('surveyType>>>'+surveyType);
-        if(surveyType != null && surveyType == 'English'){
-            forseeSurveyObj.Survey_Taken__c = surveyType;
-        }
-        update(forseeSurveyObj);
-        return null;
-    }
 
-    public PageReference englishSurvey(){
-        system.debug('surveyType>>>'+surveyType);
+
+    public PageReference EnglishSurvey(){
         PageReference pageRef = new PageReference('https://survey.foreseeresults.com/survey/display?cid=JxTg9PsUYKor4P5i9ne0Ug==&sid=link&cpp[aid]=01753415&cpp[eid]=3507118&cpp[agnt]=Z3Q5NDhx&cpp[mc]=ICcs4CSUB0000000L&cpp[ts]=1445932681082&cpp[pc]=&cpp[pcsc1]=&cpp[ops]=b3Q3aGRo');
-            forseeSurveyObj.Survey_Taken__c = surveyType;
+            forseeSurveyObj.Survey_Taken__c = 'English';
         
         update(forseeSurveyObj);
         return pageRef;
     }
+
+    public PageReference SpanishSurvey(){
+        PageReference pageRef = new PageReference('https://survey.foreseeresults.com/survey/display?cid=JxTg9PsUYKor4P5i9ne0Ug==&sid=link-sp&cpp[aid]=01753415&cpp[eid]=3507118&cpp[agnt]=Z3Q5NDhx&cpp[mc]=ICcs4CSUB0000000L&cpp[ts]=1445932681082&cpp[pc]=&cpp[pcsc1]=&cpp[ops]=b3Q3aGRo');
+            forseeSurveyObj.Survey_Taken__c = 'Spanish';
+        
+        update(forseeSurveyObj);
+        return pageRef;
+    }
+
     //A method to validate the Foresee URL
     global PageReference doValidateUrl() {
         String foreseeId = ApexPages.currentPage().getParameters().get('noc');

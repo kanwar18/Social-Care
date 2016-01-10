@@ -54,19 +54,6 @@
         }, 
         {
             "modifiers": [
-                "public"
-            ], 
-            "name": "surveyType", 
-            "visibility": "PUBLIC", 
-            "references": [], 
-            "location": {
-                "column": 19, 
-                "line": 11
-            }, 
-            "type": "String"
-        }, 
-        {
-            "modifiers": [
                 "private", 
                 "static", 
                 "final"
@@ -124,7 +111,7 @@
                     "references": [], 
                     "location": {
                         "column": 25, 
-                        "line": 148
+                        "line": 138
                     }, 
                     "type": "Datetime"
                 }, 
@@ -137,7 +124,7 @@
                     "references": [], 
                     "location": {
                         "column": 25, 
-                        "line": 149
+                        "line": 139
                     }, 
                     "type": "Datetime"
                 }, 
@@ -150,7 +137,7 @@
                     "references": [], 
                     "location": {
                         "column": 25, 
-                        "line": 150
+                        "line": 140
                     }, 
                     "type": "Datetime"
                 }, 
@@ -163,7 +150,7 @@
                     "references": [], 
                     "location": {
                         "column": 24, 
-                        "line": 151
+                        "line": 141
                     }, 
                     "type": "Boolean"
                 }, 
@@ -176,7 +163,7 @@
                     "references": [], 
                     "location": {
                         "column": 23, 
-                        "line": 152
+                        "line": 142
                     }, 
                     "type": "String"
                 }
@@ -195,7 +182,7 @@
                     "references": [], 
                     "location": {
                         "column": 16, 
-                        "line": 153
+                        "line": 143
                     }, 
                     "type": null
                 }, 
@@ -226,7 +213,7 @@
                     "references": [], 
                     "location": {
                         "column": 16, 
-                        "line": 155
+                        "line": 145
                     }, 
                     "type": null
                 }
@@ -241,7 +228,7 @@
                 "references": [], 
                 "location": {
                     "column": 18, 
-                    "line": 147
+                    "line": 137
                 }, 
                 "name": "SurveyDetails"
             }, 
@@ -253,7 +240,7 @@
                     "references": [], 
                     "location": {
                         "column": 39, 
-                        "line": 155
+                        "line": 145
                     }, 
                     "name": "todaysDate"
                 }, 
@@ -263,7 +250,7 @@
                     "references": [], 
                     "location": {
                         "column": 60, 
-                        "line": 155
+                        "line": 145
                     }, 
                     "name": "urlCreatedDate"
                 }, 
@@ -273,7 +260,7 @@
                     "references": [], 
                     "location": {
                         "column": 22, 
-                        "line": 156
+                        "line": 146
                     }, 
                     "name": "urlSentDate"
                 }, 
@@ -283,7 +270,7 @@
                     "references": [], 
                     "location": {
                         "column": 42, 
-                        "line": 156
+                        "line": 146
                     }, 
                     "name": "surveyGiven"
                 }
@@ -304,7 +291,7 @@
             "references": [], 
             "location": {
                 "column": 12, 
-                "line": 22
+                "line": 11
             }, 
             "type": null
         }
@@ -331,7 +318,17 @@
             "references": [], 
             "location": {
                 "column": 23, 
-                "line": 34
+                "line": 15
+            }, 
+            "name": "pageRef"
+        }, 
+        {
+            "type": "PageReference", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 23, 
+                "line": 23
             }, 
             "name": "pageRef"
         }, 
@@ -341,7 +338,7 @@
             "references": [], 
             "location": {
                 "column": 16, 
-                "line": 42
+                "line": 32
             }, 
             "name": "foreseeId"
         }, 
@@ -351,7 +348,7 @@
             "references": [], 
             "location": {
                 "column": 32, 
-                "line": 43
+                "line": 33
             }, 
             "name": "forseeSurveyList"
         }, 
@@ -361,7 +358,7 @@
             "references": [], 
             "location": {
                 "column": 23, 
-                "line": 44
+                "line": 34
             }, 
             "name": "pageForward"
         }, 
@@ -371,7 +368,7 @@
             "references": [], 
             "location": {
                 "column": 16, 
-                "line": 46
+                "line": 36
             }, 
             "name": "forseeQuery"
         }, 
@@ -381,7 +378,7 @@
             "references": [], 
             "location": {
                 "column": 16, 
-                "line": 47
+                "line": 37
             }, 
             "name": "responseStr"
         }, 
@@ -391,7 +388,7 @@
             "references": [], 
             "location": {
                 "column": 16, 
-                "line": 52
+                "line": 42
             }, 
             "name": "ReturnValue"
         }
@@ -402,13 +399,13 @@
             "modifiers": [
                 "public"
             ], 
-            "name": "updateResult", 
+            "name": "EnglishSurvey", 
             "parameters": [], 
             "visibility": "PUBLIC", 
             "references": [], 
             "location": {
                 "column": 26, 
-                "line": 23
+                "line": 14
             }, 
             "returnType": "PageReference", 
             "type": null
@@ -417,13 +414,13 @@
             "modifiers": [
                 "public"
             ], 
-            "name": "englishSurvey", 
+            "name": "SpanishSurvey", 
             "parameters": [], 
             "visibility": "PUBLIC", 
             "references": [], 
             "location": {
                 "column": 26, 
-                "line": 32
+                "line": 22
             }, 
             "returnType": "PageReference", 
             "type": null
@@ -438,7 +435,7 @@
             "references": [], 
             "location": {
                 "column": 26, 
-                "line": 41
+                "line": 31
             }, 
             "returnType": "PageReference", 
             "type": null

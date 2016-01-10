@@ -1215,9 +1215,9 @@
         "fileName": "unpackaged/triggers/SocialForseeTrigger.trigger", 
         "fullName": "SocialForseeTrigger", 
         "id": "01qE0000000Y2hHIAS", 
-        "lastModifiedById": "005E0000002dva8IAA", 
-        "lastModifiedByName": "Revantha C", 
-        "lastModifiedDate": "2015-11-10 12:44:11", 
+        "lastModifiedById": "005c0000001nSACAA2", 
+        "lastModifiedByName": "Ashilesh Avula", 
+        "lastModifiedDate": "2016-01-09 20:57:50", 
         "mmState": "clean", 
         "type": "ApexTrigger"
     }, 

@@ -11,6 +11,7 @@ trigger SocialForseeTrigger on Case (after update) {
         boolean isRadianFlag = false;
         Set<String> profileIdsDoNotSendForsee = new Set<String>();//Set to store profile ids specified in custom label.
         String profileIds = label.NonForseeProfileId ;//String for getting ids from custom label.
+        Set<string> caseStatusValues = new set<string>{'Auto Closed', 'Closed'};
         if(profileIds != Null) {
             profileIdsDoNotSendForsee.addAll(profileIds.split(';'));
         }
@@ -26,7 +27,7 @@ trigger SocialForseeTrigger on Case (after update) {
                     Case oldCase = Trigger.oldMap.get(caseObj.Id);
                     
                     // Check Status
-                    if(oldCase!=null && oldCase.Status!=caseObj.Status && 'Closed'.equalsIgnoreCase(caseObj.Status) && !System.label.No_Forsee_for_wireless_component.equalsIgnoreCase(caseObj.Component_Primary__c)){
+                    if(oldCase!=null && oldCase.Status!=caseObj.Status && caseStatusValues.contains(caseObj.Status) && !System.label.No_Forsee_for_wireless_component.equalsIgnoreCase(caseObj.Component_Primary__c)){
                         if(CheckcaseclosureReason(caseObj.Reason)){
                             caseIdSet.add(caseObj.Id);
                         }

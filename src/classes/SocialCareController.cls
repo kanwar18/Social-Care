@@ -12,17 +12,17 @@ global class SocialCareController {
 
 
     public PageReference EnglishSurvey(){
-        PageReference pageRef = new PageReference('https://survey.foreseeresults.com/survey/display?cid=JxTg9PsUYKor4P5i9ne0Ug==&sid=link&cpp[aid]=01753415&cpp[eid]=3507118&cpp[agnt]=Z3Q5NDhx&cpp[mc]=ICcs4CSUB0000000L&cpp[ts]=1445932681082&cpp[pc]=&cpp[pcsc1]=&cpp[ops]=b3Q3aGRo');
+        PageReference pageRef = new PageReference(forseeSurveyObj.Forsee_URL__c);
             forseeSurveyObj.Survey_Taken__c = 'English';
-        
+            forseeSurveyObj.One_Time_Used__c = true;
         update(forseeSurveyObj);
         return pageRef;
     }
 
     public PageReference SpanishSurvey(){
-        PageReference pageRef = new PageReference('https://survey.foreseeresults.com/survey/display?cid=JxTg9PsUYKor4P5i9ne0Ug==&sid=link-sp&cpp[aid]=01753415&cpp[eid]=3507118&cpp[agnt]=Z3Q5NDhx&cpp[mc]=ICcs4CSUB0000000L&cpp[ts]=1445932681082&cpp[pc]=&cpp[pcsc1]=&cpp[ops]=b3Q3aGRo');
+        PageReference pageRef = new PageReference(forseeSurveyObj.Foresee_URL_Spanish__c);
             forseeSurveyObj.Survey_Taken__c = 'Spanish';
-        
+            forseeSurveyObj.One_Time_Used__c = true;
         update(forseeSurveyObj);
         return pageRef;
     }
@@ -51,7 +51,7 @@ global class SocialCareController {
         
             if((null != foreseeId) && (foreseeId.length() == 15 || foreseeId.length() == 18)) {
                 forseeQuery = 
-                'Select Id,Forsee_URL__c,Business_Page_Load_Count__c,User_Machine_details__c,Case_Number__c,URL_Active__c,One_Time_Used__c,URL_Sent_Date__c,'+
+                'Select Id,Forsee_URL__c,Foresee_URL_Spanish__c,Business_Page_Load_Count__c,User_Machine_details__c,Case_Number__c,URL_Active__c,One_Time_Used__c,URL_Sent_Date__c,'+
                 'CreatedDate,Survey_Expired__c,resent_survey__c,Survey_Taken__c from Forsee_Survey__c Where Id = \'' + foreseeId + '\' Limit 1';
                 forseeSurveyList = Database.query(forseeQuery);
                 if((null != forseeSurveyList) && !(forseeSurveyList.isEmpty())) {
@@ -63,7 +63,7 @@ global class SocialCareController {
                         if(forseeSurveyObj.Business_Page_Load_Count__c == 2){ 
                             forseeSurveyObj.URL_Active__c = false;
                             if(!(DateTime.now() > forseeSurveyObj.URL_Sent_Date__c.adddays(2))) { //need to modify later addDays(14)
-                                forseeSurveyObj.One_Time_Used__c = true;
+                                //forseeSurveyObj.One_Time_Used__c = true;
                             }
                             pageForward = new PageReference(forseeSurveyObj.Forsee_URL__c);
                         }

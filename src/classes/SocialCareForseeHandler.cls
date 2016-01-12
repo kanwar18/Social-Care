@@ -20,6 +20,7 @@ global class SocialCareForseeHandler {
     //Forsee Paramters
     private static final String SURVEY_TYPE = '?cid=JxTg9PsUYKor4P5i9ne0Ug=='; //Type of Survey
     private static final String FORSEE_LINK_USED = '&sid=link'; //To tell the forsee system that the link is used
+    private static final String FORSEE_LINK_USED_SP = '&sid=link-sp'; // used for spanish survey
     private static final String CASE_NUM = '&cpp[aid]='; // Case Number, In case legacy its Attensity ID    
     private static final String ENCRYP_CASE_NUM ='&cpp[eid]='; //Encryption value i.e.CASE_NUM*2+288
     private static final String AGENT_CODE = '&cpp[agnt]='; //Agent who has handled the case
@@ -29,6 +30,8 @@ global class SocialCareForseeHandler {
     private static final String PRIMARY_COMPONENT = '&cpp[pc]=';// Data from the below list
     private static final String PC_SUBCATEGORY_ONE = '&cpp[pcsc1]=';//Data from the below list
     public  Boolean resend = false;
+    private static final String ENGLISH = 'English';
+    private static final String SPANISH = 'Spanish';
     Map<String,Foresee_URL_encoding__c> primarySubCompMap = new map<string,Foresee_URL_encoding__c>();
 
     //Caching Data
@@ -166,10 +169,12 @@ global class SocialCareForseeHandler {
             }
         }
         if(caseObj.RecordType.Name.contains('Consumer')){
-            forseeSurveyObj.Forsee_URL__c  = constructURLWithParameters(caseObj.CaseNumber,(agentIdStr == null ? '' :agentIdStr),pcEncoding,pcSubCategoryEncoding,managerAgentId);
+            forseeSurveyObj.Forsee_URL__c  = constructURLWithParameters(caseObj.CaseNumber,(agentIdStr == null ? '' :agentIdStr),pcEncoding,pcSubCategoryEncoding,managerAgentId,ENGLISH);
+            forseeSurveyObj.Foresee_URL_Spanish__c = constructURLWithParameters(caseObj.CaseNumber,(agentIdStr == null ? '' :agentIdStr),pcEncoding,pcSubCategoryEncoding,managerAgentId,SPANISH);
             }
         else{
             forseeSurveyObj.Forsee_URL__c  = ABS_SURVEY_PAGE + 'case_Id=' + caseObj.Id + '&cld='+ caseObj.ContactId + '&id=' + Label.Business_Survey_ID;
+            forseeSurveyObj.Foresee_URL_Spanish__c = ABS_SURVEY_PAGE + 'case_Id=' + caseObj.Id + '&cld='+ caseObj.ContactId + '&id=' + Label.Business_Survey_ID;
         }  
         return forseeSurveyObj;
     }
@@ -181,17 +186,18 @@ global class SocialCareForseeHandler {
     *     String agentCode - String will contain agent code.
     *     String encodePrimary - String will contain encoding number for primary component on case.
     *     String encodeSubPrimary - String will contain encoding number for primary component sub category one on case.
+    *     String surveyLanguage - String will contain static text as "Spanish" or "English"
     * @return - domainName
     * @see - SocialCareForseeHandler (same class)
     */
     
-    private String constructURLWithParameters(String caseNumber, String agentCode, String encodePrimary, String encodeSubPrimary, string managerAgentId) {
+    private String constructURLWithParameters(String caseNumber, String agentCode, String encodePrimary, String encodeSubPrimary, String managerAgentId, String surveyLanguage) {
         Integer caseNumberInt = Integer.valueOf(caseNumber);
         Integer caseNumberEncry = (caseNumberInt * 2) + 288; //Here 288 value is for IPad
         String domainName = Label.Forsee_URL;
         system.debug('PrimaryComponentEncodingValue' + encodePrimary + 'PC_Secondaryvalue' +encodeSubPrimary );
         domainName += SURVEY_TYPE;
-        domainName += FORSEE_LINK_USED;
+        domainName += surveyLanguage == ENGLISH ? FORSEE_LINK_USED : FORSEE_LINK_USED_SP;
         domainName += CASE_NUM + caseNumber;
         domainName += ENCRYP_CASE_NUM + caseNumberEncry;
         domainName += AGENT_CODE + EncodingUtil.base64Encode(Blob.valueOf(agentCode));

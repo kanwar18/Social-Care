@@ -7,12 +7,13 @@
         <tr>
             <td>
                 <apex:pageBlock >
-                    <apex:pageBlockSection collapsible="false" title="Customer Satisfaction Survey" columns="1">
-                        <apex:pageMessage summary="The survey link which you are trying to access has been expired. For more details contact AT&T customer care." rendered="{!forseeSurveyObj.Survey_Expired__c}" severity="info" strength="1" id="expiredSurveymsg"/>
                     
-                        <apex:pageMessage summary="The survey link has been used already. For more details contact AT&T customer care." rendered="{!forseeSurveyObj.One_Time_Used__c}" severity="info" strength="1" id="usedSurveymsg"/>
-                        <apex:outputText value="Thank you for working with AT&T social media customer service. You have been chosen to take part in a brief survey to give us feedback on your recent interaction with the social media representative." 
-                                                rendered="{!!forseeSurveyObj.One_Time_Used__c && !forseeSurveyObj.Survey_Expired__c}" style="color:blue;"/>
+                        <apex:pageMessage summary="The survey link which you are trying to access has been expired. For more details contact AT&T customer care." rendered="{!forseeSurveyObj.Survey_Expired__c && !forseeSurveyObj.One_Time_Used__c}" severity="info" strength="1" id="expiredSurveymsg"/>
+                    
+                        <apex:pageMessage summary="The survey link has been used already. For more details contact AT&T customer care." rendered="{!forseeSurveyObj.Survey_Expired__c && forseeSurveyObj.One_Time_Used__c}" severity="info" strength="1" id="expUsedSurveymsg"/>
+
+                        <apex:pageMessage summary="The survey link has been used already. For more details contact AT&T customer care." rendered="{!forseeSurveyObj.One_Time_Used__c && !forseeSurveyObj.Survey_Expired__c}" severity="info" strength="1" id="usedSurveymsg"/>
+                        
                             <apex:outputLabel rendered="{!!forseeSurveyObj.One_Time_Used__c && !forseeSurveyObj.Survey_Expired__c}">
                                Thank you for agreeing to share your opinion with us.
                                 <br/><br/>If you would like to provide feedback on your experience please choose <b>Start Survey</b>.
@@ -24,19 +25,10 @@
                                   </apex:commandButton>
                                   </div>
                                   
-                            </apex:outputLabel>  
-                    </apex:pageBlockSection>
-                    
+                            </apex:outputLabel> 
                     
                         <apex:pageBlock id="hiddenBlock" rendered="false"></apex:pageBlock>
-                   <!-- <apex:pageBlockSection title="Survey Details" columns="1" rendered="{!surveyDetailsFlag}">
-                        <apex:pageBlockTable value="{!surveyDet}" var="surveyDet">
-                            <apex:column value="{!surveyDet.todaysDate}" headerValue="Today's Date"/> 
-                            <apex:column value="{!surveyDet.urlCreatedDate}" headerValue="URL Created Date"/>
-                            <apex:column value="{!surveyDet.urlSentDate}" headerValue="URL Sent Date"/>
-                            <apex:column value="{!surveyDet.surveyGivenStr}" headerValue="Survey Taken ?"/>                            
-                        </apex:pageBlockTable>
-                    </apex:pageBlockSection> -->
+                   
                 </apex:pageBlock>    
             </td>
         </tr>

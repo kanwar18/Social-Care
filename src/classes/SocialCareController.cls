@@ -12,19 +12,37 @@ global class SocialCareController {
 
 
     public PageReference EnglishSurvey(){
-        PageReference pageRef = new PageReference(forseeSurveyObj.Forsee_URL__c);
+        String foreseeId = ApexPages.currentPage().getParameters().get('noc');
+        List<Forsee_Survey__c> foreseeList = [Select id,URL_Active__c from Forsee_Survey__c where id =:foreseeId ];
+        if (foreseeList[0].URL_Active__c) {
+            PageReference pageRef = new PageReference(forseeSurveyObj.Forsee_URL__c);
             forseeSurveyObj.Survey_Taken__c = 'English';
             forseeSurveyObj.One_Time_Used__c = true;
-        update(forseeSurveyObj);
-        return pageRef;
+            forseeSurveyObj.URL_Active__c = false;
+            update(forseeSurveyObj);
+            return pageRef;
+        } else {
+            PageReference pageRef = new PageReference('/apex/SocialMediaPage?error=error&noc='+foreseeId);
+            pageRef.setRedirect(true);
+            return pageRef;
+        }
     }
 
     public PageReference SpanishSurvey(){
-        PageReference pageRef = new PageReference(forseeSurveyObj.Foresee_URL_Spanish__c);
+        String foreseeId = ApexPages.currentPage().getParameters().get('noc');
+        List<Forsee_Survey__c> foreseeList = [Select id,URL_Active__c from Forsee_Survey__c where id =:foreseeId ];
+        PageReference pageRefSpanish = new PageReference(forseeSurveyObj.Foresee_URL_Spanish__c);
+        if (foreseeList[0].URL_Active__c) {
             forseeSurveyObj.Survey_Taken__c = 'Spanish';
             forseeSurveyObj.One_Time_Used__c = true;
-        update(forseeSurveyObj);
-        return pageRef;
+            forseeSurveyObj.URL_Active__c = false;
+            update(forseeSurveyObj);
+            return pageRefSpanish;
+        } else {
+            PageReference pageRefSap = new PageReference('/apex/SocialMediaPage?error=error&noc='+foreseeId);
+            pageRefSap.setRedirect(true);
+            return pageRefSap;
+        }
     }
 
     //A method to validate the Foresee URL
@@ -39,36 +57,18 @@ global class SocialCareController {
         surveyDet = new SurveyDetails();
         
         try {
-        String ReturnValue = '';
-
-        ReturnValue = ApexPages.currentPage().getHeaders().get('True-Client-IP');
-            
-        if (ReturnValue == '') {
-            ReturnValue = ApexPages.currentPage().getHeaders().get('X-Salesforce-SIP');
-        } // get IP address when no caching (sandbox, dev, secure urls)
-                
-        //system.debug('USER IP ADDRESS: ' + ReturnValue);
-        
             if((null != foreseeId) && (foreseeId.length() == 15 || foreseeId.length() == 18)) {
                 forseeQuery = 
-                'Select Id,Forsee_URL__c,Foresee_URL_Spanish__c,Business_Page_Load_Count__c,User_Machine_details__c,Case_Number__c,URL_Active__c,One_Time_Used__c,URL_Sent_Date__c,'+
+                'Select Id,Forsee_URL__c,Foresee_URL_Spanish__c,Business_Page_Load_Count__c,Case_Number__c,URL_Active__c,One_Time_Used__c,URL_Sent_Date__c,'+
                 'CreatedDate,Survey_Expired__c,resent_survey__c,Survey_Taken__c from Forsee_Survey__c Where Id = \'' + foreseeId + '\' Limit 1';
                 forseeSurveyList = Database.query(forseeQuery);
                 if((null != forseeSurveyList) && !(forseeSurveyList.isEmpty())) {
                     forseeSurveyObj = forseeSurveyList.get(0);
-                    forseeSurveyObj.User_Machine_details__c = forseeSurveyObj.User_Machine_details__c + ReturnValue;
                     //Block for One time Click and Survey Expired
                     if((forseeSurveyObj.URL_Active__c) && !(forseeSurveyObj.One_Time_Used__c) && !(forseeSurveyObj.Survey_Expired__c)) {
-                        forseeSurveyObj.Business_Page_Load_Count__c = forseeSurveyObj.Business_Page_Load_Count__c +1;     
-                        if(forseeSurveyObj.Business_Page_Load_Count__c == 2){ 
-                            forseeSurveyObj.URL_Active__c = false;
-                            if(!(DateTime.now() > forseeSurveyObj.URL_Sent_Date__c.adddays(2))) { //need to modify later addDays(14)
-                                //forseeSurveyObj.One_Time_Used__c = true;
-                            }
-                            pageForward = new PageReference(forseeSurveyObj.Forsee_URL__c);
-                        }
+                        forseeSurveyObj.Business_Page_Load_Count__c = forseeSurveyObj.Business_Page_Load_Count__c +1;  
                     } else {
-                        if(!(DateTime.now() > forseeSurveyObj.URL_Sent_Date__c.adddays(2))) { //need to modify later addDays(14)
+                        if(!(DateTime.now() > forseeSurveyObj.URL_Sent_Date__c.adddays(1))) { //need to modify later addDays(14)
                             if(!forseeSurveyObj.Survey_Expired__c) {
                                 responseMessage = LINK_USED;
                                 ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.INFO, responseMessage));
@@ -77,7 +77,7 @@ global class SocialCareController {
                     }//End for one time click
 
                     //Block to handle the foresee link expiry
-                    if(DateTime.now() > forseeSurveyObj.URL_Sent_Date__c.adddays(2)) { //need to modify later addDays(14)
+                    if(DateTime.now() > forseeSurveyObj.URL_Sent_Date__c.adddays(1)) { //need to modify later addDays(14)
                         forseeSurveyObj.Survey_Expired__c = true;
                         forseeSurveyObj.URL_Active__c = false;
                         responseMessage = LINK_EXPIRED;
@@ -87,26 +87,19 @@ global class SocialCareController {
                     //Update the Foresee Object
                     update(forseeSurveyObj);
                     /*ram*/
-                    if(forseeSurveyObj.resent_survey__c)
-                    {
-                    if(forseeSurveyObj.Survey_Expired__c)
-                    {
-                    responseMessage = LINK_EXPIRED;
-                    ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.INFO, responseMessage));
-                    }
-                    else if(forseeSurveyObj.One_Time_Used__c)
-                    {
-                    responseMessage = LINK_USED;
-                    ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.INFO, responseMessage));
-                    }
-                    }
-                    else
-                    {
-                    if(forseeSurveyObj.Survey_Expired__c)
-                    {
-                    responseMessage = LINK_EXPIRED;
-                    ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.INFO, responseMessage));
-                    }
+                    if(forseeSurveyObj.resent_survey__c) {
+                        if(forseeSurveyObj.Survey_Expired__c) {
+                            responseMessage = LINK_EXPIRED;
+                            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.INFO, responseMessage));
+                        } else if(forseeSurveyObj.One_Time_Used__c) {
+                            responseMessage = LINK_USED;
+                            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.INFO, responseMessage));
+                        }
+                    } else {
+                        if(forseeSurveyObj.Survey_Expired__c) {
+                            responseMessage = LINK_EXPIRED;
+                            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.INFO, responseMessage));
+                        }
                     }    
                      /*ram*/          
                 } else {

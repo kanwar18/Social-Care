@@ -1,37 +1,28 @@
 <apex:page showHeader="false" controller="SocialCareController" action="{!doValidateUrl}">
- <apex:form >
-    <table align="center" width="70%">
-        <tr>
-            <td><apex:image value="{!$Resource.ATTLogo}" alt="AT&T Logo"/></td>
-        </tr>
-        <tr>
-            <td>
-                <apex:pageBlock >
-                    
-                        <apex:pageMessage summary="The survey link which you are trying to access has been expired. For more details contact AT&T customer care." rendered="{!forseeSurveyObj.Survey_Expired__c && !forseeSurveyObj.One_Time_Used__c}" severity="info" strength="1" id="expiredSurveymsg"/>
-                    
-                        <apex:pageMessage summary="The survey link has been used already. For more details contact AT&T customer care." rendered="{!forseeSurveyObj.Survey_Expired__c && forseeSurveyObj.One_Time_Used__c}" severity="info" strength="1" id="expUsedSurveymsg"/>
-
-                        <apex:pageMessage summary="The survey link has been used already. For more details contact AT&T customer care." rendered="{!forseeSurveyObj.One_Time_Used__c && !forseeSurveyObj.Survey_Expired__c}" severity="info" strength="1" id="usedSurveymsg"/>
-                        
-                            <apex:outputLabel rendered="{!!forseeSurveyObj.One_Time_Used__c && !forseeSurveyObj.Survey_Expired__c}">
-                               Thank you for agreeing to share your opinion with us.
-                                <br/><br/>If you would like to provide feedback on your experience please choose <b>Start Survey</b>.
-                                  <br/> <br/>
-                                  <div align="center">
-                                  <apex:commandButton action="{!EnglishSurvey}" value="Start Survey in English" style="background-image:none;background-color:#089ADC;color:white;margin-right: 30px;" rerender="hiddenBlock" rendered="{!!forseeSurveyObj.One_Time_Used__c}" >
-                                  </apex:commandButton>
-                                  <apex:commandButton value="Iniciar encuesta en Español" action="{!SpanishSurvey}" style="background-image:none;background-color:#089ADC;color:white" rerender="hiddenBlock" rendered="{!!forseeSurveyObj.One_Time_Used__c}">
-                                  </apex:commandButton>
-                                  </div>
-                                  
-                            </apex:outputLabel> 
-                    
+    <apex:form id="myForm">
+        <table align="center" width="70%">
+            <tr>
+                <td><apex:image value="{!$Resource.ATTLogo}" alt="AT&T Logo"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <apex:pageBlock >
+                        <apex:pagemessages ></apex:pagemessages>
+                        <apex:outputLabel rendered="{!NOT(surveyDetailsFlag)}">
+                            Thank you for agreeing to share your opinion with us.
+                            <br/><br/>If you would like to provide feedback on your experience please choose <b>Start Survey</b>.
+                            <br/> <br/>
+                            <div align="center">
+                                <apex:commandButton action="{!EnglishSurvey}" value="Start Survey in English" style="background-image:none;background-color:#089ADC;color:white;margin-right: 30px;" rerender="hiddenBlock" rendered="{!!forseeSurveyObj.One_Time_Used__c}" >
+                                </apex:commandButton>
+                                <apex:commandButton value="Iniciar encuesta en Español" action="{!SpanishSurvey}" style="background-image:none;background-color:#089ADC;color:white" rerender="hiddenBlock" rendered="{!!forseeSurveyObj.One_Time_Used__c && (forseeSurveyObj.Foresee_URL_Spanish__c != null)}">
+                                </apex:commandButton>
+                            </div>
+                        </apex:outputLabel> 
                         <apex:pageBlock id="hiddenBlock" rendered="false"></apex:pageBlock>
-                   
-                </apex:pageBlock>    
-            </td>
-        </tr>
-    </table>
-</apex:form>
+                    </apex:pageBlock>    
+                </td>
+            </tr>
+        </table>
+    </apex:form>
 </apex:page>

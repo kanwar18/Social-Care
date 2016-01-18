@@ -10,17 +10,24 @@ Version History: Aditya(14/March/2014) - Release 19March2014
                  Aditya(19th August Release) - Update case closed time on contact
 **************************************************************************************************************************/
 trigger Social_CaseDNE on Case (after insert,before update) {
+     Map<Id,Case> caseContMap = new map<Id,Case>();
+     Map<Id,Case> contactUpdateMap = new Map<Id,Case>();
+     List<Case> caseList = new List<Case>();
+     List<Case> AutoCloseCaseList = new List<Case>();
+     Set<Id> contactIdSet = new Set<Id>();
+     List<Id> contactIdList = new List<Id>();
+     Set<String> recordTypeIdSet1 = new Set<String>();
+     recordTypeIdSet1.addAll(Label.Consumer_RT.split(','));
+     Set<String> profileTypeIdSet = new Set<String>();
+     profileTypeIdSet.addAll(Label.Customer_Account.split(','));
+     Map<Id,Case> caseContactIdMap = new Map<Id,Case>();
+     List<Case> caseListCAD = new List<Case>();
     //Added check if the logged in user is radian6 user then dont fire the trigger
     if (userInfo.getUserId() != '005E0000002G4RU' && Social_CaseAssignmentUtility.executeTriggerCode && (Boolean.valueOf(Label.DNE_Functionality))) {
         boolean isScrubTeamUser = social_DNEHandler.checkScrubTeamMember(userInfo.getUserId());
-        Map<Id,Case> caseContMap = new map<Id,Case>();//Map to store contact id and case.
-        Set<Id> contactIdSet = new Set<Id>();
-        Map<Id,Case> contactUpdateMap = new Map<Id,Case>();
         Set<String> recordTypeIdSet = new Set<String>(); //to store consumer record type.
         Set<String> profileIdAccessIdSet = new Set<String>(); //to store profile id who can update case in Pending closure Queue.
         recordTypeIdSet.addAll(Label.Consumer_RT.split(','));
-        List<Case> caseList = new List<Case>();
-        List<Case> AutoCloseCaseList = new List<Case>();
         Set<String> businessRTList = new Set<String>();
         businessRTList.addAll(System.Label.All_Business_RT.split(','));
             //Loop for insert.
@@ -62,21 +69,34 @@ trigger Social_CaseDNE on Case (after insert,before update) {
                         }                
                     }                                        
                 }
-            }            
-            //Method to update contact if DNE is not null during case update or insert.
-            if(!caseContMap.isEmpty()) {
-                social_DNEHandler.updateDNEDetailsOnContact(caseContMap);
-            }
-            //Method to update case if DNE is null during case insert and contact has DNE.
-            if (!contactUpdateMap.isEmpty()) {
-                social_DNEHandler.updateDNEDetailsOnCase(contactUpdateMap);
-            }
-            //Method to display error message
-            if (!caseList.isEmpty()) {
-                Social_SocialPostSCSHandler.doNotAllowUpdatesOnCase(caseList);
-            }
-            if(!AutoCloseCaseList.isEmpty()){
-                social_DNEHandler.updateClosedCaseEmptyFields(AutoCloseCaseList,contactIdSet);
-            }
-    }
+            }  
+        }    
+        if(trigger.isUpdate && trigger.isBefore) {       
+            for(Case caseObj : trigger.New){
+                if(caseObj.Status != trigger.OldMap.get(caseObj.Id).Status && caseObj.contactId != Null && recordTypeIdSet1.contains(caseObj.recordTypeId) && !profileTypeIdSet.isEmpty() && profileTypeIdSet.Contains(userInfo.getProfileId()) && caseObj.Status=='Closed' && (caseObj.Reason=='Completed' || caseObj.Case_Reason_HSRep__c=='Resolved')) {
+                    caseContactIdMap.put(caseObj.ContactId,caseObj);
+                    caseListCAD.add(caseObj);
+                 }         
+            }                         
+        }          
+             
+        //Method to update contact if DNE is not null during case update or insert.
+        if(!caseContMap.isEmpty()) {
+            social_DNEHandler.updateDNEDetailsOnContact(caseContMap);
+        }
+        //Method to update case if DNE is null during case insert and contact has DNE.
+        if (!contactUpdateMap.isEmpty()) {
+            social_DNEHandler.updateDNEDetailsOnCase(contactUpdateMap);
+        }
+        //Method to display error message
+        if (!caseList.isEmpty()) {
+            Social_SocialPostSCSHandler.doNotAllowUpdatesOnCase(caseList);
+        }
+        if(!AutoCloseCaseList.isEmpty()){
+            social_DNEHandler.updateClosedCaseEmptyFields(AutoCloseCaseList,contactIdSet);
+        }
+        //Method to display error message
+        if (!caseContactIdMap.KeySet().isEmpty()) {
+            social_DNEHandler.customerAcctDetails(caseContactIdMap,caseListCAD);
+        }
 }

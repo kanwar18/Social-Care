@@ -51,6 +51,31 @@ Public Class social_DNEHandler {
             Social_StreamingUtil.updateSObject(contactListToUpdate,'Failed to update DNE on contact.');
         }  
     }
+     /**
+    * < customerAcctDetails() - Void Method To Check If Contact contains child record or not>
+    * @param:
+    *     Map<Id,Case> conIdMp,List<Case> caseListCAD        
+    *       
+    * @return - Void
+    * @see - Social_CaseDNE (trigger)
+    */
+    
+    public static void customerAcctDetails(Map<Id,Case> conIdMp,List<Case> caseListCAD) {              
+        Map<Id,List<Customer_Account_Details__c>> CADMap = new Map<Id,List<Customer_Account_Details__c>>();
+        List<Customer_Account_Details__c> cust=new List<Customer_Account_Details__c>();       
+        for (Customer_Account_Details__c customerAccDetailObj : [select id,name,Contact_Id__c,Account_Type__c,Is_Active__c from Customer_Account_Details__c where Contact_Id__c IN: conIdMp.keyset()]) {
+            if(!CADMap.containsKey(customerAccDetailObj.Contact_Id__c) && customerAccDetailObj.Account_Type__c == 'U-Verse(BAN)' && customerAccDetailObj.Is_Active__c==true){
+                CADMap.put(customerAccDetailObj.Contact_Id__c, new list<Customer_Account_Details__c>{customerAccDetailObj});
+            } else if (CADMap.containsKey(customerAccDetailObj.Contact_Id__c) && customerAccDetailObj.Account_Type__c == 'U-Verse(BAN)') {
+                CADMap.get(customerAccDetailObj.Contact_Id__c).add(customerAccDetailObj);
+            }
+        }    
+        for (Case caseObj : caseListCAD) {          
+           if (!CADMap.containsKey(caseObj.contactId)) {
+               conIdMp.get(caseObj.contactId).addError('Required fields to CLOSE a Consumer case:  "Billing Account Number(BAN)" for the associated Contact on Case');
+           } 
+        }
+     }
     
     /**
     * < checkScrubTeamMember() - Boolean Method To Check If Context User Part Of SCRUB Team>

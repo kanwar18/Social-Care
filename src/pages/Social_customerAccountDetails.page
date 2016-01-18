@@ -1,0 +1,46 @@
+<apex:page standardController="Customer_Account_Details__c" extensions="Social_customerAccountDetailsController" tabStyle="Customer_Account_Details__c">
+<apex:sectionHeader title="Customer Account Detail" subtitle="New"/>
+    <script src="/soap/ajax/9.0/connection.js" type="text/javascript"></script>
+    <apex:includeScript value="/support/console/29.0/integration.js"/>
+        <script type='text/javascript'>
+        var customerDetailIdJS;
+        window.onload=function() {
+            if(sforce.console.isInConsole()){
+                sforce.console.setTabTitle('{!contactFirstName} {!contactLastName}');
+            } 
+        }
+        
+        function closeWindow() {
+            if ('{!newRecord}' == 'false' && sforce.console.isInConsole()) {
+                sforce.console.getEnclosingTabId(closeSubtab);
+            }
+        }
+        var closeSubtab = function closeSubtab(result) {
+            var tabId = result.id;
+            sforce.console.closeTab(tabId);
+        };
+    </script>
+    <apex:form >
+        <apex:inputHidden value="{!Customer_Account_Details__c.Account_Type__c}"/>
+        <apex:inputHidden value="{!Customer_Account_Details__c.Account_Number__c}"/>
+        <apex:inputHidden value="{!Customer_Account_Details__c.Email_Id__c}"/>
+        <apex:inputHidden value="{!Customer_Account_Details__c.Notes_Comments__c}"/>
+        <apex:inputHidden value="{!Customer_Account_Details__c.Is_Active__c}"/>
+        <apex:inputHidden value="{!Customer_Account_Details__c.Contact_Id__c}"/>
+        <apex:inputHidden value="{!Customer_Account_Details__c.Phone__c}"/>
+        <apex:pageBlock title="Customer Account Detail">
+        <apex:pageMessages />
+        <apex:pageBlockSection title="Information" collapsible="false" columns="2">                
+            <apex:inputField value="{!cad.Account_Type__c}"/>
+            <apex:inputText value="{!data}" label="Value"/>
+            <apex:inputField value="{!cad.Notes_Comments__c}"/>
+            <apex:inputField value="{!cad.Is_Active__c}"/>
+            <apex:outputField value="{!cad.Contact_Id__c}"/>           
+        </apex:pageBlockSection>
+        <apex:pageBlockbuttons >
+            <apex:commandButton value="Save" action="{!save}" />
+            <apex:commandButton value="Cancel" reRender="myForm" action="{!contactDetail}"/>
+        </apex:pageBlockbuttons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

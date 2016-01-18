@@ -26,11 +26,10 @@ trigger SocialForseeTrigger on Case (after update) {
                     Case oldCase = Trigger.oldMap.get(caseObj.Id);
                     
                     // Check Status
-                    if(oldCase!=null && oldCase.Status!=caseObj.Status && !System.label.No_Forsee_for_wireless_component.equalsIgnoreCase(caseObj.Component_Primary__c)){
-                        if(CheckCase(Label.Foresee_Case_Reasons,caseObj.Reason) && CheckCase(Label.Foresee_Case_Status,caseObj.Status)){
-                            caseIdSet.add(caseObj.Id);
-                        }
+                    if(oldCase!=null && oldCase.Status!=caseObj.Status && CheckCase(Label.Foresee_Case_Reasons,caseObj.Reason) && CheckCase(Label.Foresee_Case_Status,caseObj.Status)){
+                        caseIdSet.add(caseObj.Id);
                     }
+
                      if(!isRadianFlag && (caseObj.LastModifiedById == '005E0000002G4RU')) {
                         isRadianFlag = true;
                     }  
@@ -100,10 +99,10 @@ trigger SocialForseeTrigger on Case (after update) {
                             urlSendFlag = true;
                         }
                         
-                        //Check for closed cases
+                        //Check for 'Closed' & 'Auto Closed' cases
                         if(urlSendFlag) {
                             for(Case caseObj : contactObj.Cases) {
-                                if(!caseObj.Status.equalsIgnoreCase('Closed')) {
+                                if(!CheckCase(Label.Foresee_Case_Status,caseObj.Status)) {
                                     urlSendFlag = false;
                                     break;
                                 }

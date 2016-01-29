@@ -1,5 +1,5 @@
 <apex:page standardController="Customer_Account_Details__c" extensions="Social_customerAccountDetailsController" tabStyle="Customer_Account_Details__c">
-<apex:sectionHeader title="Customer Account Detail" subtitle="New"/>
+<apex:sectionHeader title="Customer Account Detail" subtitle="{!pageBlockMode}"/>
     <script src="/soap/ajax/9.0/connection.js" type="text/javascript"></script>
     <apex:includeScript value="/support/console/29.0/integration.js"/>
         <script type='text/javascript'>

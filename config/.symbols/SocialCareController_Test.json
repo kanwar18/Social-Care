@@ -1,0 +1,429 @@
+{
+    "properties": [
+        {
+            "modifiers": [
+                "private", 
+                "static"
+            ], 
+            "name": "testAccount", 
+            "visibility": "PRIVATE", 
+            "references": [], 
+            "location": {
+                "column": 16, 
+                "line": 7
+            }, 
+            "type": "Account"
+        }, 
+        {
+            "modifiers": [
+                "private", 
+                "static"
+            ], 
+            "name": "testContact", 
+            "visibility": "PRIVATE", 
+            "references": [], 
+            "location": {
+                "column": 16, 
+                "line": 8
+            }, 
+            "type": "Contact"
+        }
+    ], 
+    "externalReferences": [], 
+    "innerClasses": [], 
+    "interfaces": [], 
+    "constructors": [], 
+    "namespace": null, 
+    "name": "SocialCareController_Test", 
+    "tableDeclaration": {
+        "type": "SocialCareController_Test", 
+        "modifiers": [
+            "public", 
+            "testMethod"
+        ], 
+        "references": [], 
+        "location": {
+            "column": 14, 
+            "line": 5
+        }, 
+        "name": "SocialCareController_Test"
+    }, 
+    "key": "01pE0000001geaOIAQ", 
+    "variables": [
+        {
+            "type": "Case", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 10, 
+                "line": 28
+            }, 
+            "name": "caseObj"
+        }, 
+        {
+            "type": "Forsee_Survey__c", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 22, 
+                "line": 36
+            }, 
+            "name": "forseeSurObj"
+        }, 
+        {
+            "type": "SocialCareController", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 26, 
+                "line": 48
+            }, 
+            "name": "scc"
+        }, 
+        {
+            "type": "Case", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 10, 
+                "line": 58
+            }, 
+            "name": "caseObj"
+        }, 
+        {
+            "type": "LIST", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 16, 
+                "line": 64
+            }, 
+            "name": "caseList"
+        }, 
+        {
+            "type": "Case", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 10, 
+                "line": 65
+            }, 
+            "name": "uptCase"
+        }, 
+        {
+            "type": "Forsee_Survey__c", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 22, 
+                "line": 73
+            }, 
+            "name": "forseeSurObj"
+        }, 
+        {
+            "type": "SocialCareController", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 26, 
+                "line": 86
+            }, 
+            "name": "scc"
+        }, 
+        {
+            "type": "SocialCareController", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 26, 
+                "line": 93
+            }, 
+            "name": "scc1"
+        }, 
+        {
+            "type": "Case", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 10, 
+                "line": 104
+            }, 
+            "name": "caseObj"
+        }, 
+        {
+            "type": "LIST", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 17, 
+                "line": 110
+            }, 
+            "name": "caseList"
+        }, 
+        {
+            "type": "Case", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 10, 
+                "line": 111
+            }, 
+            "name": "uptCase"
+        }, 
+        {
+            "type": "Forsee_Survey__c", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 22, 
+                "line": 119
+            }, 
+            "name": "forseeSurObj"
+        }, 
+        {
+            "type": "SocialCareController", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 26, 
+                "line": 130
+            }, 
+            "name": "scc"
+        }, 
+        {
+            "type": "SocialCareController", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 26, 
+                "line": 136
+            }, 
+            "name": "scc1"
+        }, 
+        {
+            "type": "Date", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 10, 
+                "line": 148
+            }, 
+            "name": "d"
+        }, 
+        {
+            "type": "Case", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 10, 
+                "line": 150
+            }, 
+            "name": "caseObj2"
+        }, 
+        {
+            "type": "Forsee_Survey__c", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 22, 
+                "line": 158
+            }, 
+            "name": "forseeSurObj2"
+        }, 
+        {
+            "type": "SocialCareController", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 26, 
+                "line": 170
+            }, 
+            "name": "scc"
+        }, 
+        {
+            "type": "String", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 12, 
+                "line": 180
+            }, 
+            "name": "foreseeid"
+        }, 
+        {
+            "type": "Case", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 10, 
+                "line": 182
+            }, 
+            "name": "caseObj3"
+        }, 
+        {
+            "type": "Forsee_Survey__c", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 22, 
+                "line": 190
+            }, 
+            "name": "forseeSurObj3"
+        }, 
+        {
+            "type": "SocialCareController", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 26, 
+                "line": 201
+            }, 
+            "name": "scc"
+        }, 
+        {
+            "type": "String", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 12, 
+                "line": 212
+            }, 
+            "name": "foreseeid1"
+        }, 
+        {
+            "type": "Case", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 10, 
+                "line": 213
+            }, 
+            "name": "caseObj4"
+        }, 
+        {
+            "type": "Forsee_Survey__c", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 22, 
+                "line": 221
+            }, 
+            "name": "forseeSurObj4"
+        }, 
+        {
+            "type": "SocialCareController", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 26, 
+                "line": 233
+            }, 
+            "name": "scc"
+        }
+    ], 
+    "id": "01pE0000001geaOIAQ", 
+    "methods": [
+        {
+            "modifiers": [
+                "static", 
+                "public", 
+                "testMethod"
+            ], 
+            "name": "testURLactiveTrue", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 31, 
+                "line": 24
+            }, 
+            "returnType": "void", 
+            "type": null
+        }, 
+        {
+            "modifiers": [
+                "static", 
+                "public", 
+                "testMethod"
+            ], 
+            "name": "testEnglishSurvey", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 31, 
+                "line": 54
+            }, 
+            "returnType": "void", 
+            "type": null
+        }, 
+        {
+            "modifiers": [
+                "static", 
+                "public", 
+                "testMethod"
+            ], 
+            "name": "testSpanishSurvey", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 31, 
+                "line": 100
+            }, 
+            "returnType": "void", 
+            "type": null
+        }, 
+        {
+            "modifiers": [
+                "static", 
+                "public", 
+                "testMethod"
+            ], 
+            "name": "testURLactivefalse", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 31, 
+                "line": 143
+            }, 
+            "returnType": "void", 
+            "type": null
+        }, 
+        {
+            "modifiers": [
+                "static", 
+                "public", 
+                "testMethod"
+            ], 
+            "name": "testexceptionpartMODIFIEDURL", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 31, 
+                "line": 175
+            }, 
+            "returnType": "void", 
+            "type": null
+        }, 
+        {
+            "modifiers": [
+                "static", 
+                "public", 
+                "testMethod"
+            ], 
+            "name": "testexceptiopartMODIFIEDURL", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 31, 
+                "line": 206
+            }, 
+            "returnType": "void", 
+            "type": null
+        }
+    ]
+}

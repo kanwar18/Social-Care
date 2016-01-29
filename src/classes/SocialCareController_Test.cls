@@ -50,6 +50,95 @@ public static TestMethod void testURLactiveTrue()
     scc.doValidateUrl();
               
 }
+
+public static TestMethod void testEnglishSurvey() 
+{
+/* Test method to test that customer has clicked on english survey link */
+
+    Case caseObj=new Case();
+    caseObj.Status='New';
+    caseObj.Origin='email';
+    caseObj.contactid=testContact.id;
+    caseObj.contact=testContact;
+    insert caseObj;
+    list<case> caseList = [Select Id, status,origin,reason,contactId from case where Id =:caseObj.Id];
+    case uptCase = new case();
+    if(caseList != null && caseList.size()>0){
+        uptCase = caseList[0];
+        uptCase.reason = 'Auto Closed';
+        uptCase.status = 'Auto Closed'; 
+        update uptCase;
+    }
+        
+    Forsee_Survey__c forseeSurObj =new Forsee_Survey__c();
+    forseeSurObj.Case_Number__c = caseObj.CaseNumber;
+    forseeSurObj.URL_Active__c = True;
+    forseeSurObj.Contact__c=testContact.id;
+    forseeSurObj.Case__c=uptCase != null ? uptCase.Id : null;
+    forseeSurObj.One_Time_Used__c=False;
+    forseeSurObj.Survey_Expired__c=False;
+    forseeSurObj.URL_Sent_date__c = Date.today()+1;
+    insert forseeSurObj;
+     system.assertNotEquals(forseeSurObj.Id,Null); 
+     Test.startTest(); 
+     Test.setCurrentPage(Page.SocialMediaPage); 
+    ApexPages.currentPage().getParameters().put('noc',forseeSurObj.id);
+    SocialCareController scc = new SocialCareController();
+     scc.doValidateUrl(); 
+      
+    scc.EnglishSurvey();
+    forseeSurObj.URL_Active__c = False;
+    update forseeSurObj;
+    ApexPages.currentPage().getParameters().put('noc',forseeSurObj.id);
+    SocialCareController scc1 = new SocialCareController();
+    scc1.doValidateUrl();   
+    scc1.EnglishSurvey();
+    Test.stopTest();
+              
+}
+
+public static TestMethod void testSpanishSurvey() 
+{
+/* Test method to test that customer has clicked on spanish survey link */
+
+    Case caseObj=new Case();
+    caseObj.Status='New';
+    caseObj.Origin='email';
+    caseObj.contactid=testContact.id;
+    caseObj.contact=testContact;
+    insert caseObj;
+     list<case> caseList = [Select Id, status,origin,reason,contactId from case where Id =:caseObj.Id];
+    case uptCase = new case();
+    if(caseList != null && caseList.size()>0){
+        uptCase = caseList[0];
+        uptCase.reason = 'Auto Closed';
+        uptCase.status = 'Auto Closed'; 
+        update uptCase;
+    }   
+
+    Forsee_Survey__c forseeSurObj =new Forsee_Survey__c();
+    forseeSurObj.Case_Number__c = caseObj.CaseNumber;
+    forseeSurObj.URL_Active__c = True;
+    forseeSurObj.Contact__c=testContact.id;
+    forseeSurObj.Case__c=uptCase != null ? uptCase.Id : null;
+    forseeSurObj.One_Time_Used__c=False;
+    forseeSurObj.Survey_Expired__c=False;
+    forseeSurObj.URL_Sent_date__c = Date.today()+1;
+    insert forseeSurObj;
+    system.assertNotEquals(forseeSurObj.Id,Null);  
+    ApexPages.currentPage().getParameters().put('noc',forseeSurObj.id);
+    SocialCareController scc = new SocialCareController();
+    scc.doValidateUrl();   
+    scc.SpanishSurvey();
+    forseeSurObj.URL_Active__c = False;
+    update forseeSurObj;
+    ApexPages.currentPage().getParameters().put('noc',forseeSurObj.id);
+    SocialCareController scc1 = new SocialCareController();
+    scc1.doValidateUrl();   
+    scc1.SpanishSurvey();
+
+              
+}
   
 public static TestMethod void testURLactivefalse() 
 {

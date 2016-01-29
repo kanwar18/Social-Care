@@ -1,12 +1,12 @@
 {
     "username": "Ashilesh.avula@gmail.com", 
-    "environment": "sandbox", 
     "project_name": "Att", 
-    "workspace": "/Users/kunwar/Documents/Sublime", 
     "org_url": "", 
     "namespace": "", 
+    "metadata_container": "1dcc0000000GJybAAG", 
+    "environment": "sandbox", 
+    "workspace": "/Users/kunwar/Documents/Sublime", 
     "id": "QE7EKL5M1Y8U5LYPGFQPYZWMJR3EMC52", 
-    "metadata_container": "1dcc0000000G2G8AAK", 
     "subscription": [
         "ApexClass", 
         "ApexComponent", 

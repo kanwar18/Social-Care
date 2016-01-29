@@ -18,6 +18,7 @@ public class Social_customerAccountDetailsController {
     Public String contactFirstName{get;set;}
     Public String contactLastName{get;set;}
     Public Boolean newRecord{get;set;}
+    public string pageBlockMode{get;set;}
     
     /**
     * < Social_customerAccountDetailsController() - Constructor>   
@@ -32,7 +33,9 @@ public class Social_customerAccountDetailsController {
             contactFirstName = ApexPages.currentPage().getParameters().get('contactFirstName');
             contactLastName = ApexPages.currentPage().getParameters().get('contactLastName');
             cad.Contact_Id__c = ApexPages.currentPage().getParameters().get('contactId');
+            pageBlockMode='New';
         } else {
+            pageBlockMode='Edit';
             newRecord = false;
             contactFirstName = 'Customer Account Detail';
             if(cad.Account_Number__c == NULL && cad.Email_Id__c == NULL && cad.Phone__c != NULL ) {
@@ -56,20 +59,20 @@ public class Social_customerAccountDetailsController {
     public pagereference save() {         
         checkphone = Pattern.matches('[0-9]{10}',data);   
         checkemail = Pattern.matches('[a-zA-Z0-9._-]+@[a-zA-Z]+.[a-zA-Z]{2,4}', data);   
-        checktext = Pattern.matches('[0-9]{15}',data);
+        checktext = Pattern.matches('[0-9]{1,15}',data);
         if (cad.Account_Type__c == Null || cad.Account_Type__c == '') {
             ApexPages.addmessage(new ApexPages.message(ApexPages.severity.Error, 'Please select Account Type')); 
         }
         if(data==null || data.length() == 0 ) {
             ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Value field is mandatory'));
         }
-        if(checkphone==true && (cad.Account_Type__c=='Home Phone'||cad.Account_Type__c=='Forums Handle'||cad.Account_Type__c=='Wireless CTN')){                      
+        if(checkphone==true && (cad.Account_Type__c=='Home Phone'||cad.Account_Type__c=='Wireless CTN')){                      
             cad.Phone__c = data;
             cad.Email_Id__c = null;
             cad.Account_Number__c = null;  
             insertrecord = true; 
-        } else if(checkphone == false && (cad.Account_Type__c == 'Home Phone'||cad.Account_Type__c == 'Forums Handle'||cad.Account_Type__c == 'Wireless CTN')) {            
-            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.Error, 'Please enter a valid phone number in the value field')); 
+        } else if(checkphone == false && (cad.Account_Type__c == 'Home Phone'||cad.Account_Type__c == 'Wireless CTN')) {            
+            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.Error,'Please enter a valid 10 digits phone number.')); 
         } else if(checkemail==true && cad.Account_Type__c=='Email') {
             cad.Email_Id__c = data; 
             cad.Account_Number__c = null;
@@ -83,7 +86,12 @@ public class Social_customerAccountDetailsController {
             cad.Email_Id__c = null;
             insertrecord=true; 
         } else if(checktext == false && (cad.Account_Type__c == 'U-Verse(BAN)'|| cad.Account_Type__c == 'DIRECTV' || cad.Account_Type__c == 'Wireless(BAN)')) {
-            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.Error, 'Please enter a valid account number in the value field'));  
+            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.Error,'Please enter a valid account number upto 15 digits.'));  
+        }
+         else if(cad.Account_Type__c=='Forums Handle' && data!='')
+        {
+            cad.Phone__c = data;
+            insertrecord=true;
         }
         
         if(insertrecord == true && newRecord == true) {

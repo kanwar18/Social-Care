@@ -120,6 +120,7 @@ trigger Social_validateCaseQueue on Case (before insert,before update){
                      }               
                  // Code for Manual assignment of case from queue to user other than Ruth and Carmine    
                  if( contextUserId.equalsIgnorecase(newCase.OwnerID) && newCaseOwner.startsWith('005') && oldCaseOwner.startsWith('00G') && !Social_StreamingUtil.caseBizAssignedByRR && !Social_StreamingUtil.caseBizAssignedByAssignCase){
+                     system.debug('*************contextid***********');
                      newCase.OwnerId = UserInfo.getUserId();   
                      newCase.Track_Case_Queue__c = trigger.oldMap.get(newCase.Id).ownerId;
                      newCase.Update_reason__c = 'Manual Assignment';                    
@@ -432,8 +433,13 @@ trigger Social_validateCaseQueue on Case (before insert,before update){
                 String newCaseOwner = newCase.ownerId;
                 String oldCaseOwner = trigger.oldMap.get(newCase.Id).ownerId;
                 String eventStatus = '' ;
+                system.debug('****newCaseOwner ********'+newCaseOwner);
+                system.debug('***********8oldCaseOwner ************'+oldCaseOwner);
                 
                 if ((newCaseOwner.startsWith('005') && oldCaseOwner.startsWith('00G')) && !Social_StreamingUtil.caseBizAssignedByRR && !Social_StreamingUtil.caseBizAssignedByAssignCase ){
+                    system.debug('***********Without contextId***********');
+                     system.debug('****inside if newCaseOwner ********'+newCaseOwner);
+                system.debug('***********inside if oldCaseOwner ************'+oldCaseOwner);
                      newCase.Update_reason__c = 'Manual Assignment'; 
                       newCase.Track_Case_Queue__c = trigger.oldMap.get(newCase.Id).ownerId;
                      Social_StreamingUtil.doNotUpdateReasonBizManualAssignment = FALSE;       

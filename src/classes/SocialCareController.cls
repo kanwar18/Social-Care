@@ -8,14 +8,18 @@ global class SocialCareController {
     public SurveyDetails surveyDet {get; set;}
     public boolean surveyDetailsFlag {get;set;}
     
-    public SocialCareController() {}
+    public SocialCareController() {
+        forseeSurveyObj = new Forsee_Survey__c();
+    }
 
 
     public PageReference EnglishSurvey(){
         String foreseeId = ApexPages.currentPage().getParameters().get('noc');
-        List<Forsee_Survey__c> foreseeList = [Select id,URL_Active__c from Forsee_Survey__c where id =:foreseeId ];
-        if (foreseeList[0].URL_Active__c) {
-            PageReference pageRef = new PageReference(forseeSurveyObj.Forsee_URL__c);
+        List<Forsee_Survey__c> foreseeList = [Select id,URL_Active__c,Forsee_URL__c,One_Time_Used__c,Survey_Taken__c from Forsee_Survey__c where id =:foreseeId ];
+        if(foreseeList != null && foreseeList.size()>0)
+           forseeSurveyObj =  foreseeList[0];
+        if (forseeSurveyObj != null && forseeSurveyObj.URL_Active__c) {
+            PageReference pageRef = forseeSurveyObj.Forsee_URL__c != Null ? new PageReference(forseeSurveyObj.Forsee_URL__c) : Null;
             forseeSurveyObj.Survey_Taken__c = 'English';
             forseeSurveyObj.One_Time_Used__c = true;
             forseeSurveyObj.URL_Active__c = false;
@@ -30,9 +34,11 @@ global class SocialCareController {
 
     public PageReference SpanishSurvey(){
         String foreseeId = ApexPages.currentPage().getParameters().get('noc');
-        List<Forsee_Survey__c> foreseeList = [Select id,URL_Active__c from Forsee_Survey__c where id =:foreseeId ];
-        PageReference pageRefSpanish = new PageReference(forseeSurveyObj.Foresee_URL_Spanish__c);
-        if (foreseeList[0].URL_Active__c) {
+        List<Forsee_Survey__c> foreseeList = [Select id,URL_Active__c,Foresee_URL_Spanish__c,One_Time_Used__c,Survey_Taken__c from Forsee_Survey__c where id =:foreseeId ];
+        if(foreseeList != null && foreseeList.size()>0)
+           forseeSurveyObj =  foreseeList[0];
+        if (forseeSurveyObj != null && forseeSurveyObj.URL_Active__c) {
+            PageReference pageRefSpanish = forseeSurveyObj.Foresee_URL_Spanish__c!= Null ? new PageReference(forseeSurveyObj.Foresee_URL_Spanish__c) : Null;
             forseeSurveyObj.Survey_Taken__c = 'Spanish';
             forseeSurveyObj.One_Time_Used__c = true;
             forseeSurveyObj.URL_Active__c = false;
@@ -64,6 +70,7 @@ global class SocialCareController {
                 forseeSurveyList = Database.query(forseeQuery);
                 if((null != forseeSurveyList) && !(forseeSurveyList.isEmpty())) {
                     forseeSurveyObj = forseeSurveyList.get(0);
+                    system.debug('IN HERE::'+forseeSurveyObj.Forsee_URL__c);
                     //Block for One time Click and Survey Expired
                     if((forseeSurveyObj.URL_Active__c) && !(forseeSurveyObj.One_Time_Used__c) && !(forseeSurveyObj.Survey_Expired__c)) {
                         forseeSurveyObj.Business_Page_Load_Count__c = forseeSurveyObj.Business_Page_Load_Count__c +1;  

@@ -313,32 +313,12 @@
     "key": "01pE0000001geaNIAQ", 
     "variables": [
         {
-            "type": "PageReference", 
-            "modifiers": [], 
-            "references": [], 
-            "location": {
-                "column": 23, 
-                "line": 15
-            }, 
-            "name": "pageRef"
-        }, 
-        {
-            "type": "PageReference", 
-            "modifiers": [], 
-            "references": [], 
-            "location": {
-                "column": 23, 
-                "line": 23
-            }, 
-            "name": "pageRef"
-        }, 
-        {
             "type": "String", 
             "modifiers": [], 
             "references": [], 
             "location": {
                 "column": 16, 
-                "line": 32
+                "line": 17
             }, 
             "name": "foreseeId"
         }, 
@@ -348,19 +328,29 @@
             "references": [], 
             "location": {
                 "column": 32, 
-                "line": 33
+                "line": 18
             }, 
-            "name": "forseeSurveyList"
+            "name": "foreseeList"
         }, 
         {
             "type": "PageReference", 
             "modifiers": [], 
             "references": [], 
             "location": {
-                "column": 23, 
-                "line": 34
+                "column": 27, 
+                "line": 22
             }, 
-            "name": "pageForward"
+            "name": "pageRef"
+        }, 
+        {
+            "type": "PageReference", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 27, 
+                "line": 29
+            }, 
+            "name": "pageRef"
         }, 
         {
             "type": "String", 
@@ -370,6 +360,76 @@
                 "column": 16, 
                 "line": 36
             }, 
+            "name": "foreseeId"
+        }, 
+        {
+            "type": "LIST", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 32, 
+                "line": 37
+            }, 
+            "name": "foreseeList"
+        }, 
+        {
+            "type": "PageReference", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 27, 
+                "line": 41
+            }, 
+            "name": "pageRefSpanish"
+        }, 
+        {
+            "type": "PageReference", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 27, 
+                "line": 48
+            }, 
+            "name": "pageRefSap"
+        }, 
+        {
+            "type": "String", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 16, 
+                "line": 56
+            }, 
+            "name": "foreseeId"
+        }, 
+        {
+            "type": "LIST", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 32, 
+                "line": 57
+            }, 
+            "name": "forseeSurveyList"
+        }, 
+        {
+            "type": "PageReference", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 23, 
+                "line": 58
+            }, 
+            "name": "pageForward"
+        }, 
+        {
+            "type": "String", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 16, 
+                "line": 60
+            }, 
             "name": "forseeQuery"
         }, 
         {
@@ -378,19 +438,9 @@
             "references": [], 
             "location": {
                 "column": 16, 
-                "line": 37
+                "line": 61
             }, 
             "name": "responseStr"
-        }, 
-        {
-            "type": "String", 
-            "modifiers": [], 
-            "references": [], 
-            "location": {
-                "column": 16, 
-                "line": 42
-            }, 
-            "name": "ReturnValue"
         }
     ], 
     "id": "01pE0000001geaNIAQ", 
@@ -405,7 +455,7 @@
             "references": [], 
             "location": {
                 "column": 26, 
-                "line": 14
+                "line": 16
             }, 
             "returnType": "PageReference", 
             "type": null
@@ -420,7 +470,7 @@
             "references": [], 
             "location": {
                 "column": 26, 
-                "line": 22
+                "line": 35
             }, 
             "returnType": "PageReference", 
             "type": null
@@ -435,7 +485,7 @@
             "references": [], 
             "location": {
                 "column": 26, 
-                "line": 31
+                "line": 55
             }, 
             "returnType": "PageReference", 
             "type": null

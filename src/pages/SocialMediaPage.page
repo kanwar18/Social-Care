@@ -1,4 +1,5 @@
 <apex:page showHeader="false" controller="SocialCareController" action="{!doValidateUrl}">
+    <title>AT&amp;T</title>
     <apex:form id="myForm">
         <table align="center" width="70%">
             <tr>
@@ -7,10 +8,10 @@
             <tr>
                 <td>
                     <apex:pageBlock >
-                        <apex:pagemessages ></apex:pagemessages>
+                        <apex:pagemessages escape="false"></apex:pagemessages>
                         <apex:outputLabel rendered="{!NOT(surveyDetailsFlag)}">
-                            Thank you for agreeing to share your opinion with us.
-                            <br/><br/>If you would like to provide feedback on your experience please choose <b>Start Survey</b>.
+                            AT&amp;T considers your feedback to be a valuable gift and we want to hear from you!
+                            <br/><br/>Please select your language below to let us know about your experience with our social media team.
                             <br/> <br/>
                             <div align="center">
                                 <apex:commandButton action="{!EnglishSurvey}" value="Start Survey in English" style="background-image:none;background-color:#089ADC;color:white;margin-right: 30px;" rerender="hiddenBlock" rendered="{!!forseeSurveyObj.One_Time_Used__c}" >

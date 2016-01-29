@@ -67,6 +67,7 @@ public class SocialCareForsee_Test {
         caseObj.Component_Primary__c='Landline';
         caseObj.Customer_Type__c='Enterprise';
         caseObj.Method_of_Contact__c='NA';
+        caseObj.R6Service__MediaProvider__c = 'Twitter';
     
         insert caseObj;
             
@@ -109,7 +110,7 @@ public class SocialCareForsee_Test {
         caseObj1.Component_Primary__c='Landline';
         caseObj1.Customer_Type__c='Enterprise';
         caseObj1.Method_of_Contact__c='NA';
-    
+        caseObj1.Component_Secondary__c = null;
         
         insert caseObj1;
         caseObj1.Clarify_CRM_Verified__c = 'No';     

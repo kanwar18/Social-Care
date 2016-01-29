@@ -342,6 +342,10 @@ global with sharing class Social_CaseEmailInBoundUtilities {
                         //to blank out the reassignment reason, Auto Reassignment Tag and update the Case post tag accoerding to the Reassignment tag
                         if(this.thecase.Auto_Reassignment_Tag__c != null && this.thecase.Do_Not_Reassign__c == false){
                             Social_StreamingUtil.fireAssignmentRule = true;
+                            if(this.thecase.Auto_Reassignment_Tag__c == 'GCS-ESCALATION'){
+                                this.thecase.ownerid = System.Label.GENERAL_BC_QUEUE;
+                                Social_StreamingUtil.fireAssignmentRule = false;
+                            }
                             this.thecase.Reassignment_Reason__c = null;
                             this.thecase.Case_Post_Tag__c = this.thecase.Auto_Reassignment_Tag__c;
                             this.thecase.Case_PostTag__c = this.thecase.Auto_Reassignment_Tag__c;
@@ -367,7 +371,6 @@ global with sharing class Social_CaseEmailInBoundUtilities {
                     this.thecase.status='Reopen';
                     this.thecase.update_reason__c = Social_StreamingUtil.CASE_REOPENED;
                     this.thecase.Customer_Response_Received__c = true;
-                    this.thecase.No_Contact_Email_Available__c = false;
                     this.theCase.Customer_Response_Received_Time__c= dateTime.Now();//Added to track customer's email received.    
                     this.thecase.Is_Auto_Closed__c = false;
                     this.thecase.RecordTypeId = SYSTEM.LABEL.Consumer_Care_Email_Case;
@@ -396,6 +399,10 @@ global with sharing class Social_CaseEmailInBoundUtilities {
                         //to blank out the reassignment reason, Auto Reassignment Tag and update the Case post tag accoerding to the Reassignment tag
                         if(this.thecase.Auto_Reassignment_Tag__c != null && this.thecase.Do_Not_Reassign__c == false){
                             Social_StreamingUtil.fireAssignmentRule = true;
+                            if(this.thecase.Auto_Reassignment_Tag__c == 'GCS-ESCALATION'){
+                                this.thecase.ownerid = System.Label.GENERAL_BC_QUEUE;
+                                Social_StreamingUtil.fireAssignmentRule = false;
+                            }
                             this.thecase.Reassignment_Reason__c = null;
                             this.thecase.Case_Post_Tag__c = this.thecase.Auto_Reassignment_Tag__c;
                             this.thecase.Case_PostTag__c = this.thecase.Auto_Reassignment_Tag__c;

@@ -37,11 +37,10 @@ trigger SocialForseeTrigger on Case (after update) {
                 } //end for new
                 
                 if(caseIdSet.size() != 0){
-                
-                // Fetch All Case Ids (Contact Has No Open Cases/No Foresee Past 48 Hours)
-                caseIdSet = fetchCaseIds(caseIdSet);
-                // Call Util Class Method
-                socialCareHandler.generateForSeeUrls(caseIdSet);
+                    // Fetch All Case Ids (Contact Has No Open Cases/No Foresee Past 48 Hours)
+                    caseIdSet = fetchCaseIds(caseIdSet);
+                    // Call Util Class Method
+                    socialCareHandler.generateForSeeUrls(caseIdSet);
                 }                                            
             }
          }

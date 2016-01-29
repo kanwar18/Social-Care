@@ -240,11 +240,16 @@ public class Social_SocialPostSCSHandler {
             //to blank out the reassignment reason, Auto Reassignment Tag and update the Case post tag accoerding to the Reassignment tag
             if(pendingInQueueCase.Auto_Reassignment_Tag__c != null && pendingInQueueCase.Do_Not_Reassign__c == false && consumerRTList.contains(pendingInQueueCase.RecordtypeId)){
                 Social_StreamingUtil.fireAssignmentRule = true;
+                //added logic for business post tag only to disable assignment rule
+                if(pendingInQueueCase.Auto_Reassignment_Tag__c == 'GCS-ESCALATION'){
+                    pendingInQueueCase.ownerid = System.Label.GENERAL_BC_QUEUE;
+                    Social_StreamingUtil.fireAssignmentRule = false;
+                }
                 pendingInQueueCase.Reassignment_Reason__c = null;
                 pendingInQueueCase.Case_Post_Tag__c = pendingInQueueCase.Auto_Reassignment_Tag__c;
                 pendingInQueueCase.Case_PostTag__c = pendingInQueueCase.Auto_Reassignment_Tag__c;
                 pendingInQueueCase.Business_Case_Post_Tag__c = pendingInQueueCase.Auto_Reassignment_Tag__c;
-                pendingInQueueCase.Auto_Reassignment_Tag__c = null;                  
+                pendingInQueueCase.Auto_Reassignment_Tag__c = null;                
             } else {
                 pendingInQueueCase.ownerid = pendingInQueueCase.Track_Case_Queue__c;
             }
@@ -253,13 +258,18 @@ public class Social_SocialPostSCSHandler {
         //If case is (SLA 1 Ended or SLA 2 Ended) and case owner is pending closure and case status is not closed i.e. status is Pending Closure and awaiting to be Auto Closed
         if((Social_StreamingUtil.SLA1_ENDED.equalsIgnoreCase(pendingInQueueCase.Current_SLA_Phase__c) || Social_StreamingUtil.SLA2_ENDED.equalsIgnoreCase(pendingInQueueCase.Current_SLA_Phase__c)) && pendingInQueueCase.ownerId == System.Label.PendingClouseQueueId && !Social_StreamingUtil.CASE_STATUS_CLOSED.equalsIgnoreCase(pendingInQueueCase.status) && !Social_StreamingUtil.CASE_STATUS_AUTOCLOSED.equalsIgnoreCase(pendingInQueueCase.status) ){
             //to blank out the reassignment reason, Auto Reassignment Tag and update the Case post tag accoerding to the Reassignment tag
-            if(pendingInQueueCase.Auto_Reassignment_Tag__c != null && pendingInQueueCase.Do_Not_Reassign__c == false && consumerRTList.contains(pendingInQueueCase.RecordtypeId)){
+            if(pendingInQueueCase.Auto_Reassignment_Tag__c != null && pendingInQueueCase.Do_Not_Reassign__c == false && consumerRTList.contains(pendingInQueueCase.RecordtypeId)){ 
                 Social_StreamingUtil.fireAssignmentRule = true;
+                //added logic for business post tag only to disable assignment rule
+                if(pendingInQueueCase.Auto_Reassignment_Tag__c =='GCS-ESCALATION'){
+                    pendingInQueueCase.ownerid = System.Label.GENERAL_BC_QUEUE;
+                    Social_StreamingUtil.fireAssignmentRule = false;
+                }
                 pendingInQueueCase.Reassignment_Reason__c = null;
                 pendingInQueueCase.Case_Post_Tag__c = pendingInQueueCase.Auto_Reassignment_Tag__c;
                 pendingInQueueCase.Case_PostTag__c = pendingInQueueCase.Auto_Reassignment_Tag__c;
                 pendingInQueueCase.Business_Case_Post_Tag__c = pendingInQueueCase.Auto_Reassignment_Tag__c;
-                pendingInQueueCase.Auto_Reassignment_Tag__c = null;                    
+                pendingInQueueCase.Auto_Reassignment_Tag__c = null;                   
             } else {
                 pendingInQueueCase.ownerid = pendingInQueueCase.Track_Case_Queue__c;
             }

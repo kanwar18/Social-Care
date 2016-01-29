@@ -1,0 +1,215 @@
+{
+    "properties": [
+        {
+            "modifiers": [
+                "private", 
+                "static"
+            ], 
+            "name": "testAccount", 
+            "visibility": "PRIVATE", 
+            "references": [], 
+            "location": {
+                "column": 20, 
+                "line": 10
+            }, 
+            "type": "Account"
+        }, 
+        {
+            "modifiers": [
+                "private", 
+                "static"
+            ], 
+            "name": "testContact", 
+            "visibility": "PRIVATE", 
+            "references": [], 
+            "location": {
+                "column": 20, 
+                "line": 11
+            }, 
+            "type": "Contact"
+        }
+    ], 
+    "externalReferences": [], 
+    "innerClasses": [], 
+    "interfaces": [], 
+    "constructors": [], 
+    "namespace": null, 
+    "name": "SocialCareForsee_Test", 
+    "tableDeclaration": {
+        "type": "SocialCareForsee_Test", 
+        "modifiers": [
+            "public", 
+            "testMethod"
+        ], 
+        "references": [], 
+        "location": {
+            "column": 14, 
+            "line": 9
+        }, 
+        "name": "SocialCareForsee_Test"
+    }, 
+    "key": "01pE0000001geaQIAQ", 
+    "variables": [
+        {
+            "type": "Case", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 14, 
+                "line": 25
+            }, 
+            "name": "caseObj"
+        }, 
+        {
+            "type": "Social_Media_Account__c", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 33, 
+                "line": 43
+            }, 
+            "name": "media"
+        }, 
+        {
+            "type": "Contact", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 17, 
+                "line": 52
+            }, 
+            "name": "testContact1"
+        }, 
+        {
+            "type": "Case", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 14, 
+                "line": 58
+            }, 
+            "name": "caseObj"
+        }, 
+        {
+            "type": "Forsee_Survey__c", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 26, 
+                "line": 78
+            }, 
+            "name": "forseeSurObj"
+        }, 
+        {
+            "type": "Social_Media_Account__c", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 33, 
+                "line": 91
+            }, 
+            "name": "media"
+        }, 
+        {
+            "type": "Case", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 14, 
+                "line": 100
+            }, 
+            "name": "caseObj1"
+        }, 
+        {
+            "type": "Forsee_Survey__c", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 26, 
+                "line": 121
+            }, 
+            "name": "forseeSurObj"
+        }, 
+        {
+            "type": "SocialMediaTwitterRest", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 32, 
+                "line": 173
+            }, 
+            "name": "mediaTwitter"
+        }
+    ], 
+    "id": "01pE0000001geaQIAQ", 
+    "methods": [
+        {
+            "modifiers": [
+                "static", 
+                "public", 
+                "testMethod"
+            ], 
+            "name": "testnotclosedcases", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 35, 
+                "line": 24
+            }, 
+            "returnType": "void", 
+            "type": null
+        }, 
+        {
+            "modifiers": [
+                "static", 
+                "public", 
+                "testMethod"
+            ], 
+            "name": "testforeseehandlerwithoutcontactemail", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 35, 
+                "line": 40
+            }, 
+            "returnType": "void", 
+            "type": null
+        }, 
+        {
+            "modifiers": [
+                "static", 
+                "public", 
+                "testMethod"
+            ], 
+            "name": "testForeseehandlerwithcontactemail", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 35, 
+                "line": 88
+            }, 
+            "returnType": "void", 
+            "type": null
+        }, 
+        {
+            "modifiers": [
+                "static", 
+                "public", 
+                "testMethod"
+            ], 
+            "name": "testForeseehandlerwithcontactemail11", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 35, 
+                "line": 133
+            }, 
+            "returnType": "void", 
+            "type": null
+        }
+    ]
+}

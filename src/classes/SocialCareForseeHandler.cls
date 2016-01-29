@@ -68,40 +68,40 @@ global class SocialCareForseeHandler {
     
     //Method responsible to generat the Forsee URL's
     global void generateForSeeUrls(Set<Id> caseIdSet) {
-      Set<Id> forseeIdSet = new Set<Id>();      
-      List<Forsee_Survey__c> forseeSurList = new List<Forsee_Survey__c>();
-      List<Case> caseObjList = new list<case>();
-      primarySubCompMap = Social_CareHelper.encodingPrimaryAndSubComp();
-
-      if (resend) {
-          caseObjList=[Select Id,R6Service__MediaProvider__c,RecordTypeId, Business_Survey_Indicator__c,Business_Survey_Email_Indicator__c,ContactId, CaseNumber, Status, Owner.Id, Component_Primary__c,Component_Secondary__c,Assigned_Operation_Manager__c,RecordType.Name from Case Where Id in :caseIdSet];
-      } else  {
-          caseObjList =   
-          [
-           Select Id, ContactId,R6Service__MediaProvider__c,RecordTypeId, Business_Survey_Indicator__c,Business_Survey_Email_Indicator__c,CaseNumber, Status, Owner.Id ,Component_Primary__c,Component_Secondary__c,Assigned_Operation_Manager__c, RecordType.Name from Case Where
-           Status = 'Closed' and Id in :caseIdSet and Id not in 
-           (Select Case__c from Forsee_Survey__c)   
-          ];
-      }
-      try {
-          
-          if((null != caseObjList) && !(caseObjList.isEmpty())) {
-              for(Case caseObj : caseObjList) {
-                  forseeSurList.add(constructForseeUrl(caseObj)); 
-              } 
-          }
-          if(!forseeSurList.isEmpty()) {
-              insert forseeSurList;
-              for(Forsee_Survey__c forseeSurObj : forseeSurList) {
-                forseeIdSet.add(forseeSurObj.Id);
-              }
-              delegateSources(forseeIdSet);
-          }
-      } catch(DMLException dml) {
+        Set<Id> forseeIdSet = new Set<Id>();      
+        List<Forsee_Survey__c> forseeSurList = new List<Forsee_Survey__c>();
+        List<Case> caseObjList = new list<case>();
+        primarySubCompMap = Social_CareHelper.encodingPrimaryAndSubComp();
+        string labelValue = Label.Foresee_Case_Status;
+        Set<String> caseStatusList = labelValue != null? new Set<String>(labelValue.split(';')) : new Set<string>();
+        if (resend) {
+            caseObjList=[Select Id,R6Service__MediaProvider__c,RecordTypeId, Business_Survey_Indicator__c,Business_Survey_Email_Indicator__c,ContactId, CaseNumber, Status, Owner.Id, Component_Primary__c,Component_Secondary__c,Assigned_Operation_Manager__c,RecordType.Name from Case Where Id in :caseIdSet];
+        } else  {
+            caseObjList =   
+            [
+            Select Id, ContactId,R6Service__MediaProvider__c,RecordTypeId, Business_Survey_Indicator__c,Business_Survey_Email_Indicator__c,CaseNumber, Status, Owner.Id ,Component_Primary__c,Component_Secondary__c,Assigned_Operation_Manager__c, RecordType.Name from Case Where
+            Status IN : caseStatusList and Id in :caseIdSet and Id not in 
+            (Select Case__c from Forsee_Survey__c)   
+            ];
+        }
+        try {
+            if((null != caseObjList) && !(caseObjList.isEmpty())) {
+                for(Case caseObj : caseObjList) {
+                    forseeSurList.add(constructForseeUrl(caseObj)); 
+                } 
+            }
+            if(!forseeSurList.isEmpty()) {
+                insert forseeSurList;
+                for(Forsee_Survey__c forseeSurObj : forseeSurList) {
+                    forseeIdSet.add(forseeSurObj.Id);
+                }
+                delegateSources(forseeIdSet);
+            }
+        } catch(DMLException dml) {
             System.debug('DML Exception Caught:'+dml.getMessage());
-      } catch(Exception excep) {
+        } catch(Exception excep) {
             System.debug('Exception Caught:'+excep.getMessage());
-      }
+        }
     }
 
     /**
@@ -224,7 +224,6 @@ global class SocialCareForseeHandler {
         ];
         
         try {
-            System.debug('forseeSurObjList'+forseeSurObjList.size());
             for(Forsee_Survey__c forseeObj : forseeSurObjList) {
                 if(forseeObj.Case__r.RecordType.Name.contains('Consumer')){
                     forseeObj.Vanity_URL__c = VANITY_PAGE + forseeObj.Id;
@@ -302,25 +301,12 @@ global class SocialCareForseeHandler {
             tritterHandle = isConsumer != FALSE ? Label.Consumer_DefaultTwitterHandle : Label.Business_DefaultTwitterHandle;
             //vanityUrl = 'Thank you again';
             if(isConsumer == FALSE){
-                SocialMediaRoundRobin.invokeTwitterDM(
-                    vanityUrl,
-                    socialPersonaName,
-                    tritterHandle,
-                    //Label.Consumer_DefaultTwitterHandle,
-                    forSeeObj.Id, 
-                    emailABSTemplateId
-                );
+                //"Label.Consumer_DefaultTwitterHandle" removed from passed params on this method. It was fourth param 
+                SocialMediaRoundRobin.invokeTwitterDM(vanityUrl,socialPersonaName,tritterHandle,forSeeObj.Id,emailABSTemplateId); 
             }
             else{
-            
-                SocialMediaRoundRobin.invokeTwitterDM(
-                    vanityUrl,
-                    socialPersonaName,
-                    tritterHandle,
-                    //Label.Consumer_DefaultTwitterHandle,
-                    forSeeObj.Id, 
-                    emailTemplateId 
-                );
+                //"Label.Consumer_DefaultTwitterHandle" removed from passed params on this method. It was fourth param 
+                SocialMediaRoundRobin.invokeTwitterDM(vanityUrl,socialPersonaName,tritterHandle,forSeeObj.Id,emailTemplateId); 
             }
         
         } catch(Exception excep) {

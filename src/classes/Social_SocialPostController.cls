@@ -313,7 +313,7 @@ Global Class Social_SocialPostController {
                     associatedCaseList[0].Customer_Response_Received__c = true;               
                 }
                 // logic to send the case from pending closure queue to track case queue.
-                associatedCaseList[0] = Social_SocialPostSCSHandler.caseUpdateCustomerResponseReceived(associatedCaseList[0]);                 
+                associatedCaseList[0] = Social_SocialPostSCSHandler.caseUpdateCustomerResponseReceived(associatedCaseList[0]);     
                 associatedCaseList[0].Update_Reason__c = Social_StreamingUtil.CUSTOMER_REPLY;
                 if(associatedCaseList[0].RecordTypeId == SYSTEM.LABEL.Business_Open_RT){                  
                    ownerDetail = ownerDetails(associatedCaseList[0]);                    
@@ -462,7 +462,6 @@ Global Class Social_SocialPostController {
                          associatedCaseList[0].ReadUnreadCheck__c = TRUE;
                          associatedCaseList[0].Status = Social_StreamingUtil.CASE_STATUS_REOPEN;
                          associatedCaseList[0].Is_Auto_Closed__c = False;
-                         associatedCaseList[0].No_Contact_Email_Available__c = False;
                          //Storing contact Id of case been reopened in order to update last case closed field on contact
                          if (associatedCaseList[0].contactId != Null) {
                              contactIdSet.add(associatedCaseList[0].contactId);

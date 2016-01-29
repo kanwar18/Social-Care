@@ -441,7 +441,7 @@
             "modifiers": [], 
             "references": [], 
             "location": {
-                "column": 15, 
+                "column": 17, 
                 "line": 71
             }, 
             "name": "forseeIdSet"
@@ -451,7 +451,7 @@
             "modifiers": [], 
             "references": [], 
             "location": {
-                "column": 30, 
+                "column": 32, 
                 "line": 72
             }, 
             "name": "forseeSurList"
@@ -461,17 +461,37 @@
             "modifiers": [], 
             "references": [], 
             "location": {
-                "column": 18, 
+                "column": 20, 
                 "line": 73
             }, 
             "name": "caseObjList"
+        }, 
+        {
+            "type": "String", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 16, 
+                "line": 75
+            }, 
+            "name": "labelValue"
+        }, 
+        {
+            "type": "Set", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 21, 
+                "line": 76
+            }, 
+            "name": "caseStatusList"
         }, 
         {
             "type": "Case", 
             "modifiers": [], 
             "references": [], 
             "location": {
-                "column": 24, 
+                "column": 26, 
                 "line": 89
             }, 
             "name": "caseObj"
@@ -481,7 +501,7 @@
             "modifiers": [], 
             "references": [], 
             "location": {
-                "column": 36, 
+                "column": 38, 
                 "line": 95
             }, 
             "name": "forseeSurObj"
@@ -702,7 +722,7 @@
             "references": [], 
             "location": {
                 "column": 34, 
-                "line": 228
+                "line": 227
             }, 
             "name": "forseeObj"
         }, 
@@ -712,7 +732,7 @@
             "references": [], 
             "location": {
                 "column": 55, 
-                "line": 279
+                "line": 278
             }, 
             "name": "forSeeObj"
         }, 
@@ -722,7 +742,7 @@
             "references": [], 
             "location": {
                 "column": 31, 
-                "line": 281
+                "line": 280
             }, 
             "name": "mediaRoundRobin"
         }, 
@@ -732,7 +752,7 @@
             "references": [], 
             "location": {
                 "column": 16, 
-                "line": 282
+                "line": 281
             }, 
             "name": "twitterResponseMsg"
         }, 
@@ -742,7 +762,7 @@
             "references": [], 
             "location": {
                 "column": 16, 
-                "line": 283
+                "line": 282
             }, 
             "name": "socialCareHandleName"
         }, 
@@ -752,7 +772,7 @@
             "references": [], 
             "location": {
                 "column": 16, 
-                "line": 284
+                "line": 283
             }, 
             "name": "socialPersonaName"
         }, 
@@ -762,7 +782,7 @@
             "references": [], 
             "location": {
                 "column": 17, 
-                "line": 285
+                "line": 284
             }, 
             "name": "isConsumer"
         }, 
@@ -772,7 +792,7 @@
             "references": [], 
             "location": {
                 "column": 16, 
-                "line": 286
+                "line": 285
             }, 
             "name": "tritterHandle"
         }, 
@@ -782,7 +802,7 @@
             "references": [], 
             "location": {
                 "column": 16, 
-                "line": 289
+                "line": 288
             }, 
             "name": "vanityUrl"
         }, 
@@ -792,7 +812,7 @@
             "references": [], 
             "location": {
                 "column": 16, 
-                "line": 291
+                "line": 290
             }, 
             "name": "timbaURL"
         }
@@ -914,7 +934,7 @@
             "references": [], 
             "location": {
                 "column": 20, 
-                "line": 279
+                "line": 278
             }, 
             "returnType": "String", 
             "type": null
